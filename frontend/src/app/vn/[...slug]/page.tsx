@@ -464,8 +464,24 @@ export async function generateMetadata({
     };
   }
   if (slug.length > 1) {
+    // Skip API call for legacy aliases (they redirect in the page component)
+    // and for /allmodels paths which are category hubs, not product pages
+    const isLegacyAlias = LEGACY_ALIASES.includes(key);
+    const isAllModels = slug[slug.length - 1] === "allmodels";
+    if (isLegacyAlias || isAllModels) {
+      const label = categoryLabel(slug);
+      return {
+        title: `Gaming ${label}｜ROG - Republic of Gamers｜Việt Nam`,
+        description: `Khám phá các sản phẩm Gaming ${label} của ROG - Republic of Gamers Việt Nam.`,
+      };
+    }
     const cleanSlug = slug[slug.length - 1] === "spec" ? slug.slice(0, -1).join("/") : key;
-    const product = await RogApi.getProductItem(cleanSlug);
+    let product = null;
+    try {
+      product = await RogApi.getProductItem(cleanSlug);
+    } catch {
+      // backend unavailable at build time — return generic metadata
+    }
     if (!product) return {};
     return {
       title: `${product.name}${slug[slug.length - 1] === "spec" ? " - Thông số kỹ thuật" : ""} | ROG - Republic of Gamers Việt Nam`,
