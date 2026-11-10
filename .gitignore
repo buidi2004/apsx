@@ -1,0 +1,22 @@
+# Build artifacts
+bin/
+obj/
+dist/
+build/
+
+# Dependencies
+node_modules/
+
+# Tool output
+graphify-out/
+.playwright-mcp/
+.run/
+
+# Environment / secrets
+.env
+.env.*
+*.user
+
+# OS files
+.DS_Store
+Thumbs.db

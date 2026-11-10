@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RogAdmin — Quản trị nội dung</title>
+  <link rel="stylesheet" href="admin.css?v=2" />
+</head>
+<body>
+  <!-- ============ MÀN HÌNH ĐĂNG NHẬP ============ -->
+  <div id="login-screen" class="login-screen hidden">
+    <form id="login-form" class="login-box">
+      <div class="login-logo">ROG<span>ADMIN</span></div>
+      <h1>Đăng nhập quản trị</h1>
+      <label for="login-username">Tên đăng nhập</label>
+      <input id="login-username" type="text" autocomplete="username" required />
+      <label for="login-password">Mật khẩu</label>
+      <input id="login-password" type="password" autocomplete="current-password" required />
+      <button type="submit" class="btn btn-primary">Đăng nhập</button>
+      <p id="login-error" class="login-error hidden"></p>
+    </form>
+  </div>
+
+  <!-- ============ KHU VỰC QUẢN TRỊ ============ -->
+  <div id="app" class="app hidden">
+    <aside class="sidebar">
+      <div class="brand">ROG<span>ADMIN</span></div>
+      <nav>
+        <a href="#dashboard" data-page="dashboard">📊 Dashboard</a>
+        <a href="#products" data-page="products">💰 Sản phẩm & Giá</a>
+        <a href="#articles" data-page="articles">📰 Bài viết</a>
+        <a href="#hero-slides" data-page="hero-slides">🖼️ Slide Hero</a>
+        <a href="#product-categories" data-page="product-categories">🎮 Danh mục SP</a>
+        <a href="#footer-links" data-page="footer-links">🔗 Link Footer</a>
+        <a href="#site-settings" data-page="site-settings">⚙️ Cấu hình site</a>
+        <a href="#users" data-page="users" data-admin-only>👥 Tài khoản</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div id="current-user" class="current-user"></div>
+        <div class="sidebar-actions">
+          <button id="change-password-btn" class="btn btn-ghost">🔑 Đổi mật khẩu</button>
+          <button id="logout-btn" class="btn btn-ghost">Đăng xuất</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <!-- Dashboard -->
+      <section id="page-dashboard" class="page hidden">
+        <h1>Dashboard</h1>
+        <div id="dashboard-stats" class="stats-grid"></div>
+      </section>
+
+      <!-- Sản phẩm & Giá cả -->
+      <section id="page-products" class="page hidden">
+        <div class="page-head">
+          <h1>Sản phẩm & Giá cả</h1>
+          <button class="btn btn-primary" data-create="product">+ Thêm sản phẩm</button>
+        </div>
+        <div class="filters">
+          <input id="product-search" type="search" placeholder="Tìm theo tên, model hoặc slug..." />
+        </div>
+        <div class="table-wrap"><table id="products-table"></table></div>
+        <div id="products-pager" class="pager"></div>
+      </section>
+
+      <!-- Bài viết -->
+      <section id="page-articles" class="page hidden">
+        <div class="page-head">
+          <h1>Bài viết</h1>
+          <button class="btn btn-primary" data-create="article">+ Thêm bài viết</button>
+        </div>
+        <div class="filters">
+          <select id="article-section-filter">
+            <option value="">Tất cả khu vực</option>
+            <option value="Highlights">Highlights (trang chủ)</option>
+            <option value="Listing">Listing (trang bài viết)</option>
+          </select>
+          <select id="article-tag-filter">
+            <option value="">Tất cả chuyên mục</option>
+          </select>
+          <input id="article-search" type="search" placeholder="Tìm theo tiêu đề..." />
+        </div>
+        <div class="table-wrap"><table id="articles-table"></table></div>
+        <div id="articles-pager" class="pager"></div>
+      </section>
+
+      <!-- Slide hero -->
+      <section id="page-hero-slides" class="page hidden">
+        <div class="page-head">
+          <h1>Slide Hero</h1>
+          <button class="btn btn-primary" data-create="hero-slide">+ Thêm slide</button>
+        </div>
+        <div class="table-wrap"><table id="hero-slides-table"></table></div>
+      </section>
+
+      <!-- Danh mục sản phẩm -->
+      <section id="page-product-categories" class="page hidden">
+        <div class="page-head">
+          <h1>Danh mục sản phẩm</h1>
+          <button class="btn btn-primary" data-create="category">+ Thêm danh mục</button>
+        </div>
+        <div class="table-wrap"><table id="product-categories-table"></table></div>
+      </section>
+
+      <!-- Link footer -->
+      <section id="page-footer-links" class="page hidden">
+        <div class="page-head">
+          <h1>Link Footer</h1>
+          <button class="btn btn-primary" data-create="footer-link">+ Thêm link</button>
+        </div>
+        <div class="table-wrap"><table id="footer-links-table"></table></div>
+      </section>
+
+      <!-- Cấu hình site -->
+      <section id="page-site-settings" class="page hidden">
+        <div class="page-head">
+          <h1>Cấu hình site</h1>
+          <button id="save-settings-btn" class="btn btn-primary">💾 Lưu tất cả</button>
+        </div>
+        <div id="settings-form" class="settings-form"></div>
+      </section>
+
+      <!-- Tài khoản (chỉ Admin) -->
+      <section id="page-users" class="page hidden">
+        <div class="page-head">
+          <h1>Tài khoản</h1>
+          <button class="btn btn-primary" data-create="user" data-admin-only>+ Thêm tài khoản</button>
+        </div>
+        <div class="table-wrap"><table id="users-table"></table></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ============ MODAL FORM ============ -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h2 id="modal-title"></h2>
+        <button id="modal-close" class="btn btn-ghost">✕</button>
+      </div>
+      <form id="modal-form" class="modal-body"></form>
+      <div class="modal-foot">
+        <button id="modal-cancel" class="btn btn-ghost">Hủy</button>
+        <button id="modal-save" class="btn btn-primary">Lưu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="admin.js?v=2"></script>
+</body>
+</html>

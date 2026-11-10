@@ -1,0 +1,102 @@
+@RogAdmin.Api_HostAddress = http://localhost:5161
+
+### 0) Health check
+GET {{RogAdmin.Api_HostAddress}}/health
+Accept: application/json
+
+### 1) Đăng nhập lấy token (admin) — tối đa 10 lần/phút/IP
+POST {{RogAdmin.Api_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "Admin@123"
+}
+
+### 2) Public: slide hero (shape {src, alt, href} như FE)
+GET {{RogAdmin.Api_HostAddress}}/api/public/hero-slides
+Accept: application/json
+
+### 3) Public: danh mục sản phẩm (shape {image, label, href} như FE)
+GET {{RogAdmin.Api_HostAddress}}/api/public/product-categories
+Accept: application/json
+
+### 4) Public: bài viết trang Listing (shape {img, tag, title, excerpt, href} như FE)
+GET {{RogAdmin.Api_HostAddress}}/api/public/articles?section=listing
+Accept: application/json
+
+### 5) Public: bài viết Highlights lọc theo chuyên mục (tag không cần prefix //)
+GET {{RogAdmin.Api_HostAddress}}/api/public/articles?section=highlights&tag=Guides
+Accept: application/json
+
+### 6) Public: cấu hình site (PromoBar, JoinRepublic, footer...)
+GET {{RogAdmin.Api_HostAddress}}/api/public/site-config
+Accept: application/json
+
+### 7) Admin: dashboard (cần token)
+GET {{RogAdmin.Api_HostAddress}}/api/admin/dashboard
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### 8) Admin: danh sách bài viết (cần token)
+GET {{RogAdmin.Api_HostAddress}}/api/admin/articles?page=1&pageSize=20
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### 9) Admin: tạo bài viết mới (cần token)
+POST {{RogAdmin.Api_HostAddress}}/api/admin/articles
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Bài viết thử nghiệm từ .http",
+  "tag": "Guides",
+  "imageUrl": "/sites/rog-asus/img/articles/gta6.webp",
+  "href": "https://rog.asus.com/vn/articles/",
+  "section": "Listing",
+  "excerpt": "Mô tả ngắn thử nghiệm",
+  "sortOrder": 99,
+  "isActive": true
+}
+
+### 10) Admin: danh sách chuyên mục (dropdown lọc)
+GET {{RogAdmin.Api_HostAddress}}/api/admin/articles/tags
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### 11) Admin: danh sách tài khoản (chỉ role Admin)
+GET {{RogAdmin.Api_HostAddress}}/api/admin/users
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### 12) Admin: tạo tài khoản mới
+POST {{RogAdmin.Api_HostAddress}}/api/admin/users
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "username": "bien-tap-vien-2",
+  "password": "MatKhau@123",
+  "fullName": "Biên tập viên 2",
+  "role": "Editor",
+  "isActive": true
+}
+
+### 13) Đổi mật khẩu của chính mình (cả Admin lẫn Editor)
+PUT {{RogAdmin.Api_HostAddress}}/api/admin/account/password
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "currentPassword": "Admin@123",
+  "newPassword": "MatKhauMoi@123"
+}
+
+### 14) Admin: đặt lại mật khẩu cho user khác
+PUT {{RogAdmin.Api_HostAddress}}/api/admin/users/2/password
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "newPassword": "MatKhauMoi@123"
+}
