@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect } from "react";
 import RogNavbar from "@/components/sites/rog-asus/RogNavbar";
 import RogFooter from "@/components/sites/rog-asus/RogFooter";
@@ -10,6 +9,23 @@ import { IPHONE_18_PRO_HTML } from "./iphone-18-pro-html";
 
 export default function AppleIphone18ProOverview() {
   useEffect(() => {
+    // 0. Inject vendor CSS into <head>
+    const cssUrls = [
+      "/sites/apple/macbook-pro-proled/css/apple-fonts.css",
+      "/sites/apple/iphone-18-pro/css/overview.built.css",
+      "/sites/apple/iphone-duo/css/modal.css",
+    ];
+    const injectedLinks: HTMLLinkElement[] = [];
+    for (const href of cssUrls) {
+      if (!document.querySelector(`link[href="${href}"]`)) {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = href;
+        document.head.appendChild(link);
+        injectedLinks.push(link);
+      }
+    }
+
     // 1. Suppress video play()/pause() abort rejections in modern browsers
     const handleRejection = (e: PromiseRejectionEvent) => {
       if (
@@ -98,6 +114,7 @@ export default function AppleIphone18ProOverview() {
           // ignore
         }
       });
+      injectedLinks.forEach((l) => { try { l.remove(); } catch { /* ignore */ } });
     };
   }, []);
 
@@ -109,12 +126,7 @@ export default function AppleIphone18ProOverview() {
       {/* 1. Official ROG Header */}
       <RogNavbar />
 
-      {/* 2. Apple Stylesheets & Font Links */}
-      <link rel="stylesheet" href="/sites/apple/macbook-pro-proled/css/apple-fonts.css" />
-      <link rel="stylesheet" href="/sites/apple/iphone-18-pro/css/overview.built.css" />
-      <link rel="stylesheet" href="/sites/apple/iphone-duo/css/modal.css" />
-
-      {/* 3. iPhone 18 Pro Core (Sticky Localnav & 24 Product Sections) */}
+      {/* 2. iPhone 18 Pro Core (Sticky Localnav & 24 Product Sections) */}
       <div
         className="iphone-18-pro-container"
         dangerouslySetInnerHTML={{ __html: IPHONE_18_PRO_HTML }}

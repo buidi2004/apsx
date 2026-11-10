@@ -97,7 +97,7 @@ const ARTICLES: ListingArticle[] = [
 const FILTERS = ["THỂ LOẠI", "Chassi", "ROG Xbox Ally", "Technologies", "Guides", "ROG Gaming Laptops"];
 
 export default function RogArticleListing() {
-  const [articles, setArticles] = useState<ListingArticle[]>([]);
+  const [articles, setArticles] = useState<ListingArticle[]>(ARTICLES);
   const [filter, setFilter] = useState<string | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 

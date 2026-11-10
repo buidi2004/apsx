@@ -9,6 +9,25 @@ import { APPLE_PROLED_HTML } from "./apple-proled-html";
 
 export default function AppleMacbookProProledOverview() {
   useEffect(() => {
+    // 0. Inject vendor CSS into <head>
+    const cssUrls = [
+      "/sites/apple/macbook-pro-proled/css/apple-fonts.css",
+      "/sites/apple/macbook-pro-proled/css/ac-localnav.built.css",
+      "/sites/apple/macbook-pro-proled/css/campaigns-overview.built.css",
+      "/sites/apple/macbook-pro-proled/css/overview.built.css",
+      "/sites/apple/macbook-pro-proled/css/modal.css",
+    ];
+    const injectedLinks: HTMLLinkElement[] = [];
+    for (const href of cssUrls) {
+      if (!document.querySelector(`link[href="${href}"]`)) {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = href;
+        document.head.appendChild(link);
+        injectedLinks.push(link);
+      }
+    }
+
     // 1. Suppress video play()/pause() abort rejections in modern browsers
     const handleRejection = (e: PromiseRejectionEvent) => {
       if (
@@ -105,6 +124,7 @@ export default function AppleMacbookProProledOverview() {
           // ignore
         }
       });
+      injectedLinks.forEach((l) => { try { l.remove(); } catch { /* ignore */ } });
     };
   }, []);
 
@@ -113,14 +133,7 @@ export default function AppleMacbookProProledOverview() {
       {/* 1. Official ROG Header */}
       <RogNavbar />
 
-      {/* 2. Apple Stylesheets & Font Links */}
-      <link rel="stylesheet" href="/sites/apple/macbook-pro-proled/css/apple-fonts.css" />
-      <link rel="stylesheet" href="/sites/apple/macbook-pro-proled/css/ac-localnav.built.css" />
-      <link rel="stylesheet" href="/sites/apple/macbook-pro-proled/css/campaigns-overview.built.css" />
-      <link rel="stylesheet" href="/sites/apple/macbook-pro-proled/css/overview.built.css" />
-      <link rel="stylesheet" href="/sites/apple/macbook-pro-proled/css/modal.css" />
-
-      {/* 3. MacBook Pro with PROLED XDR Display Core (Sticky Localnav & 19 Sections) */}
+      {/* 2. MacBook Pro with PROLED XDR Display Core (Sticky Localnav & 19 Sections) */}
       <div
         className="apple-proled-container"
         dangerouslySetInnerHTML={{ __html: APPLE_PROLED_HTML }}

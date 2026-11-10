@@ -54,7 +54,7 @@ const SLIDES: HeroSlide[] = [
 const INTERVAL_MS = 5000;
 
 export default function RogHeroCarousel() {
-  const [slides, setSlides] = useState<HeroSlide[]>([]);
+  const [slides, setSlides] = useState<HeroSlide[]>(SLIDES);
   const [active, setActive] = useState(0);
   const [playing, setPlaying] = useState(true);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);

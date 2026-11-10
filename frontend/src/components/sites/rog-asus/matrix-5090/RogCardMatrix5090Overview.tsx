@@ -10,6 +10,22 @@ import RogCardMatrix5090PostFeatures from "./RogCardMatrix5090PostFeatures";
 
 export default function RogCardMatrix5090Overview() {
   useEffect(() => {
+    // 0. Inject vendor CSS into <head>
+    const cssUrls = ["/sites/rog-asus/matrix-5090/css/hd-style.css"];
+    const injectedLinks: HTMLLinkElement[] = [];
+    for (const href of cssUrls) {
+      if (!document.querySelector(`link[href="${href}"]`)) {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = href;
+        document.head.appendChild(link);
+        injectedLinks.push(link);
+      }
+    }
+    const cleanupLinks = () => {
+      injectedLinks.forEach((l) => { try { l.remove(); } catch { /* ignore */ } });
+    };
+
     // Suppress video play()/pause() abort rejections in modern browsers
     const handleRejection = (e: PromiseRejectionEvent) => {
       if (
@@ -35,6 +51,7 @@ export default function RogCardMatrix5090Overview() {
       triggerRefresh();
       return () => {
         window.removeEventListener("unhandledrejection", handleRejection);
+        cleanupLinks();
       };
     }
 
@@ -62,14 +79,12 @@ export default function RogCardMatrix5090Overview() {
       } catch {
         // ignore
       }
+      cleanupLinks();
     };
   }, []);
 
   return (
     <article className="rog-pd" style={{ backgroundColor: "#000", color: "#fff" }}>
-      {/* Official ROG Matrix Stylesheet */}
-      <link rel="stylesheet" href="/sites/rog-asus/matrix-5090/css/hd-style.css" />
-
       {/* 1. Breadcrumb navigation */}
       <div className="rog-pd-crumb-wrap">
         <nav className="rog-pd-crumb" aria-label="Breadcrumb">

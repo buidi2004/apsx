@@ -9,6 +9,30 @@ import { GALAXY_Z_FOLD8_ULTRA_HTML } from "./galaxy-z-fold8-ultra-html";
 
 export default function SamsungGalaxyZFold8UltraOverview() {
   useEffect(() => {
+    // 0. Inject vendor CSS into <head>
+    const cssUrls = [
+      "/sites/samsung/galaxy-z-fold8-ultra/css/fonts.css",
+      "/sites/samsung/galaxy-z-fold8-ultra/css/vn-site.css",
+      "/sites/samsung/galaxy-z-fold8-ultra/css/vn.min.css",
+      "/sites/samsung/galaxy-z-fold8-ultra/css/dependencies.css",
+      "/sites/samsung/galaxy-z-fold8-ultra/css/base-ux26.css",
+      "/sites/samsung/galaxy-z-fold8-ultra/css/flagship-compact.css",
+      "/sites/samsung/galaxy-z-fold8-ultra/css/floating-nav.css",
+      "/sites/samsung/galaxy-z-fold8-ultra/css/static-content.css",
+      "/sites/samsung/galaxy-z-fold8-ultra/css/common.min.css",
+      "/sites/samsung/galaxy-z-fold8-ultra/css/viewer-style.css",
+    ];
+    const injectedLinks: HTMLLinkElement[] = [];
+    for (const href of cssUrls) {
+      if (!document.querySelector(`link[href="${href}"]`)) {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = href;
+        document.head.appendChild(link);
+        injectedLinks.push(link);
+      }
+    }
+
     // 1. Suppress video play()/pause() abort rejections in modern browsers
     const handleRejection = (e: PromiseRejectionEvent) => {
       if (
@@ -95,6 +119,7 @@ export default function SamsungGalaxyZFold8UltraOverview() {
           // ignore
         }
       });
+      injectedLinks.forEach((l) => { try { l.remove(); } catch { /* ignore */ } });
     };
   }, []);
 
@@ -106,19 +131,7 @@ export default function SamsungGalaxyZFold8UltraOverview() {
       {/* 1. Official ROG Header */}
       <RogNavbar />
 
-      {/* 2. Samsung Stylesheets */}
-      <link rel="stylesheet" href="/sites/samsung/galaxy-z-fold8-ultra/css/fonts.css" />
-      <link rel="stylesheet" href="/sites/samsung/galaxy-z-fold8-ultra/css/vn-site.css" />
-      <link rel="stylesheet" href="/sites/samsung/galaxy-z-fold8-ultra/css/vn.min.css" />
-      <link rel="stylesheet" href="/sites/samsung/galaxy-z-fold8-ultra/css/dependencies.css" />
-      <link rel="stylesheet" href="/sites/samsung/galaxy-z-fold8-ultra/css/base-ux26.css" />
-      <link rel="stylesheet" href="/sites/samsung/galaxy-z-fold8-ultra/css/flagship-compact.css" />
-      <link rel="stylesheet" href="/sites/samsung/galaxy-z-fold8-ultra/css/floating-nav.css" />
-      <link rel="stylesheet" href="/sites/samsung/galaxy-z-fold8-ultra/css/static-content.css" />
-      <link rel="stylesheet" href="/sites/samsung/galaxy-z-fold8-ultra/css/common.min.css" />
-      <link rel="stylesheet" href="/sites/samsung/galaxy-z-fold8-ultra/css/viewer-style.css" />
-
-      {/* 3. Samsung Galaxy Z Fold 8 Ultra Core (Sticky Floating Nav & 38 Product Sections) */}
+      {/* 2. Samsung Galaxy Z Fold 8 Ultra Core (Sticky Floating Nav & 38 Product Sections) */}
       <div
         className="galaxy-z-fold8-ultra-container"
         dangerouslySetInnerHTML={{ __html: GALAXY_Z_FOLD8_ULTRA_HTML }}

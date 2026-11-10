@@ -9,6 +9,29 @@ import { IPAD_PRO_HTML } from "./ipad-pro-html";
 
 export default function AppleIpadProOverview() {
   useEffect(() => {
+    // 0. Inject vendor CSS into <head>
+    const cssUrls = [
+      "/sites/apple/macbook-pro-proled/css/apple-fonts.css",
+      "/sites/apple/ipad-pro/css/ac-localnav.built.css",
+      "/sites/apple/ipad-pro/css/ribbon-global.built.css",
+      "/sites/apple/ipad-pro/css/ribbon-ipad.built.css",
+      "/sites/apple/ipad-pro/css/main.built.css",
+      "/sites/apple/ipad-pro/css/overview.built.css",
+      "/sites/apple/ipad-pro/css/vn-overview.built.css",
+      "/sites/apple/ipad-pro/css/shared-index.built.css",
+      "/sites/apple/ipad-pro/css/modal.css",
+    ];
+    const injectedLinks: HTMLLinkElement[] = [];
+    for (const href of cssUrls) {
+      if (!document.querySelector(`link[href="${href}"]`)) {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = href;
+        document.head.appendChild(link);
+        injectedLinks.push(link);
+      }
+    }
+
     // 1. Suppress video play()/pause() abort rejections in modern browsers
     const handleRejection = (e: PromiseRejectionEvent) => {
       if (
@@ -98,6 +121,7 @@ export default function AppleIpadProOverview() {
           // ignore
         }
       });
+      injectedLinks.forEach((l) => { try { l.remove(); } catch { /* ignore */ } });
     };
   }, []);
 
@@ -109,18 +133,7 @@ export default function AppleIpadProOverview() {
       {/* 1. Official ROG Header */}
       <RogNavbar />
 
-      {/* 2. Apple Stylesheets & Font Links */}
-      <link rel="stylesheet" href="/sites/apple/macbook-pro-proled/css/apple-fonts.css" />
-      <link rel="stylesheet" href="/sites/apple/ipad-pro/css/ac-localnav.built.css" />
-      <link rel="stylesheet" href="/sites/apple/ipad-pro/css/ribbon-global.built.css" />
-      <link rel="stylesheet" href="/sites/apple/ipad-pro/css/ribbon-ipad.built.css" />
-      <link rel="stylesheet" href="/sites/apple/ipad-pro/css/main.built.css" />
-      <link rel="stylesheet" href="/sites/apple/ipad-pro/css/overview.built.css" />
-      <link rel="stylesheet" href="/sites/apple/ipad-pro/css/vn-overview.built.css" />
-      <link rel="stylesheet" href="/sites/apple/ipad-pro/css/shared-index.built.css" />
-      <link rel="stylesheet" href="/sites/apple/ipad-pro/css/modal.css" />
-
-      {/* 3. iPad Pro Core (Sticky Localnav & 19 Product Sections) */}
+      {/* 2. iPad Pro Core (Sticky Localnav & 19 Product Sections) */}
       <div
         className="ipad-pro-container"
         dangerouslySetInnerHTML={{ __html: IPAD_PRO_HTML }}

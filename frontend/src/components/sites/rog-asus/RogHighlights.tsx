@@ -105,7 +105,7 @@ const GLYPHS = [
 ];
 
 export default function RogHighlights() {
-  const [articles, setArticles] = useState<Article[]>([]);
+  const [articles, setArticles] = useState<Article[]>(ARTICLES);
   const mobileTrackRef = useRef<HTMLDivElement>(null);
   const [mobilePage, setMobilePage] = useState(0);
 
