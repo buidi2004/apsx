@@ -18,9 +18,26 @@ mkdir -p "$LOG_DIR"
 BE_PORT=5161
 FE_PORT=3000
 
-# -------- kiểm tra môi trường --------
-command -v dotnet >/dev/null || { echo "❌ Chưa cài dotnet SDK"; exit 1; }
-command -v node   >/dev/null || { echo "❌ Chưa cài Node.js"; exit 1; }
+# -------- Node >= 24 (yêu cầu của frontend/package.json) --------
+# Chọn trực tiếp bản Node >= 24 cao nhất trong ~/.nvm (không dùng nvm.sh để tránh xung đột prefix trong ~/.npmrc)
+NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+if [ -d "$NVM_DIR/versions/node" ]; then
+  NODE24_BIN="$(ls -1d "$NVM_DIR"/versions/node/v* 2>/dev/null | while read -r d; do
+    m="${d##*/v}"; m="${m%%.*}"
+    [ "$m" -ge 24 ] 2>/dev/null && echo "$d"
+  done | sort -V | tail -1)"
+  [ -n "$NODE24_BIN" ] && export PATH="$NODE24_BIN/bin:$PATH"
+fi
+command -v node >/dev/null || { echo "❌ Chưa cài Node.js"; exit 1; }
+
+# Báo lỗi sớm nếu Node < 24 so với engines trong frontend/package.json
+MAJOR="$(node -p 'process.versions.node.split(".")[0]')"
+if [ "$MAJOR" -lt 24 ]; then
+  echo "❌ Node hiện tại v$(node --version) < 24 (frontend yêu cầu >= 24)."
+  echo "   Cài qua nvm:  nvm install 24 && nvm alias default 24"
+  exit 1
+fi
+echo "Node $(node --version) | dotnet $(dotnet --version)"
 
 # -------- tiện ích: kiểm tra port đang bị chiếm --------
 check_port() {
