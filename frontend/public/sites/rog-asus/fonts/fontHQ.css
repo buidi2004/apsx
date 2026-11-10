@@ -1,0 +1,82 @@
+
+@font-face {
+  font-family: "Roboto Condensed";
+  font-style: normal;
+  font-weight: normal;
+  font-display: fallback;
+  src: url("/sites/rog-asus/fonts/robotocondensed-regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "robotocondensed";
+  font-style: normal;
+  font-weight: normal;
+  font-display: fallback;
+  src: url("/sites/rog-asus/fonts/robotocondensed-regular.ttf") format("truetype");
+}
+/* 
+
+/sites/rog-asus/fonts/tradegothicltpro.ttf
+/sites/rog-asus/fonts/robotocondensed-bold.ttf
+
+*/
+@font-face {
+  font-family: "roboto";
+  font-style: normal;
+  font-weight: normal;
+  font-display: fallback;
+  src: url("/sites/rog-asus/fonts/robotocondensed-regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "condensed";
+  font-style: normal;
+  font-weight: bold;
+  font-display: fallback;
+  src: url("/sites/rog-asus/fonts/robotocondensed-bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "tradegothicltpro";
+  font-style: normal;
+  font-weight: normal;
+  font-display: fallback;
+  src: url("/sites/rog-asus/fonts/tradegothicltpro.ttf") format("truetype");
+}
+
+
+@font-face {
+  font-family: "tradegothicltprobold";
+  font-style: normal;
+  font-weight: normal;
+  font-display: fallback;
+  src: url("/sites/rog-asus/fonts/tradegothicltpro-bold.ttf") format("truetype");
+}
+
+
+
+@font-face {
+  font-family: "ROGFonts-Regular";
+  font-style: normal;
+  font-weight: normal;
+  font-display: fallback;
+  src: url("/sites/rog-asus/fonts/rogfonts-regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "segoeui";
+  font-style: normal;
+  font-weight: normal;
+  font-display: fallback;
+  src: url("/sites/rog-asus/fonts/segoeui.woff") format("woff");
+}
+
+@font-face {
+  font-family: "segoeui-bold";
+  font-style: normal;
+  font-weight: normal;
+  font-display: fallback;
+  src: url("/sites/rog-asus/fonts/Segoe-UI-Bold.woff") format("woff"),
+  url("~assets/fonts/Segoe-UI-Bold.woff") format("woff");
+}
+

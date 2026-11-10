@@ -1,0 +1,382 @@
+/* RogProductHome — product category page template (per /vn/*-group/ source) */
+
+/* hero */
+.rog-ph-hero {
+  position: relative;
+  width: 100%;
+  height: 555px;
+  overflow: hidden;
+  background: #000;
+}
+.rog-ph-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  pointer-events: none;
+}
+.rog-ph-slide-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.rog-ph-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.rog-ph-indicators {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+}
+.rog-ph-bar {
+  width: 60px;
+  height: 4px;
+  border: none;
+  padding: 0;
+  background: rgba(153, 153, 153, 0.5);
+  border-radius: 2px;
+  cursor: pointer;
+  overflow: hidden;
+  display: block;
+}
+.rog-ph-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #ff4c5f;
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+.rog-ph-fill-active {
+  animation: rog-ph-progress 5s linear forwards;
+}
+.rog-ph-fill-paused {
+  animation-play-state: paused;
+}
+@keyframes rog-ph-progress {
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+.rog-ph-pause {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  padding: 2px;
+  margin-left: 4px;
+}
+.rog-ph-pause:hover {
+  color: #fff;
+}
+
+/* intro */
+.rog-ph-intro {
+  background: #fff;
+  color: #111;
+  text-align: center;
+  padding: 90px 24px 64px;
+}
+.rog-ph-intro-title {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 40px;
+  margin: 0 0 20px;
+  color: #111;
+}
+.rog-ph-intro-text {
+  max-width: 980px;
+  margin: 0 auto 18px;
+  font-size: 16px;
+  line-height: 1.55;
+  color: #333;
+}
+.rog-ph-xemtatca {
+  color: var(--rog-red-bright);
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+}
+.rog-ph-xemtatca:hover {
+  text-decoration: underline;
+}
+.rog-ph-intro-btn-row {
+  margin: 26px 0 0;
+}
+.rog-ph-bigcards {
+  max-width: 1360px;
+  margin: 44px auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.rog-ph-bigcard {
+  background: #f5f5f5;
+  overflow: hidden;
+}
+.rog-ph-bigcard img {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 631 / 395;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+.rog-ph-bigcard:hover img {
+  transform: scale(1.04);
+}
+
+/* TÌM SẢN PHẨM PHÙ HỢP */
+.rog-ph-find {
+  margin: 56px auto 0;
+  max-width: 760px;
+}
+.rog-ph-find-title {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 36px;
+  margin: 0 0 12px;
+  color: #111;
+}
+.rog-ph-find-text {
+  font-size: 16px;
+  color: #444;
+  margin: 0;
+}
+
+/* hot products */
+.rog-ph-hot {
+  background: #f5f5f5;
+  color: #111;
+  padding: 48px 0 64px;
+}
+.rog-ph-hot-title {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 36px;
+  text-align: center;
+  margin: 0 0 16px;
+  color: #111;
+}
+.rog-ph-hot-ai-row {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.rog-ph-hot-grid {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.rog-ph-hot-card {
+  background: #fff;
+  padding: 16px 14px 20px;
+}
+.rog-ph-hot-card a {
+  color: inherit;
+}
+.rog-ph-hot-img {
+  height: 190px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+.rog-ph-hot-img img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform 0.35s ease;
+}
+.rog-ph-hot-card:hover .rog-ph-hot-img img {
+  transform: scale(1.05);
+}
+.rog-ph-hot-name {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 20px;
+  text-align: center;
+  line-height: 1.3;
+  margin: 0 0 12px;
+  color: #111;
+}
+.rog-ph-hot-desc {
+  font-size: 13.5px;
+  color: #555;
+  line-height: 1.5;
+  text-align: center;
+  margin: 0 0 14px;
+}
+.rog-ph-hot-card .rog-hot-more {
+  display: inline-block;
+  text-align: center;
+}
+.rog-ph-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+  padding-top: 6px;
+}
+.rog-hot-detail-badge {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #222;
+  background: #f0f0f0;
+  padding: 3px 8px;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+  letter-spacing: 0.5px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.rog-ph-hot-card:hover .rog-hot-detail-badge {
+  background: #ff0036;
+  color: #fff;
+  border-color: #ff0036;
+}
+
+.rog-ph-view-all-wrap {
+  text-align: center;
+  margin: 36px auto 20px;
+}
+.rog-ph-btn-view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #111;
+  color: #fff !important;
+  font-family: var(--rog-body-font);
+  font-size: 13.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 12px 30px;
+  border-radius: 4px;
+  text-decoration: none !important;
+  transition: all 0.2s ease;
+  letter-spacing: 0.5px;
+}
+.rog-ph-btn-view-all:hover {
+  background: #ff0036;
+  color: #fff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(255, 0, 54, 0.4);
+}
+
+@media (max-width: 1023px) {
+  .rog-ph-hero {
+    height: 480px;
+  }
+  .rog-ph-intro {
+    padding: 56px 16px 48px;
+  }
+  .rog-ph-intro-title {
+    font-size: 30px;
+  }
+  .rog-ph-bigcards {
+    grid-template-columns: 1fr;
+    padding: 0 16px;
+  }
+  .rog-ph-hot-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+}
+
+
+/* Series cards on category hub (e.g. laptops-group) */
+.rog-ph-series-section {
+  max-width: 1360px;
+  margin: 30px auto 40px;
+  padding: 0 24px;
+}
+.rog-ph-series-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+@media (max-width: 900px) {
+  .rog-ph-series-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.rog-ph-series-card {
+  background: #111;
+  border: 1px solid #262626;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+.rog-ph-series-card:hover {
+  transform: translateY(-4px);
+  border-color: #e60012;
+}
+.rog-ph-series-img-wrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #000;
+}
+.rog-ph-series-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.rog-ph-series-card:hover .rog-ph-series-img-wrap img {
+  transform: scale(1.05);
+}
+.rog-ph-series-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.rog-ph-series-title {
+  color: #fff;
+  font-family: var(--rog-heading-font, var(--rog-body-font));
+  font-size: 26px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  letter-spacing: 0.5px;
+}
+.rog-ph-series-desc {
+  color: #999;
+  font-size: 14.5px;
+  line-height: 1.6;
+  margin: 0 0 24px 0;
+  flex: 1;
+}
+.rog-ph-series-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  color: #e60012;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: gap 0.2s ease, color 0.2s ease;
+}
+.rog-ph-series-link:hover {
+  color: #ff3344;
+  gap: 12px;
+}

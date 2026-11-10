@@ -1,0 +1,67 @@
+/* RogJoinRepublic — "THE ART OF THE ROG UNIVERSE" banner */
+
+.rog-jr {
+  background: #000;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+.rog-jr-link {
+  text-decoration: none;
+  color: inherit;
+}
+.rog-jr-link:hover .rog-jr-title {
+  text-decoration: underline;
+}
+
+.rog-jr-text {
+  padding: 32px 24px;
+}
+.rog-jr-title {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 28px;
+  margin: 0 0 12px;
+}
+.rog-jr-desc {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #eee;
+  margin: 0;
+}
+
+.rog-jr-art img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+@media (min-width: 1024px) {
+  .rog-jr {
+    position: relative;
+    flex-direction: row;
+    align-items: center;
+    min-height: 375px;
+  }
+  .rog-jr-art {
+    position: absolute;
+    inset: 0;
+  }
+  .rog-jr-art img {
+    width: 100%;
+    height: 100%;
+    max-height: 375px;
+  }
+  .rog-jr-text {
+    position: relative;
+    z-index: 1;
+    margin-left: auto;
+    width: 42%;
+    max-width: 560px;
+    padding: 40px 60px 40px 0;
+  }
+  .rog-jr-title {
+    font-size: 32px;
+  }
+}

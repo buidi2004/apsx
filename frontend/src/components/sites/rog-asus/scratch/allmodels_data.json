@@ -1,0 +1,271 @@
+{
+  "laptops-group": [
+    {
+      "name": "ROG Strix G18 (2025)",
+      "model": "G815LM-S9088W",
+      "img": "https://dlcdnwebimgs.asus.com/gain/BF78DF19-AA0C-4464-B21B-CB1393BD6570/w717/h525",
+      "link": "/vn/laptops/rog-strix/rog-strix-g18-2025/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG Zephyrus G16 (2025) GU605",
+      "model": "GU605CP-QR141W",
+      "img": "https://dlcdnwebimgs.asus.com/gain/8DFC1629-C380-4005-A755-517B02AACD98/w717/h525",
+      "link": "/vn/laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG Zephyrus G16 (2025) GU605",
+      "model": "GU605CP-QR115W",
+      "img": "https://dlcdnwebimgs.asus.com/gain/8DFC1629-C380-4005-A755-517B02AACD98/w717/h525",
+      "link": "/vn/laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG Strix SCAR 18 (2026)",
+      "model": "G835LXG-TQ473W",
+      "img": "https://dlcdnwebimgs.asus.com/gain/6B2FAE90-9A5A-4758-91EE-073829291922/w717/h525",
+      "link": "/vn/laptops/rog-strix/rog-strix-scar-18-2026/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG Strix SCAR 18 (2026)",
+      "model": "G835LWG-TQ383W",
+      "img": "https://dlcdnwebimgs.asus.com/gain/BF6C0FA0-C6B9-4ED4-9FC7-3ECFFE707213/w717/h525",
+      "link": "/vn/laptops/rog-strix/rog-strix-scar-18-2026/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG Zephyrus G14 (2025)",
+      "model": "GA403WM-QS051WS",
+      "img": "https://dlcdnwebimgs.asus.com/gain/E90DE227-7002-48C1-A940-B6E952D0BCCC/w717/h525",
+      "link": "/vn/laptops/rog-zephyrus/rog-zephyrus-g14-2025/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG Zephyrus G16 (2026)",
+      "model": "GU606AX-TB042WS",
+      "img": "https://dlcdnwebimgs.asus.com/gain/12A6D30F-E19C-4FBB-8EBD-629EEA40570A/w717/h525",
+      "link": "/vn/laptops/rog-zephyrus/rog-zephyrus-g16-2026/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG Zephyrus G16 (2026)",
+      "model": "GU606AR-TB027W",
+      "img": "https://dlcdnwebimgs.asus.com/gain/B198DD60-EFF9-43C6-8CDE-28E65E811CE8/w717/h525",
+      "link": "/vn/laptops/rog-zephyrus/rog-zephyrus-g16-2026/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG Zephyrus G16 (2026)",
+      "model": "GU606AM-TB032W",
+      "img": "https://dlcdnwebimgs.asus.com/gain/4322A382-3010-420B-A036-C05706B68CED/w717/h525",
+      "link": "/vn/laptops/rog-zephyrus/rog-zephyrus-g16-2026/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    }
+  ],
+  "motherboards-group": [
+    {
+      "name": "ROG CROSSHAIR X870E EDITION 20",
+      "model": "",
+      "img": "https://dlcdnwebimgs.asus.com/gain/ECBCBC04-0968-43CE-898A-15F80F86C0E6/w717/h525",
+      "link": "/vn/motherboards/rog-crosshair/rog-crosshair-x870e-edition-20/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG STRIX X870E-H GAMING WIFI7 HATSUNE MIKU EDITION",
+      "model": "",
+      "img": "https://dlcdnwebimgs.asus.com/gain/0B993BB9-71CC-4730-8C0A-B4429F37DAA5/w717/h525",
+      "link": "/vn/motherboards/rog-strix/rog-strix-x870e-h-gaming-wifi7-hatsune-miku-edition/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG STRIX B860-I GAMING WIFI",
+      "model": "",
+      "img": "https://dlcdnwebimgs.asus.com/gain/CB4C470A-3BE0-47CD-B2B5-1C0AE3292C2E/w717/h525",
+      "link": "/vn/motherboards/rog-strix/rog-strix-b860-i-gaming-wifi/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG STRIX B860-G GAMING WIFI",
+      "model": "",
+      "img": "https://dlcdnwebimgs.asus.com/gain/12610F45-0D18-4254-97F7-D237DBBE1D38/w717/h525",
+      "link": "/vn/motherboards/rog-strix/rog-strix-b860-g-gaming-wifi/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG STRIX B860-A GAMING WIFI",
+      "model": "",
+      "img": "https://dlcdnwebimgs.asus.com/gain/C4EA52D4-C2B7-434F-AB84-9710409AA2C3/w717/h525",
+      "link": "/vn/motherboards/rog-strix/rog-strix-b860-a-gaming-wifi/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG STRIX B860-F GAMING WIFI",
+      "model": "",
+      "img": "https://dlcdnwebimgs.asus.com/gain/A8362654-EC82-4643-B925-EBDBAA527893/w717/h525",
+      "link": "/vn/motherboards/rog-strix/rog-strix-b860-f-gaming-wifi/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG STRIX B850-A GAMING WIFI",
+      "model": "",
+      "img": "https://dlcdnwebimgs.asus.com/gain/8435EF24-6EF3-44AA-97B9-E6858ACD495C/w717/h525",
+      "link": "/vn/motherboards/rog-strix/rog-strix-b850-a-gaming-wifi/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG STRIX B850-F GAMING WIFI",
+      "model": "",
+      "img": "https://dlcdnwebimgs.asus.com/gain/87C03001-78CC-4C5D-866A-9FC7199B6AF5/w717/h525",
+      "link": "/vn/motherboards/rog-strix/rog-strix-b850-f-gaming-wifi/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG STRIX B850-E GAMING WIFI",
+      "model": "",
+      "img": "https://dlcdnwebimgs.asus.com/gain/A5A5CF00-C00B-4E6F-9470-6CDB3B0BE5ED/w717/h525",
+      "link": "/vn/motherboards/rog-strix/rog-strix-b850-e-gaming-wifi/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    }
+  ],
+  "monitors-group": [
+    {
+      "name": "ROG Strix OLED XG27AQWMG",
+      "model": "",
+      "img": "https://dlcdnwebimgs.asus.com/gain/609612E2-9EBC-4A8B-8402-91FB13DF5C96/w717/h525",
+      "link": "/vn/monitors/27-to-31-5-inches/rog-strix-oled-xg27aqwmg/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG Strix XG259QNSR Ace",
+      "model": "",
+      "img": "https://dlcdnwebimgs.asus.com/gain/B276CBB3-24EB-4015-B005-87C455818976/w717/h525",
+      "link": "/vn/monitors/23-to-24-5-inches/rog-strix-xg259qnsr-ace/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG Swift OLED PG34WCDN",
+      "model": "",
+      "img": "https://dlcdnwebimgs.asus.com/gain/FC5461B1-46CE-4886-9BD3-52B1268E6BB6/w717/h525",
+      "link": "/vn/monitors/32-to-34-inches/rog-swift-oled-pg34wcdn/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG Strix OLED XG27AQDMES",
+      "model": "",
+      "img": "https://dlcdnwebimgs.asus.com/gain/271310F2-B1E9-428E-A727-C35F26652934/w717/h525",
+      "link": "/vn/monitors/27-to-31-5-inches/rog-strix-oled-xg27aqdmes/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG Strix OLED XG27AQDMG Gen2 (XG27AQDMGR)",
+      "model": "",
+      "img": "https://dlcdnwebimgs.asus.com/gain/FA804897-208F-4E22-A12F-9F3592B9D810/w717/h525",
+      "link": "/vn/monitors/27-to-31-5-inches/rog-strix-oled-xg27aqdmg-gen2-xg27aqdmgr/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG Swift OLED PG27UCDM",
+      "model": "",
+      "img": "https://dlcdnwebimgs.asus.com/gain/D26349C3-97F2-4A59-8087-E09882C0D455/w717/h525",
+      "link": "/vn/monitors/27-to-31-5-inches/rog-swift-oled-pg27ucdm/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG Strix OLED XG27ACDMS",
+      "model": "",
+      "img": "https://dlcdnwebimgs.asus.com/gain/500E8FF4-5D1C-4285-83B2-7861605D36E5/w717/h525",
+      "link": "/vn/monitors/27-to-31-5-inches/rog-strix-oled-xg27acdms/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG Strix OLED XG32UCWMG",
+      "model": "",
+      "img": "https://dlcdnwebimgs.asus.com/gain/0E265871-C4E7-4B02-8C19-4C870E460AE9/w717/h525",
+      "link": "/vn/monitors/27-to-31-5-inches/rog-strix-oled-xg32ucwmg/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG Strix OLED XG34WCDG",
+      "model": "",
+      "img": "https://dlcdnwebimgs.asus.com/gain/251BB234-6102-472E-AFB5-927152237C7C/w717/h525",
+      "link": "/vn/monitors/32-to-34-inches/rog-strix-oled-xg34wcdg/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    }
+  ],
+  "phones-group": [
+    {
+      "name": "ROG Phone 7",
+      "model": "",
+      "img": "https://dlcdnwebimgs.asus.com/gain/C91B34FA-D253-4E35-9C67-BDFF3EC90E9B/w717/h525",
+      "link": "/vn/phones/rog-phone-7/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    },
+    {
+      "name": "ROG Phone 7",
+      "model": "",
+      "img": "https://dlcdnwebimgs.asus.com/gain/4A2BCCC6-B9D8-47A5-AD7F-501E30A462A9/w717/h525",
+      "link": "/vn/phones/rog-phone-7/",
+      "features": [],
+      "tag": "",
+      "spec": ""
+    }
+  ]
+}

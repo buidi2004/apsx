@@ -1,0 +1,101 @@
+#icon-card-specialist.icon-card .icon-container {
+	padding-top: 5px;
+	padding-bottom: 31px;
+}
+
+.subsection-ipados .ipados-headline {
+	margin-top: 80px;
+}
+
+.section-incentive .section-header-headline {
+	max-width: 580px;
+}
+
+/* VN hero text gradient fix */
+.section-welcome .welcome .welcome-text-content.gradient-text {
+	padding-bottom: 4px;
+}
+
+/* Creator section fix */
+@media (max-width: 734px) {
+	.modal-l2 .chip-l2-wrapper .chip-hero .hero .hero-headline {
+		width: 100%;
+	}
+}
+
+@media (min-width: 735px) {
+	.modal-l2 .chip-l2-wrapper .chip-hero .hero .hero-headline {
+		top: -24px;
+	}
+}
+
+@media (max-width: 734px) {
+	.subsection.subsection-chip .typography-site-headline-elevated {
+		font-size: 38px;
+	}
+}
+
+/* Wi-Fi Section */
+@media (min-width: 1035px) {
+	.subsection.subsection-connectivity .typography-site-headline-elevated {
+		font-size: 68px;
+	}
+}
+
+@media (max-width: 734px) {
+	.subsection.subsection-connectivity .typography-site-headline-elevated {
+		font-size: 34px;
+	}
+}
+
+@media (max-width: 734px) {
+	#modal-connectivity .connectivity-l2-wrapper .content-area {
+		--l2-spacing-column-width: 32px;
+	}
+}
+
+@media (max-width: 734px) {
+	#modal-connectivity .connectivity-l2-wrapper h2.typography-site-headline {
+		top: 0px;
+		font-size: 26px;
+	}
+}
+
+@media (min-width: 735px) and (max-width: 1034px) {
+	#modal-connectivity .connectivity-l2-wrapper h2.typography-site-headline {
+		top: -30px;
+		font-size: 42px;
+	}
+}
+
+@media (min-width: 1035px) {
+	#modal-connectivity .connectivity-l2-wrapper h2.typography-site-headline {
+		top: 30px;
+		font-size: 54px;
+	}
+}
+
+/* Compare/Contrast section mobile fix for iPad Air */
+.section-contrast .product-tile-positioning {
+	min-height: 80px;
+}
+
+.section-contrast .product-tile-ipad-air .product-tile-plus {
+	margin-top: 0px;
+}
+
+.headline-keyboard {
+	line-height: 1.15;
+}
+
+@media (max-width: 1068px) {
+	.headline-keyboard {
+		line-height: 1.0625;
+	}
+}
+
+@media (max-width: 734px) {
+	.headline-keyboard {
+		line-height: 1.1;
+	}
+}

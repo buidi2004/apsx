@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_分離模式" data-name="分離模式" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 151.04 11.86">
+  <!-- Generator: Adobe Illustrator 29.8.2, SVG Export Plug-In . SVG Version: 2.1.1 Build 3)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+        stroke: #f51928;
+        stroke-miterlimit: 10;
+        stroke-width: .5px;
+      }
+
+      .st1 {
+        fill: #f51928;
+      }
+    </style>
+  </defs>
+  <g>
+    <g>
+      <rect class="st0" x=".25" y=".25" width="31.16" height="11.36"/>
+      <rect class="st1" x=".25" y=".25" width="5.32" height="11.36"/>
+      <g>
+        <path class="st1" d="M11.54,9.58h-.62l2.12-6.57h.62l-2.12,6.57Z"/>
+        <path class="st1" d="M17.81,9.06h-3.38v-.55l1.72-2.29c.26-.35.44-.64.54-.87.1-.22.15-.46.15-.72,0-.32-.07-.58-.22-.78-.15-.2-.35-.3-.59-.3-.31,0-.54.11-.71.32-.17.21-.25.52-.25.92h-.74c0-.56.15-1.01.46-1.35.3-.34.72-.52,1.24-.52.48,0,.86.15,1.14.44.28.29.42.69.42,1.18,0,.6-.31,1.31-.94,2.12l-1.35,1.76h2.5v.63Z"/>
+        <path class="st1" d="M21.86,6.48c0,.89-.13,1.56-.39,2-.26.44-.67.66-1.23.66s-.94-.21-1.21-.64-.4-1.06-.42-1.91v-1.04c0-.88.13-1.54.39-1.98.26-.44.67-.65,1.22-.65s.95.21,1.21.62c.26.41.4,1.04.41,1.87v1.06ZM21.13,5.43c0-.64-.07-1.11-.21-1.42-.14-.3-.37-.46-.68-.46s-.52.15-.67.45c-.14.3-.21.75-.22,1.35v1.25c0,.64.07,1.12.22,1.44.15.32.37.48.67.48s.52-.15.66-.45c.14-.3.21-.76.22-1.38v-1.25Z"/>
+        <path class="st1" d="M25.39,3v.65h-.12c-.49.01-.88.18-1.15.5-.28.32-.44.8-.48,1.44.27-.34.61-.51,1.03-.51.45,0,.8.18,1.06.55s.39.85.39,1.44c0,.63-.14,1.14-.43,1.5-.29.37-.68.55-1.17.55s-.88-.22-1.18-.65c-.3-.43-.45-1.01-.45-1.73v-.29c0-.83.09-1.49.27-1.99.18-.49.45-.86.8-1.1.35-.24.79-.36,1.31-.37h.12ZM24.55,5.73c-.2,0-.38.08-.55.23s-.29.35-.37.58v.3c0,.49.09.89.26,1.2.17.31.39.46.64.46.27,0,.49-.13.64-.38.16-.25.23-.59.23-1s-.08-.74-.23-1c-.16-.26-.36-.39-.62-.39Z"/>
+      </g>
+    </g>
+    <rect class="st1" x="34.66" y=".25" width="2.33" height="11.36"/>
+    <g>
+      <rect class="st1" x="84.53" y=".25" width="1.32" height="1.32" transform="translate(86.1 -84.28) rotate(90)"/>
+      <rect class="st1" x="78.45" y="5.27" width="1.32" height="1.32" transform="translate(85.04 -73.18) rotate(90)"/>
+      <rect class="st1" x="84.53" y="10.29" width="1.32" height="1.32" transform="translate(96.14 -74.23) rotate(90)"/>
+      <rect class="st1" x="72.37" y=".25" width="1.32" height="1.32" transform="translate(73.94 -72.12) rotate(90)"/>
+      <rect class="st1" x="66.29" y="5.27" width="1.32" height="1.32" transform="translate(72.88 -61.02) rotate(90)"/>
+      <rect class="st1" x="72.37" y="10.29" width="1.32" height="1.32" transform="translate(83.98 -62.08) rotate(90)"/>
+      <rect class="st1" x="60.21" y=".25" width="1.32" height="1.32" transform="translate(61.78 -59.96) rotate(90)"/>
+      <rect class="st1" x="54.13" y="5.27" width="1.32" height="1.32" transform="translate(60.73 -48.86) rotate(90)"/>
+      <rect class="st1" x="60.21" y="10.29" width="1.32" height="1.32" transform="translate(71.83 -49.92) rotate(90)"/>
+      <rect class="st1" x="48.05" y=".25" width="1.32" height="1.32" transform="translate(49.63 -47.8) rotate(90)"/>
+      <rect class="st1" x="41.98" y="5.27" width="1.32" height="1.32" transform="translate(48.57 -36.7) rotate(90)"/>
+      <rect class="st1" x="48.05" y="10.29" width="1.32" height="1.32" transform="translate(59.67 -37.76) rotate(90)"/>
+    </g>
+  </g>
+  <g>
+    <polygon class="st1" points="135.79 .44 124.74 11.48 127.6 11.48 138.65 .44 135.79 .44"/>
+    <polygon class="st1" points="141.99 .44 130.94 11.48 133.79 11.48 144.84 .44 141.99 .44"/>
+    <polygon class="st1" points="148.18 .44 137.13 11.48 139.99 11.48 151.04 .44 148.18 .44"/>
+  </g>
+</svg>

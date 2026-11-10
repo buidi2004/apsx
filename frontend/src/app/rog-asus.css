@@ -1,0 +1,153 @@
+/* ROG ASUS VN clone — scoped styles. All classes prefixed rog- */
+
+/* ---- Fonts (from source fontHQ.css) ---- */
+@font-face {
+  font-family: "ROGFonts-Regular";
+  font-style: normal;
+  font-weight: normal;
+  font-display: fallback;
+  src: url("/sites/rog-asus/fonts/rogfonts-regular.otf") format("opentype");
+}
+@font-face {
+  font-family: "Roboto Condensed";
+  font-style: normal;
+  font-weight: normal;
+  font-display: fallback;
+  src: url("/sites/rog-asus/fonts/robotocondensed-regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Roboto Condensed";
+  font-style: normal;
+  font-weight: bold;
+  font-display: fallback;
+  src: url("/sites/rog-asus/fonts/robotocondensed-bold.ttf") format("truetype");
+}
+@font-face {
+  font-family: "condensed";
+  font-style: normal;
+  font-weight: bold;
+  font-display: fallback;
+  src: url("/sites/rog-asus/fonts/robotocondensed-bold.ttf") format("truetype");
+}
+@font-face {
+  font-family: "tradegothicltpro";
+  font-style: normal;
+  font-weight: normal;
+  font-display: fallback;
+  src: url("/sites/rog-asus/fonts/tradegothicltpro.ttf") format("truetype");
+}
+
+/* ---- Tokens ---- */
+:root {
+  --rog-red: #cc000e;
+  --rog-red-bright: #e60012;
+  --rog-footer-bg: #0e0e0e;
+  --rog-footer-text: #c6c6c6;
+  --rog-body-font: "Roboto Condensed", "Microsoft JhengHei", sans-serif;
+  --rog-heading-font: "condensed", "Roboto Condensed", sans-serif;
+}
+
+/* ---- Page base ---- */
+html {
+  overflow-x: clip;
+  overflow-y: auto;
+  background: #000;
+  color: #fff;
+}
+
+body {
+  position: static !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 100vh;
+  overflow: visible !important;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+  background: #000;
+  color: #fff;
+}
+
+.rog-page {
+  font-family: var(--rog-body-font);
+  background: #000;
+  color: #fff;
+  position: relative;
+  width: 100%;
+  overflow: visible !important;
+}
+
+.rog-page a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ---- Section heading (KHÁM PHÁ SẢN PHẨM CỦA CHÚNG TÔI) ---- */
+.rog-section-title {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.2;
+}
+
+/* ---- AI Recommendations gradient button ---- */
+.rog-ai-btn {
+  background-image: linear-gradient(
+    90deg,
+    #4545ff,
+    #8336b8,
+    #c12871,
+    #ff1a29,
+    #c12871,
+    #8336b8,
+    #4545ff
+  );
+  background-size: 200% 100%;
+  color: #fff;
+  font-size: 16px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  animation: rog-gradient-slide 6s linear infinite;
+}
+@keyframes rog-gradient-slide {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* ---- ROG Highlights gradient background (sampled from source) ---- */
+.rog-highlights-bg {
+  background:
+    radial-gradient(60% 95% at 99% 42%, rgba(51, 68, 135, 0.6) 0%, rgba(23, 27, 76, 0.4) 45%, rgba(0, 0, 0, 0) 78%),
+    radial-gradient(50% 70% at 55% 10%, rgba(24, 26, 84, 0.5) 0%, rgba(0, 0, 0, 0) 70%),
+    linear-gradient(105deg, #010208 0%, #05061a 55%, #0a0d2e 100%);
+}
+
+/* ==========================================================================
+   GLOBAL LENIS INERTIAL SMOOTH SCROLL (ASUS ROG 100% SPECIFICATION)
+   ========================================================================== */
+
+html {
+  scroll-behavior: auto !important;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto !important;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+

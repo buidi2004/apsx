@@ -1,0 +1,54 @@
+/* Apple iPhone Duo Scoped Styles */
+
+:root {
+  --global-scrollbar-width: 0px;
+}
+
+html.apple-page-active {
+  background-color: #000 !important;
+}
+
+.iphone-duo-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #000;
+  color: #fff;
+  overflow-x: clip;
+  position: relative;
+  font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Localnav subbar sticks right underneath 50px RogNavbar */
+#localnav-container,
+.localnav-container,
+#ac-localnav,
+#localnav {
+  position: sticky !important;
+  top: 50px !important;
+  z-index: 900 !important;
+}
+
+.iphone-duo-container img {
+  max-width: 100%;
+  height: auto;
+}
+
+.iphone-duo-container video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Localnav subbar sticks right underneath 50px RogNavbar */
+#localnav {
+  position: sticky !important;
+  top: 50px !important;
+  z-index: 40 !important;
+}
+
+/* Fix any Tailwind svg collapse */
+.iphone-duo-container svg {
+  display: inline-block;
+}

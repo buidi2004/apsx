@@ -1,0 +1,518 @@
+/* .ss-kv-text {
+  grid-column-gap: 5.313rem;
+  grid-row-gap: 5.313rem;
+}
+@media screen and (min-width: 991px) {
+  .ss-kv-text {
+    padding-bottom: 7.813rem;
+  }
+}
+@media screen and (max-width: 991px) {
+  .ss-kv-text {
+    grid-column-gap: 3.5rem;
+    grid-row-gap: 3.5rem;
+  }
+}
+@media screen and (max-width: 479px) {
+  .ss-kv-text {
+    grid-column-gap: 2rem;
+    grid-row-gap: 2rem;
+  }
+} */
+
+/* .ss-page-title {
+  font-size: 5.25rem;
+}
+@media screen and (max-width: 1199px) {
+  .ss-page-title {
+    font-size: 4rem;
+  }
+}
+@media screen and (max-width: 991px) {
+  .ss-page-title {
+    font-size: 3rem;
+  }
+}
+@media screen and (max-width: 479px) {
+  .ss-page-title {
+    font-size: 2rem;
+  }
+} */
+
+/* .ss-page-subtitle {
+  text-transform: uppercase;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: Tradegothicltpro, sans-serif;
+  font-size: 4.375rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+@media screen and (max-width: 1199px) {
+  .ss-page-subtitle {
+    font-size: 3rem;
+  }
+}
+@media screen and (max-width: 991px) {
+  .ss-page-subtitle {
+    font-size: 2rem;
+  }
+}
+@media screen and (max-width: 479px) {
+  .ss-page-subtitle {
+    font-size: 1.5rem;
+  }
+} */
+.w-layout-vflex .heading-2 {
+  font-family: Nvidiasans W Bd, Arial, sans-serif;
+}
+
+.ss-kv{
+  overflow: hidden;
+}
+
+/* ss-kv 動畫初始狀態 */
+.ss-kv-fig-wrapper {
+  opacity: 1;
+}
+.ss-page-title {
+  /* opacity: 0;
+  transform: scale(2.5);
+  filter: blur(10px); */
+  will-change: transform, filter, opacity;
+}
+
+.ss-clean-section {
+  position: relative;
+}
+
+.zm-display-ani-trigger {
+  height: 0 !important;
+  margin: 0 !important;
+}
+
+.zm-display-screen {
+  position: relative;
+}
+.zm-display-frame {
+  --scale-ratio: 0.75;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: auto;
+  transform: translate(-50%, -50%) scale(var(--scale-ratio));
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+}
+@media screen and (max-width: 992px) {
+  .zm-display-frame {
+    --scale-ratio: 1;
+  }
+}
+@media screen and (min-width: 1920px) {
+  .zm-display-frame img{
+    width: 100%;
+  }
+}
+
+.zm-display-frame::before, .zm-display-frame::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 1);
+  z-index: -1;
+}
+.zm-display-frame::before {
+  right: 99%;
+}
+.zm-display-frame::after {
+  left: 99%;
+}
+.zm-text-mask {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+.zm-text-mask text {
+  font-family: Tradegothicltpro, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 80px;
+  will-change: transform;
+  text-rendering: geometricPrecision;
+}
+
+.ss-wattage {
+  position: relative;
+}
+.ss-wattage-title {
+  font-family: Tradegothicltpro, sans-serif;
+  font-weight: 700;
+  font-size: 2.5rem;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0 0 2rem;
+  color: #fff;
+}
+
+@media screen and (max-width: 479px) {
+  .ss-wattage .text-block-5-copy {
+    font-size: 15vw;
+  }
+}
+@media screen and (min-width: 480px) and (max-width: 767px) {
+  .ss-wattage .text-block-5-copy {
+    font-size: 12vw;
+  }
+}
+
+@property --mw-color-left {
+  syntax: '<color>';
+  initial-value: #FFF;
+  inherits: false;
+}
+@property --mw-color-right {
+  syntax: '<color>';
+  initial-value: #FFF;
+  inherits: false;
+}
+.ss-mw-total {
+  --mw-color-left: #FFF;
+  --mw-color-right: #FFF;
+  background-image: linear-gradient(90deg, var(--mw-color-left), var(--mw-color-right));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: --mw-color-left 0.8s ease, --mw-color-right 0.8s ease;
+}
+.ss-mw-total.gradient {
+  --mw-color-left: #ED59F0;
+  --mw-color-right: #2CFBFB;
+}
+
+.ss-wattage .ss-effect {
+  z-index: 10;
+}
+
+.ss-layout-center{
+  padding-top: 50px;
+}
+
+.ss-perf-intro {
+  margin-top: 50px;
+}
+
+ul.zm-ksp-grid {
+  padding: 0;
+  list-style-type: none;
+}
+
+.ss-ksp-fig-mask-c::before, .ss-ksp-fig-mask-c::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.ss-ksp-fig-mask-c::before {
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.50);
+  mix-blend-mode: soft-light;
+}
+
+.ss-ksp-fig-mask-c::after {
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.30);
+  mix-blend-mode: multiply;
+}
+
+.ss-ksp-fig-mask-c .ss-fig {
+  height: 100%;
+  object-fit: cover;
+}
+
+.ss-three-ksps .ss-xs-text {
+  max-width: 348px;
+  line-height: 140%;
+}
+
+
+
+.c-btn-toggle {
+  background-color: transparent;
+  background-image: url('/sites/rog-asus/img/scar18/pause.svg');
+  width: 24px;
+  height: 24px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 50;
+  text-indent: -999999px;
+}
+
+.c-btn-toggle[data-status=play] {
+  background-image: url('/sites/rog-asus/img/scar18/play_arrow.svg') 
+}
+
+.ss-carousel {
+  height: fit-content;
+}
+
+.div-block-14 {
+  display: flex;
+  align-items: center;
+}
+
+.div-block-14 .ss-fig {
+  height: 87.7%;
+  transform: translate(0, 3%);
+}
+
+.zm-display-btn-wrap {
+  position: absolute;
+  bottom: 5%;
+  left: 88%;
+  z-index: 10;
+}
+
+@media screen and (max-width: 991px) {
+  .zm-display-btn-wrap {
+    bottom: 30%;
+    left: 85%;
+  }
+}
+
+.ss-display .ss-child-section .ss-filled-bg {
+  left: 50%;
+}
+
+.ss-display .ss-p span{
+  font-size: 0.875rem;
+  opacity: 0.8;
+}
+
+@media screen and (min-width: 992px) {
+  .ss-display .ss-child-section .ss-filled-bg {
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 25%);
+    mask-image: linear-gradient(to right, transparent 0%, black 25%);
+  }
+}
+
+.ss-display-play-pause-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.ss-display-play-pause-button:hover {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+@media screen and (min-width: 992px) and (max-width: 1200px) {
+  .ss-battery .ss-cover-fig.is-bg{
+    max-height: 25.6rem;
+  }
+}
+
+.ss-cooling .div-block-8 {
+  position: relative;
+}
+.ss-cooling .div-block-8::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 40%;
+  background: linear-gradient(to bottom, transparent 0%, #000 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ss-subheading > *{
+  text-transform: capitalize;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(90deg, #cfc5ff, #d4ecff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: Tradegothicltpro, sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.section__faq {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.section__faq .info-container {
+  max-width: 2000px;
+  width: 80%;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+.section__faq h2 {
+  font-family: 'Trade-Gothic-LT-Bold', 'robotocondensed-bold', 'Arial',
+    'Microsoft JhengHei', 'LiHei Pro', 'WenQuanYi Zen Hei', 'sans-serif';
+  font-size: 46px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.5;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.section__faq .faq-block h3 {
+  font-family: 'Trade-Gothic-LT-Bold', 'robotocondensed-bold', 'Arial',
+    'Microsoft JhengHei', 'LiHei Pro', 'WenQuanYi Zen Hei', 'sans-serif';
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #000000;
+}
+
+.section__faq .faq-block {
+  width: 100%;
+  background-color: #ffffff;
+  display: block;
+  margin: 30px 0;
+  position: relative;
+  z-index: 3;
+  border-radius: 15px;
+}
+
+.section__faq .faq-block .question {
+  width: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 25px 25px;
+  position: relative;
+  background: transparent;
+  border: 0;
+  text-align: left;
+}
+
+/* 鍵盤聚焦樣式 */
+.section__faq .faq-block .question:focus-visible {
+  outline: 2px solid #aaa;
+  outline-offset: 3px;
+  border-radius: 15px;
+}
+
+.section__faq .faq-block .question .icon {
+  width: 23px;
+  height: 23px;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+}
+
+.section__faq .faq-block .question .icon::before,
+.section__faq .faq-block .question .icon::after {
+  content: "";
+  width: 4px;
+  height: 23px;
+  display: block;
+  background-color: #000000;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.section__faq .faq-block .question .icon::after {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(90deg);
+  transition: opacity 0.15s ease, transform 0.3s ease;
+}
+
+.section__faq
+  .faq-block
+  .question[aria-expanded="true"]
+  .icon::after {
+  opacity: 0;
+  transform: translate(-50%, 1000%) rotate(90deg);
+  will-change: opacity, transform;
+}
+
+/* 預留 SVG 旋轉動畫（如果未來放 svg-icon） */
+.section__faq .faq-block .question .icon .svg-icon {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.25s ease;
+  transform-origin: 50% 50%;
+}
+
+.section__faq
+  .faq-block
+  .question[aria-expanded="true"]
+  .svg-icon {
+  transform: rotate(180deg);
+}
+
+.section__faq .faq-block .info-box {
+  position: relative;
+  overflow: hidden; /* 配合 jQuery slideUp/Down */
+  padding: 0 30px 10px 0;
+}
+
+.section__faq .faq-block .info-box[hidden] {
+  display: none !important;
+}
+
+.section__faq .faq-block .info-box p {
+  margin: 0 0 0.5em 0;
+  line-height: 1.6;
+  padding: 0 25px;
+  color: #222;
+  font-family: 'Roboto Condensed', 'Arial', 'Microsoft JhengHei',
+    'LiHei Pro', 'WenQuanYi Zen Hei', 'sans-serif';
+  font-size: 20px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section__faq .faq-block .question .icon .svg-icon {
+    transition: none;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .info-container {
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .info-container {
+    max-width: 700px;
+    width: 100%;
+  }
+}

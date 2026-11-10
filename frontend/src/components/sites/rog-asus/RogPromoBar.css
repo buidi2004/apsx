@@ -1,0 +1,16 @@
+/* RogPromoBar */
+
+.rog-promo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  background: var(--rog-red);
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+  padding: 8px 16px;
+}
+.rog-promo:hover {
+  text-decoration: underline;
+}

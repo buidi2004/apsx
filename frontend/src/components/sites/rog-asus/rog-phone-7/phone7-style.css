@@ -1,0 +1,315 @@
+@import "./phone7-tabbar.css";
+@import "./phone7-awards.css";
+@import "./phone7-features.css";
+
+/* Disable browser smooth-scroll fighting GSAP ScrollTrigger pins and scrub */
+html,
+body {
+  scroll-behavior: auto !important;
+}
+
+/* ROG Phone 7 Master 1:1 Page Container */
+.rog-phone7-container {
+  background-color: #000000;
+  color: #ffffff;
+  font-family: "Roboto Condensed", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.rog-phone7-container * {
+  box-sizing: border-box;
+}
+
+/* 1:1 Breadcrumb Styling */
+.rog-phone7-crumb-wrap {
+  background-color: #0b0b0b;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 12px 24px;
+  width: 100%;
+}
+
+.rog-phone7-crumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 1440px;
+  margin: 0 auto;
+  font-size: 13px;
+  color: #888888;
+}
+
+.rog-phone7-crumb a {
+  color: #aaaaaa;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.rog-phone7-crumb a:hover {
+  color: #ff0033;
+}
+
+.rog-phone7-crumb .sep {
+  color: #555555;
+}
+
+.rog-phone7-crumb .current {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+/* Sticky Subbar Elevation & Polish */
+.rog-phone7-subbar {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background-color: rgba(10, 10, 10, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.rog-phone7-subbar-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rog-phone7-subbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.rog-phone7-subbar-thumb {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
+}
+
+.rog-phone7-subbar-title {
+  font-family: "Trade Gothic LT W05 Bold", "Roboto Condensed", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.rog-phone7-subbar-tabs {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.rog-phone7-tab-link {
+  font-size: 14px;
+  font-weight: 500;
+  color: #aaaaaa;
+  text-decoration: none;
+  padding: 18px 0;
+  position: relative;
+  transition: color 0.2s ease;
+  cursor: pointer;
+}
+
+.rog-phone7-tab-link:hover {
+  color: #ffffff;
+}
+
+.rog-phone7-tab-link.is-active {
+  color: #ff0033;
+  font-weight: 700;
+}
+
+.rog-phone7-tab-link.is-active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: #ff0033;
+  border-radius: 2px 2px 0 0;
+}
+
+.rog-phone7-subbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.rog-phone7-price-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.rog-phone7-price-label {
+  font-size: 11px;
+  color: #888888;
+  text-transform: uppercase;
+}
+
+.rog-phone7-price {
+  font-family: "Trade Gothic LT W05 Bold", "Roboto Condensed", sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #ff0033;
+}
+
+.rog-phone7-buy-btn {
+  background-color: #e60012;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 8px 22px;
+  border-radius: 2px;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  transition: all 0.2s ease;
+  display: inline-block;
+}
+
+.rog-phone7-buy-btn:hover {
+  background-color: #ff1a2b;
+  box-shadow: 0 0 16px rgba(230, 0, 18, 0.6);
+  transform: translateY(-1px);
+}
+
+/* Floating Side Navigation Polish */
+.cmd-sidenav {
+  position: fixed;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 998;
+}
+
+.cmd-sidenav .container-bg {
+  background: rgba(15, 15, 15, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+}
+
+.btn-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 44px;
+  height: 44px;
+  background-color: rgba(20, 20, 20, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 997;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.btn-to-top:hover {
+  background-color: #ff0033;
+  border-color: #ff0033;
+  box-shadow: 0 0 14px rgba(255, 0, 51, 0.5);
+}
+
+.btn-to-top svg {
+  width: 18px;
+  height: 18px;
+  fill: #ffffff;
+}
+
+/* Video Modal Lightbox */
+.rog-phone7-video-modal {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(10px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.rog-phone7-video-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  aspect-ratio: 16 / 9;
+  background: #000000;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 0, 51, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.rog-phone7-video-close {
+  position: absolute;
+  top: -48px;
+  right: 0;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s ease;
+}
+
+.rog-phone7-video-close:hover {
+  color: #ff0033;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsive tweaks */
+@media (max-width: 1024px) {
+  .rog-phone7-subbar-tabs {
+    display: none;
+  }
+  .cmd-sidenav {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .rog-phone7-subbar-inner {
+    padding: 0 16px;
+    height: 52px;
+  }
+  .rog-phone7-subbar-title {
+    font-size: 16px;
+  }
+  .rog-phone7-price-label {
+    display: none;
+  }
+  .rog-phone7-price {
+    font-size: 15px;
+  }
+  .rog-phone7-buy-btn {
+    padding: 6px 14px;
+    font-size: 12px;
+  }
+}
+

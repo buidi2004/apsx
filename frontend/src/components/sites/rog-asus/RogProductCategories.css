@@ -1,0 +1,165 @@
+/* RogProductCategories — white "KHÁM PHÁ SẢN PHẨM CỦA CHÚNG TÔI" section + product carousel */
+
+.rog-products {
+  background: #fff;
+  color: #000;
+  padding: 155px 0 74px;
+  text-align: center;
+}
+
+.rog-products-title {
+  color: #000;
+  margin: 0 auto 26px;
+}
+
+.rog-products-sub {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.3;
+  color: #000;
+  margin: 0 auto 14px;
+}
+
+.rog-products-desc {
+  font-family: var(--rog-body-font);
+  font-size: 16px;
+  line-height: 1.4;
+  color: #444;
+  margin: 0 auto 24px;
+}
+
+.rog-products-btn-row {
+  margin-bottom: 44px;
+}
+
+.rog-products-btn-row .rog-ai-btn {
+  display: inline-block;
+  font-family: var(--rog-body-font);
+  font-weight: 700;
+}
+
+/* ---- Carousel ---- */
+
+.rog-carousel {
+  position: relative;
+}
+
+.rog-carousel-viewport {
+  overflow: hidden;
+  margin: 0 56px;
+}
+
+.rog-carousel-track {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: flex-start;
+  transition: transform 0.4s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+}
+
+.rog-product-item {
+  flex: 0 0 20%;
+  min-width: 0;
+  padding: 0 12px;
+  text-align: center;
+}
+
+.rog-product-item a {
+  display: block;
+}
+
+.rog-product-img {
+  display: block;
+  width: 240px;
+  max-width: 100%;
+  height: 175px;
+  object-fit: contain;
+  margin: 0 auto;
+}
+
+.rog-product-label {
+  display: block;
+  margin-top: 14px;
+  font-family: var(--rog-body-font);
+  font-size: 20px;
+  line-height: 1.25;
+  color: #202020;
+}
+
+/* Red chevron arrows at the outer edges, centered on the image row */
+.rog-carousel-arrow {
+  position: absolute;
+  top: 88px; /* vertical center of the 175px image row */
+  transform: translateY(-50%);
+  background: none;
+  border: 0;
+  padding: 6px;
+  cursor: pointer;
+  color: var(--rog-red);
+  line-height: 0;
+  z-index: 2;
+}
+
+.rog-carousel-arrow--prev {
+  left: 14px;
+}
+
+.rog-carousel-arrow--next {
+  right: 14px;
+}
+
+.rog-carousel-arrow svg {
+  display: block;
+}
+
+.rog-carousel-arrow:hover {
+  opacity: 0.7;
+}
+
+/* ---- Dot indicators ---- */
+
+.rog-carousel-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 13px;
+  margin-top: 44px;
+}
+
+.rog-carousel-dot {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border: 0;
+  background: #999;
+  transform: skewX(-15deg);
+  cursor: pointer;
+}
+
+.rog-carousel-dot--active {
+  background: var(--rog-red);
+}
+
+/* ---- Small screens ---- */
+
+@media (max-width: 768px) {
+  .rog-carousel-viewport {
+    margin: 0 36px;
+  }
+
+  .rog-product-img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 240 / 175;
+  }
+
+  .rog-product-label {
+    font-size: 16px;
+  }
+
+  .rog-carousel-arrow {
+    top: 40%;
+  }
+}

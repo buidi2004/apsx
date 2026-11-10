@@ -1,0 +1,429 @@
+/* RogListingExtra — 4 section dưới trang listing (bám theo rog.asus.com/vn/laptops-group/) */
+
+/* ============ 1) SẢN PHẨM BÁN CHẠY ============ */
+.rog-hot {
+  background: #f5f5f5;
+  color: #111;
+  padding: 48px 0 64px;
+}
+.rog-hot-head {
+  max-width: 1360px;
+  margin: 0 auto 30px;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.rog-hot-title {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 36px;
+  margin: 0;
+  color: #111;
+}
+.rog-hot-ai {
+  display: inline-flex;
+  align-items: center;
+}
+
+.rog-hot-grid {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.rog-hot-card {
+  position: relative;
+  background: #fff;
+  padding: 16px 14px 20px;
+}
+.rog-hot-card-link {
+  display: block;
+  color: inherit;
+}
+.rog-hot-deal {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  border: 1.5px solid #111;
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1px;
+  padding: 3px 10px;
+  background: #fff;
+  z-index: 2;
+}
+.rog-hot-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 190px;
+  margin-bottom: 16px;
+}
+.rog-hot-img img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform 0.35s ease;
+}
+.rog-hot-card:hover .rog-hot-img img {
+  transform: scale(1.05);
+}
+.rog-hot-name {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 22px;
+  text-align: center;
+  line-height: 1.25;
+  margin: 0 0 14px;
+  color: #111;
+}
+.rog-hot-specs {
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+  text-align: center;
+}
+.rog-hot-specs li {
+  font-size: 13.5px;
+  color: #444;
+  line-height: 1.45;
+  margin-bottom: 4px;
+}
+.rog-hot-price-wrap {
+  text-align: center;
+  margin-bottom: 14px;
+}
+.rog-hot-price-label {
+  display: block;
+  font-size: 13.5px;
+  color: #555;
+  margin-bottom: 2px;
+}
+.rog-hot-info {
+  font-size: 12px;
+  color: #999;
+}
+.rog-hot-price {
+  display: block;
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 24px;
+  color: #111;
+}
+.rog-hot-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.rog-hot-cta {
+  display: inline-block;
+  background: var(--rog-red);
+  color: #fff;
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  padding: 10px 28px;
+  border: none;
+}
+.rog-hot-cta:hover {
+  background: var(--rog-red-bright);
+}
+.rog-hot-more {
+  color: var(--rog-red-bright);
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+.rog-hot-more:hover {
+  text-decoration: underline;
+}
+.rog-hot-chev {
+  margin-left: 2px;
+}
+
+/* ============ 2) VIDEO ============ */
+.rog-vids {
+  background: #fff;
+  color: #111;
+  padding: 64px 0 56px;
+}
+.rog-vids-title {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 44px;
+  text-align: center;
+  margin: 0 0 36px;
+  color: #111;
+}
+.rog-vids-layout {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 1.02fr 1fr;
+  gap: 18px;
+}
+.rog-vids-small {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.rog-vid {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  color: #fff;
+}
+.rog-vid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  aspect-ratio: 642 / 420;
+}
+.rog-vids-small .rog-vid img {
+  aspect-ratio: 313 / 178;
+}
+.rog-vid-play {
+  position: absolute;
+  left: 14px;
+  bottom: 44px;
+  color: #fff;
+  display: inline-flex;
+  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.6));
+}
+.rog-vid-title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 26px 14px 10px 44px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.75) 80%);
+  font-size: 14.5px;
+  font-weight: 700;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.rog-vid:hover img {
+  opacity: 0.92;
+}
+
+/* ============ 3) BÀI VIẾT LIÊN QUAN ============ */
+.rog-rel {
+  background: #181818;
+  color: #fff;
+  padding: 64px 0 56px;
+  position: relative;
+}
+.rog-rel-title {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 44px;
+  text-align: center;
+  margin: 0 0 44px;
+}
+.rog-rel-wrap {
+  position: relative;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.rog-rel-track {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px 64px;
+}
+.rog-rel-card {
+  display: grid;
+  grid-template-columns: 295px 1fr;
+  gap: 24px;
+  color: inherit;
+  align-items: start;
+}
+.rog-rel-img {
+  width: 295px;
+  aspect-ratio: 295 / 170;
+  overflow: hidden;
+  background: #222;
+}
+.rog-rel-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.rog-rel-img-empty {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #6a6a6a;
+}
+.rog-rel-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  padding-top: 6px;
+}
+.rog-rel-body::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  right: 0;
+  width: 74px;
+  height: 8px;
+  background: #3a3a3a;
+  transform: skewX(-30deg);
+}
+.rog-rel-tag {
+  color: var(--rog-red-bright);
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+.rog-rel-card-title {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 0;
+  color: #fff;
+}
+.rog-rel-card:hover .rog-rel-card-title {
+  text-decoration: underline;
+}
+.rog-rel-excerpt {
+  font-size: 14px;
+  color: #b5b5b5;
+  line-height: 1.5;
+  margin: 0;
+}
+.rog-rel-arrow {
+  position: absolute;
+  right: -6px;
+  top: 45%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  z-index: 2;
+  padding: 4px;
+}
+.rog-rel-arrow:hover {
+  color: var(--rog-red-bright);
+}
+
+/* ============ 4) SẢN PHẨM LIÊN QUAN ============ */
+.rog-relprod {
+  background: #fff;
+  color: #111;
+  padding: 64px 0 72px;
+}
+.rog-relprod-title {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 44px;
+  text-align: center;
+  margin: 0 0 44px;
+  color: #111;
+}
+.rog-relprod-grid {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.rog-relprod-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  color: inherit;
+}
+.rog-relprod-img {
+  width: 100%;
+  height: 210px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.rog-relprod-img img {
+  max-width: 82%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+.rog-relprod-card:hover .rog-relprod-img img {
+  transform: translateY(-4px);
+}
+.rog-relprod-name {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 18px;
+  color: #111;
+  line-height: 1.3;
+}
+.rog-relprod-more {
+  color: var(--rog-red-bright);
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 13.5px;
+  letter-spacing: 0.5px;
+}
+
+/* ============ 5) Disclaimer ============ */
+.rog-disclaimer {
+  background: #f5f5f5;
+  color: #666;
+  padding: 28px 24px 34px;
+}
+.rog-disclaimer p {
+  max-width: 1360px;
+  margin: 0 auto 10px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+/* ============ Mobile ============ */
+@media (max-width: 1023px) {
+  .rog-hot-grid,
+  .rog-relprod-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .rog-vids-layout {
+    grid-template-columns: 1fr;
+  }
+  .rog-rel-track {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .rog-rel-card {
+    grid-template-columns: 1fr;
+  }
+  .rog-rel-img {
+    width: 100%;
+  }
+  .rog-hot-title,
+  .rog-vids-title,
+  .rog-rel-title,
+  .rog-relprod-title {
+    font-size: 30px;
+  }
+}

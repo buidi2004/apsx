@@ -1,0 +1,45 @@
+/* Apple iPad Pro (M4) Scoped Styles */
+
+:root {
+  --global-scrollbar-width: 0px;
+}
+
+html.apple-page-active {
+  background-color: #000 !important;
+}
+
+.ipad-pro-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #000;
+  color: #fff;
+  overflow-x: clip;
+  position: relative;
+  font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ipad-pro-container img {
+  max-width: 100%;
+  height: auto;
+}
+
+.ipad-pro-container video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Localnav subbar sticks right underneath 50px RogNavbar */
+#ac-localnav,
+#localnav {
+  position: sticky !important;
+  top: 50px !important;
+  z-index: 40 !important;
+}
+
+/* Fix any Tailwind svg collapse */
+.ipad-pro-container svg {
+  display: inline-block;
+}

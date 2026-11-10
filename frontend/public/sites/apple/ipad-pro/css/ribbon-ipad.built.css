@@ -1,0 +1,16 @@
+/* ipad-pro fix */
+.ipad-pro-product-page-ribbon.ribbon-evergreen {
+	position: relative;
+	z-index: 9997;
+	top: -45px;
+}
+
+html.text-zoom .ipad-pro-product-page-ribbon.ribbon-evergreen {
+	top: 0;
+}
+
+@media only screen and (max-width: 734px) {
+	html.text-zoom .ipad-pro-product-page-ribbon.ribbon-evergreen + .section-welcome {
+		margin-top: -20px;
+	}
+}

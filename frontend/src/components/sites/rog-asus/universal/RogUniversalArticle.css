@@ -1,0 +1,49 @@
+.rog-universal-article-content {
+  color: #ccc;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.rog-universal-article-content h2 {
+  color: #fff;
+  font-size: 24px;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.rog-universal-article-content h3 {
+  color: #ff0036;
+  font-size: 20px;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.rog-universal-article-content p {
+  margin-bottom: 1.25rem;
+  color: #bbb;
+}
+
+.rog-universal-article-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 1.5rem 0;
+  display: block;
+}
+
+.rog-universal-article-content ul,
+.rog-universal-article-content ol {
+  margin: 1rem 0 1.5rem 2rem;
+  color: #bbb;
+}
+
+.rog-universal-article-content li {
+  margin-bottom: 0.5rem;
+}
+
+.rog-universal-article-content a {
+  color: #ff0036;
+  text-decoration: underline;
+}
+

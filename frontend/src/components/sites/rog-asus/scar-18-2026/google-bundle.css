@@ -1,0 +1,438 @@
+@font-face {
+  font-family: 'Trade-Gothic-LT-Bold';
+  src: url('https://dlcdnwebimgs.asus.com/files/media/982b43f2-03f0-4780-b552-cf2a58d515bf/v1/fonts/Trade-Gothic-LT-Bold.woff2') format('woff2'),
+    url('https://dlcdnwebimgs.asus.com/files/media/982b43f2-03f0-4780-b552-cf2a58d515bf/v1/fonts/Trade-Gothic-LT-Bold.woff') format('woff'),
+    url('https://dlcdnwebimgs.asus.com/files/media/982b43f2-03f0-4780-b552-cf2a58d515bf/v1/fonts/Trade-Gothic-LT-Bold.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto-Regular';
+  src: local('Roboto Regular'), local('Roboto-Regular'),
+    url('https://dlcdnwebimgs.asus.com/files/media/982b43f2-03f0-4780-b552-cf2a58d515bf/v1/fonts/Roboto-Regular.woff2') format('woff2'),
+    url('https://dlcdnwebimgs.asus.com/files/media/982b43f2-03f0-4780-b552-cf2a58d515bf/v1/fonts/Roboto-Regular.woff') format('woff'),
+    url('https://dlcdnwebimgs.asus.com/files/media/982b43f2-03f0-4780-b552-cf2a58d515bf/v1/fonts/Roboto-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+#ASUS-features .google-bundle *,
+#ASUS-features .google-bundle *::before,
+#ASUS-features .google-bundle *::after,
+#hd .google-bundle *,
+#hd .google-bundle *::before,
+#hd .google-bundle *::after,
+.google-bundle *,
+.google-bundle *::before,
+.google-bundle *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#ASUS-features .google-bundle h1,
+#ASUS-features .google-bundle h2,
+#ASUS-features .google-bundle h3,
+#ASUS-features .google-bundle p,
+#ASUS-features .google-bundle a,
+#hd .google-bundle h1,
+#hd .google-bundle h2,
+#hd .google-bundle h3,
+#hd .google-bundle p,
+#hd .google-bundle a,
+.google-bundle h1,
+.google-bundle h2,
+.google-bundle h3,
+.google-bundle p,
+.google-bundle a {
+  font-family: 'Trade-Gothic-LT-Bold', 'Microsoft JhengHei', 'sans-serif';
+  margin: 0;
+}
+
+#ASUS-features .google-bundle,
+#hd .google-bundle,
+.google-bundle {
+  width: 100%;
+  background: #000;
+  padding: 120px 0 80px 0;
+  overflow: hidden;
+}
+
+#ASUS-features .google-bundle .container,
+#hd .google-bundle .container,
+.google-bundle .container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  width: 1600px;
+  margin: 0 auto;
+}
+
+@media (max-width: 1599px) {
+  #ASUS-features .google-bundle .container,
+  #hd .google-bundle .container,
+  .google-bundle .container {
+    width: 100%;
+  }
+}
+
+#ASUS-features .google-bundle__logo,
+#hd .google-bundle__logo,
+.google-bundle__logo {
+  position: relative;
+  z-index: 2;
+  display: block;
+  align-self: flex-end;
+  width: 332px;
+  height: 67px;
+  margin-right: 140px;
+  margin-bottom: 60px;
+}
+
+@media (max-width: 1599px) {
+  #ASUS-features .google-bundle__logo,
+  #hd .google-bundle__logo,
+  .google-bundle__logo {
+    width: 20.75vw; /* 332 / 1600 */
+    height: 4.1875vw; /* 67 / 1600 */
+    margin-right: 3.75vw;
+  }
+}
+
+#ASUS-features .google-bundle__logo img,
+#hd .google-bundle__logo img,
+.google-bundle__logo img {
+  display: block;
+  width: 332px;
+  height: 67px;
+  object-fit: contain;
+}
+
+#ASUS-features .google-bundle__inner,
+#hd .google-bundle__inner,
+.google-bundle__inner {
+  width: 100%;
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-left: 100px;
+}
+
+@media (max-width: 1599px) {
+  #ASUS-features .google-bundle__inner,
+  #hd .google-bundle__inner,
+  .google-bundle__inner {
+    margin-left: 5vw; 
+  }
+}
+
+#ASUS-features .google-bundle__aside,
+#hd .google-bundle__aside,
+.google-bundle__aside {
+  --visual-w: 940px;
+  --visual-h: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: none;
+  position: relative;
+  z-index: 1;
+  width: var(--visual-w);
+  margin-left: -140px;
+}
+
+#ASUS-features .google-bundle__visual,
+#hd .google-bundle__visual,
+.google-bundle__visual {
+  display: block;
+  width: var(--visual-w);
+}
+
+#ASUS-features .google-bundle__visual picture,
+#ASUS-features .google-bundle__visual img,
+#hd .google-bundle__visual picture,
+#hd .google-bundle__visual img,
+.google-bundle__visual picture,
+.google-bundle__visual img {
+  display: block;
+  width: var(--visual-w);
+  height: var(--visual-h);
+}
+
+#ASUS-features .google-bundle__visual img,
+#hd .google-bundle__visual img,
+.google-bundle__visual img {
+  object-fit: contain;
+}
+
+@media (max-width: 1599px) {
+  #ASUS-features .google-bundle__logo,
+  #ASUS-features .google-bundle__logo img,
+  #hd .google-bundle__logo,
+  #hd .google-bundle__logo img,
+  .google-bundle__logo,
+  .google-bundle__logo img {
+    width: 20.75vw; /* 332 / 1600 */
+    height: 4.1875vw; /* 67 / 1600 */
+  }
+
+  #ASUS-features .google-bundle__aside,
+  #hd .google-bundle__aside,
+  .google-bundle__aside {
+    --visual-w: 58.75vw; /* 940 / 1600 */
+    --visual-h: 37.5vw; /* 600 / 1600 */
+    margin-left: -8.75vw; /* 140 / 1600 */
+  }
+}
+
+#ASUS-features .google-bundle__copy,
+#hd .google-bundle__copy,
+.google-bundle__copy {
+  width: 600px;
+  flex: none;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 32px;
+}
+
+@media (max-width: 1599px) {
+  #ASUS-features .google-bundle__copy,
+  #hd .google-bundle__copy,
+  .google-bundle__copy {
+    width: 37.5vw; /* 600 / 1600 */
+  }
+}
+
+#ASUS-features .google-bundle__title,
+#hd .google-bundle__title,
+.google-bundle__title {
+  font-size: 51px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff;
+}
+@media (max-width: 1599px) {
+  #ASUS-features .google-bundle__title,
+  #hd .google-bundle__title,
+  .google-bundle__title {
+    font-size: 3.1875vw; /* 51 / 1600 */
+  }
+}
+
+
+#ASUS-features .google-bundle__title span,
+#hd .google-bundle__title span,
+.google-bundle__title span {
+  display: block;
+}
+
+#ASUS-features .google-bundle__btn,
+#hd .google-bundle__btn,
+.google-bundle__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 220px;
+  height: 70px;
+  border: 1px solid rgba(241, 243, 248, 0.95);
+  border-radius: 999px;
+  background:
+    radial-gradient(
+      ellipse 52% 110% at 50% 58%,
+      rgba(18, 20, 30, 0.42) 0%,
+      rgba(25, 27, 38, 0.24) 42%,
+      rgba(25, 27, 38, 0) 100%
+    ),
+    radial-gradient(
+      ellipse 90% 130% at 0% 45%,
+      rgba(61, 91, 151, 0.78) 0%,
+      rgba(61, 91, 151, 0) 72%
+    ),
+    radial-gradient(
+      ellipse 90% 130% at 100% 50%,
+      rgba(119, 93, 137, 0.82) 0%,
+      rgba(119, 93, 137, 0) 72%
+    ),
+    linear-gradient(
+      180deg,
+      #a1a8b9 0%,
+      #7e8598 23%,
+      #666977 50%,
+      #5d5f6d 72%,
+      #716d80 100%
+    );
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 200%;
+  background-position: center, center, center, center top;
+  background-repeat: no-repeat;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 0 0 1px rgba(117, 124, 146, 0.7),
+    inset 0 -1px 0 rgba(33, 35, 49, 0.75),
+    0 1px 2px rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 31px;
+  font-weight: 400;
+  line-height: 1;
+  text-decoration: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  transition:
+    background-position 0.45s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.25s ease;
+}
+
+@media (max-width: 1599px) {
+  #ASUS-features .google-bundle__btn,
+  #hd .google-bundle__btn,
+  .google-bundle__btn {
+    width: 13.75vw; /* 220 / 1600 */
+    height: 4.375vw; /* 70 / 1600 */
+    font-size: 1.875vw; /* 31 / 1600 */
+  }
+}
+
+#ASUS-features .google-bundle__btn:hover,
+#hd .google-bundle__btn:hover,
+.google-bundle__btn:hover {
+  background-position: center, center, center, center bottom;
+  border-color: #fff;
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 0 0 1px rgba(150, 156, 178, 0.78),
+    inset 0 -1px 0 rgba(33, 35, 49, 0.6),
+    0 4px 14px rgba(105, 101, 144, 0.42);
+  transform: translateY(-1px);
+}
+
+#ASUS-features .google-bundle__btn:focus-visible,
+#hd .google-bundle__btn:focus-visible,
+.google-bundle__btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #ASUS-features .google-bundle__btn,
+  #hd .google-bundle__btn,
+  .google-bundle__btn {
+    transition: none;
+  }
+
+  #ASUS-features .google-bundle__btn:hover,
+  #hd .google-bundle__btn:hover,
+  .google-bundle__btn:hover {
+    transform: none;
+  }
+}
+
+#ASUS-features p.google-bundle__legal,
+#hd p.google-bundle__legal,
+p.google-bundle__legal {
+  width: 100%;
+  font-family: 'Roboto-Regular', 'Microsoft JhengHei', sans-serif;
+  padding: 0 30px;
+  margin-top: 16px;
+  color: #888;
+  font-size: clamp(12px, .9vw, 14px);
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* Tablet / mobile: vertical layout (≤1023px) */
+@media (max-width: 1023px) {
+
+  #ASUS-features .google-bundle__title span,
+  #hd .google-bundle__title span,
+  .google-bundle__title span {
+    display: inline;
+  }
+
+  #ASUS-features .google-bundle__logo,
+  #ASUS-features .google-bundle__logo img,
+  #hd .google-bundle__logo,
+  #hd .google-bundle__logo img,
+  .google-bundle__logo,
+  .google-bundle__logo img {
+    width: 25.9375vw; /* 20.75 * 1.25 */
+    height: 5.234375vw; /* 4.1875 * 1.25 */
+  }
+
+  #ASUS-features .google-bundle__logo,
+  #hd .google-bundle__logo,
+  .google-bundle__logo {
+    margin-right: 4vw;
+    margin-bottom: 15vw;
+  }
+
+  #ASUS-features .google-bundle__inner,
+  #hd .google-bundle__inner,
+  .google-bundle__inner {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0;
+  }
+
+  #ASUS-features .google-bundle__aside,
+  #hd .google-bundle__aside,
+  .google-bundle__aside {
+    display: contents;
+  }
+
+  #ASUS-features .google-bundle__visual,
+  #hd .google-bundle__visual,
+  .google-bundle__visual {
+    --visual-w: 88.125vw; /* 58.75 * 1.5 */
+    --visual-h: 56.25vw; /* 37.5 * 1.5 */
+    width: var(--visual-w);
+    order: 1;
+  }
+
+  #ASUS-features .google-bundle__copy,
+  #hd .google-bundle__copy,
+  .google-bundle__copy {
+    width: 100%;
+    flex: none;
+    align-items: center;
+    order: 2;
+    padding: 0 4.5vw;
+    text-align: center;
+    gap: 60px;
+  }
+
+  #ASUS-features .google-bundle__title,
+  #hd .google-bundle__title,
+  .google-bundle__title {
+    font-size: 6vw; /* 3.1875 * 1.5 */
+    line-height: 1.25;
+  }
+
+  #ASUS-features .google-bundle__btn,
+  #hd .google-bundle__btn,
+  .google-bundle__btn {
+    width: 20.625vw; /* 13.75 * 1.5 */
+    height: 6.5625vw; /* 4.375 * 1.5 */
+    font-size: 2.8125vw; /* 1.875 * 1.5 */
+  }
+
+  #ASUS-features p.google-bundle__legal,
+  #hd p.google-bundle__legal,
+  p.google-bundle__legal {
+    order: 3;
+    width: 100%;
+    margin-top: 24px;
+    padding: 10vh 4vw 24px;
+  }
+}

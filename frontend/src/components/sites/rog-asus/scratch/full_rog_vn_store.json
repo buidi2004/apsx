@@ -1,0 +1,1755 @@
+{
+  "Banner": {
+    "banner": [
+      {
+        "link": "https://rog.asus.com/microsite/gamescom/",
+        "linktext": "ROG GAMESCOM",
+        "bannerName": "ROG GAMESCOM",
+        "description": "ROG GAMESCOM",
+        "alt": "ROG GAMESCOM",
+        "class": "info-on-top",
+        "mdaTag": {
+          "tagline": "",
+          "taglineImgUrl": ""
+        },
+        "mobileItem": [
+          {
+            "type": "pic",
+            "group": "1",
+            "link": "",
+            "class": "keyvisual",
+            "content": {
+              "desktop": "",
+              "mobile": "https://dlcdnwebimgs.asus.com/gain/99F76FA2-7E44-4CA8-9284-5EC89ED2E33C/fwebp"
+            },
+            "flag": "pd-img",
+            "show": 1
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "title",
+            "content": "Banner Title",
+            "flag": "title",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "sub-title",
+            "content": "Sub-Title...",
+            "flag": "slogan",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "desp",
+            "content": "Banner Content....",
+            "flag": "desp",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-more",
+            "content": "Learn More",
+            "flag": "more",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-buy-now",
+            "content": "BUY NOW",
+            "flag": "buy",
+            "show": 0
+          },
+          {
+            "type": "position",
+            "group": "4",
+            "link": "",
+            "class": "",
+            "content": "Top",
+            "flag": "position",
+            "show": 1
+          }
+        ],
+        "item": [
+          {
+            "type": "pic",
+            "group": "1",
+            "link": "",
+            "class": "keyvisual",
+            "content": {
+              "desktop": "https://dlcdnwebimgs.asus.com/gain/D586634C-6408-46BF-BB4B-AF06EDBF59BD/fwebp",
+              "mobile": ""
+            },
+            "flag": "pd-img",
+            "show": 1
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "title",
+            "content": "Banner Title",
+            "flag": "title",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "sub-title",
+            "content": "Sub-Title",
+            "flag": "slogan",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "desp",
+            "content": "Banner Content....",
+            "flag": "desp",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-more",
+            "content": "Learn More",
+            "flag": "more",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-buy-now",
+            "content": "BUY NOW",
+            "flag": "buy",
+            "show": 0
+          },
+          {
+            "type": "position",
+            "group": "4",
+            "link": "",
+            "class": "",
+            "content": "Top",
+            "flag": "position",
+            "show": 1
+          }
+        ]
+      },
+      {
+        "link": "https://www.asus.com/vn/content/asus-googleai",
+        "linktext": "Mua laptop ROG nhận Google AI",
+        "bannerName": "Mua laptop ROG nhận Google AI",
+        "description": "Mua laptop ROG nhận Google AI",
+        "alt": "Mua laptop ROG nhận Google AI",
+        "class": "info-on-bottom",
+        "mdaTag": {
+          "tagline": "",
+          "taglineImgUrl": ""
+        },
+        "mobileItem": [
+          {
+            "type": "pic",
+            "group": "1",
+            "link": "",
+            "class": "keyvisual",
+            "content": {
+              "desktop": "",
+              "mobile": "https://dlcdnwebimgs.asus.com/gain/9C20B34F-F2CF-4436-B9F2-3AFF10845635/fwebp"
+            },
+            "flag": "pd-img",
+            "show": 1
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "title",
+            "content": "Banner Title",
+            "flag": "title",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "sub-title",
+            "content": "Sub-Title...",
+            "flag": "slogan",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "desp",
+            "content": "Banner Content....",
+            "flag": "desp",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "price",
+            "content": "$399",
+            "flag": "price",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-more",
+            "content": "Learn More",
+            "flag": "more",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-video",
+            "content": "Button Title",
+            "flag": "video",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-buy-now",
+            "content": "BUY NOW",
+            "flag": "buy",
+            "show": 0
+          }
+        ],
+        "item": [
+          {
+            "type": "pic",
+            "group": "1",
+            "link": "",
+            "class": "keyvisual",
+            "content": {
+              "desktop": "https://dlcdnwebimgs.asus.com/gain/F894F260-5564-43AF-A33C-049D990D95F3/fwebp",
+              "mobile": ""
+            },
+            "flag": "pd-img",
+            "show": 1
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "title",
+            "content": "Banner Title",
+            "flag": "title",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "sub-title",
+            "content": "Sub-Title",
+            "flag": "slogan",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "desp",
+            "content": "Banner Content....",
+            "flag": "desp",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "price",
+            "content": "$399",
+            "flag": "price",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-more",
+            "content": "BUY NOW",
+            "flag": "more",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-video",
+            "content": "Button Title",
+            "flag": "video",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-buy-now",
+            "content": "BUY NOW",
+            "flag": "buy",
+            "show": 0
+          }
+        ]
+      },
+      {
+        "link": "https://www.asus.com/vn/events/infoM/activity_control-resonant-bundle",
+        "linktext": "SỞ HỮU ROG & TUF GAMING RTX 50 SERIES – NHẬN NGAY TỰA GAME CONTROL RESONANT",
+        "bannerName": "SỞ HỮU ROG & TUF GAMING RTX 50 SERIES – NHẬN NGAY TỰA GAME CONTROL RESONANT",
+        "description": "SỞ HỮU ROG & TUF GAMING RTX 50 SERIES – NHẬN NGAY TỰA GAME CONTROL RESONANT",
+        "alt": "SỞ HỮU ROG & TUF GAMING RTX 50 SERIES – NHẬN NGAY TỰA GAME CONTROL RESONANT",
+        "class": "",
+        "mdaTag": {
+          "tagline": "",
+          "taglineImgUrl": ""
+        },
+        "mobileItem": [
+          {
+            "type": "pic",
+            "group": "1",
+            "link": "",
+            "class": "keyvisual",
+            "content": {
+              "desktop": "",
+              "mobile": "https://dlcdnwebimgs.asus.com/gain/EB6F5BAB-F386-4D5F-B97A-DE8D695F3AD7/fwebp"
+            },
+            "flag": "pd-img",
+            "show": 1
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "title",
+            "content": "Banner Title",
+            "flag": "title",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "sub-title",
+            "content": "Sub-Title...",
+            "flag": "slogan",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "desp",
+            "content": "Banner Content....",
+            "flag": "desp",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "price",
+            "content": "$399",
+            "flag": "price",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-more",
+            "content": "Learn More",
+            "flag": "more",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-video",
+            "content": "Button Title",
+            "flag": "video",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-buy-now",
+            "content": "BUY NOW",
+            "flag": "buy",
+            "show": 0
+          }
+        ],
+        "item": [
+          {
+            "type": "pic",
+            "group": "1",
+            "link": "",
+            "class": "keyvisual",
+            "content": {
+              "desktop": "https://dlcdnwebimgs.asus.com/gain/7125B6F2-51B8-4BF8-AA63-3FED8B16C987/fwebp",
+              "mobile": ""
+            },
+            "flag": "pd-img",
+            "show": 1
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "title",
+            "content": "Banner Title",
+            "flag": "title",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "sub-title",
+            "content": "Sub-Title",
+            "flag": "slogan",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "desp",
+            "content": "Banner Content....",
+            "flag": "desp",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "price",
+            "content": "$399",
+            "flag": "price",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-more",
+            "content": "Learn More",
+            "flag": "more",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-video",
+            "content": "Button Title",
+            "flag": "video",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-buy-now",
+            "content": "BUY NOW",
+            "flag": "buy",
+            "show": 0
+          }
+        ]
+      },
+      {
+        "link": "https://rog.asus.com/vn/laptops/rog-strix/rog-strix-scar-18-2026/",
+        "linktext": "ROG Strix SCAR 18 2026",
+        "bannerName": "ROG Strix SCAR 18 2026",
+        "description": "ROG Strix Scar 18 2026",
+        "alt": "ROG Strix Scar 18 2026",
+        "class": "",
+        "mdaTag": {
+          "tagline": "",
+          "taglineImgUrl": ""
+        },
+        "mobileItem": [
+          {
+            "type": "pic",
+            "group": "1",
+            "link": "",
+            "class": "keyvisual",
+            "content": {
+              "desktop": "",
+              "mobile": "https://dlcdnwebimgs.asus.com/gain/840648D0-F438-4808-89B6-4D0FCE7981F5/fwebp"
+            },
+            "flag": "pd-img",
+            "show": 1
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "title",
+            "content": "Banner Title",
+            "flag": "title",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "sub-title",
+            "content": "Sub-Title...",
+            "flag": "slogan",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "desp",
+            "content": "Banner Content....",
+            "flag": "desp",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "price",
+            "content": "$399",
+            "flag": "price",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-more",
+            "content": "Learn More",
+            "flag": "more",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-video",
+            "content": "Button Title",
+            "flag": "video",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-buy-now",
+            "content": "BUY NOW",
+            "flag": "buy",
+            "show": 0
+          }
+        ],
+        "item": [
+          {
+            "type": "pic",
+            "group": "1",
+            "link": "",
+            "class": "keyvisual",
+            "content": {
+              "desktop": "https://dlcdnwebimgs.asus.com/gain/26203F8D-C9A9-488F-A58E-7DFDCB2F86BF/fwebp",
+              "mobile": ""
+            },
+            "flag": "pd-img",
+            "show": 1
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "title",
+            "content": "Banner Title",
+            "flag": "title",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "sub-title",
+            "content": "Sub-Title",
+            "flag": "slogan",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "desp",
+            "content": "Banner Content....",
+            "flag": "desp",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "price",
+            "content": "$399",
+            "flag": "price",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-more",
+            "content": "Learn More",
+            "flag": "more",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-video",
+            "content": "Button Title",
+            "flag": "video",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-buy-now",
+            "content": "BUY NOW",
+            "flag": "buy",
+            "show": 0
+          }
+        ]
+      },
+      {
+        "link": "https://rog.asus.com/vn/laptops/rog-zephyrus/rog-zephyrus-duo-2026/",
+        "linktext": "ROG Zephyru DUO 2026",
+        "bannerName": "ROG Zephyru DUO 2026",
+        "description": "ROG Zephyru DUO 2026, laptop gaming 2 màn hình 16\" đầu tiên trên thế giới.",
+        "alt": "ROG Zephyru DUO 2026",
+        "class": "",
+        "mdaTag": {
+          "tagline": "",
+          "taglineImgUrl": ""
+        },
+        "mobileItem": [
+          {
+            "type": "pic",
+            "group": "1",
+            "link": "",
+            "class": "keyvisual",
+            "content": {
+              "desktop": "",
+              "mobile": "https://dlcdnwebimgs.asus.com/gain/41BB5A2E-D630-488E-A40D-AFD684F77B25/fwebp"
+            },
+            "flag": "pd-img",
+            "show": 1
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "title",
+            "content": "Banner Title",
+            "flag": "title",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "sub-title",
+            "content": "Sub-Title...",
+            "flag": "slogan",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "desp",
+            "content": "Banner Content....",
+            "flag": "desp",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "price",
+            "content": "$399",
+            "flag": "price",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-more",
+            "content": "Learn More",
+            "flag": "more",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-video",
+            "content": "Button Title",
+            "flag": "video",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-buy-now",
+            "content": "BUY NOW",
+            "flag": "buy",
+            "show": 0
+          }
+        ],
+        "item": [
+          {
+            "type": "pic",
+            "group": "1",
+            "link": "",
+            "class": "keyvisual",
+            "content": {
+              "desktop": "https://dlcdnwebimgs.asus.com/gain/E8231247-2233-4821-8164-EAF843B875A2/fwebp",
+              "mobile": ""
+            },
+            "flag": "pd-img",
+            "show": 1
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "title",
+            "content": "Banner Title",
+            "flag": "title",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "sub-title",
+            "content": "Sub-Title",
+            "flag": "slogan",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "desp",
+            "content": "Banner Content....",
+            "flag": "desp",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "price",
+            "content": "$399",
+            "flag": "price",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "https://rog.asus.com/vn/laptops/rog-zephyrus/rog-zephyrus-duo-16-2022-series/?utm_source=asus-local&utm_medium=banner&utm_campaign=22q2_rogamd_launch_vn&utm_content=gx650_image_homepage",
+            "class": "af-btn btn-more",
+            "content": "Learn More",
+            "flag": "more",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-video",
+            "content": "Button Title",
+            "flag": "video",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-buy-now",
+            "content": "BUY NOW",
+            "flag": "buy",
+            "show": 0
+          }
+        ]
+      },
+      {
+        "link": "https://rog.asus.com/vn/laptops/rog-zephyrus/rog-zephyrus-g14-2026-gu405/",
+        "linktext": "ROG Zephyrus G14 2026 GU405",
+        "bannerName": "ROG Zephyrus G14 2026 GU405",
+        "description": "ROG Zephyrus G14 2026 GU405",
+        "alt": "ROG Zephyrus G14 2026 GU405",
+        "class": "",
+        "mdaTag": {
+          "tagline": "",
+          "taglineImgUrl": "<a class=\"MDA2015\" href=\"https://www.asus.com/vn/content/windows11-home/\" target=\"_blank\" aria-label=\"Tìm hiểu về Windows 11 Gaming (mở trong cửa sổ mới)\"><img src=\"https://dlcdnimgs.asus.com/images/mda2022/gaming/blue/vi-vn.png\" style=\"height:43px\" alt=\"Tìm hiểu về Windows 11 Gaming (mở trong cửa sổ mới)\"></a>"
+        },
+        "mobileItem": [
+          {
+            "type": "pic",
+            "group": "1",
+            "link": "",
+            "class": "keyvisual",
+            "content": {
+              "desktop": "",
+              "mobile": "https://dlcdnwebimgs.asus.com/gain/63C21BAF-D0EA-45BD-AD91-EC7914CCB423"
+            },
+            "flag": "pd-img",
+            "show": 1
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "title",
+            "content": "Banner Title",
+            "flag": "title",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "sub-title",
+            "content": "Sub-Title...",
+            "flag": "slogan",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "desp",
+            "content": "Banner Content....",
+            "flag": "desp",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "price",
+            "content": "$399",
+            "flag": "price",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-more",
+            "content": "Learn More",
+            "flag": "more",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-video",
+            "content": "Button Title",
+            "flag": "video",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-buy-now",
+            "content": "BUY NOW",
+            "flag": "buy",
+            "show": 0
+          }
+        ],
+        "item": [
+          {
+            "type": "pic",
+            "group": "1",
+            "link": "",
+            "class": "keyvisual",
+            "content": {
+              "desktop": "https://dlcdnwebimgs.asus.com/gain/BCC7AF59-1775-4DCD-942E-D08A181DC702",
+              "mobile": ""
+            },
+            "flag": "pd-img",
+            "show": 1
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "title",
+            "content": "Banner Title",
+            "flag": "title",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "sub-title",
+            "content": "Sub-Title",
+            "flag": "slogan",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "desp",
+            "content": "Banner Content....",
+            "flag": "desp",
+            "show": 0
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "price",
+            "content": "$399",
+            "flag": "price",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-more",
+            "content": "Learn More",
+            "flag": "more",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-video",
+            "content": "Button Title",
+            "flag": "video",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-buy-now",
+            "content": "BUY NOW",
+            "flag": "buy",
+            "show": 0
+          }
+        ]
+      }
+    ],
+    "bannerLink": "https://www.asus.com/vn/content/asus-googleai",
+    "bannerMainImage": "https://dlcdnwebimgs.asus.com/gain/BCC7AF59-1775-4DCD-942E-D08A181DC702",
+    "bannerMobileMainImage": "https://dlcdnwebimgs.asus.com/gain/63C21BAF-D0EA-45BD-AD91-EC7914CCB423",
+    "bannerPromotionBar": [
+      {
+        "link": "https://vn.store.asus.com/rog/2025-rog-laptop-gaming-ai-rtx-50-series?utm_source=rogsite&utm_medium=banner",
+        "linktext": "Create an account for better product support!",
+        "bannerName": "Create an account for better product support!",
+        "description": "Mua Ngay Laptop Gaming AI ROG RTX 50 Series!",
+        "alt": "",
+        "class": "Default",
+        "mdaTag": {
+          "tagline": "",
+          "taglineImgUrl": ""
+        },
+        "mobileItem": [
+          {
+            "type": "pic",
+            "group": "1",
+            "link": "",
+            "class": "keyvisual",
+            "content": {
+              "desktop": "",
+              "mobile": ""
+            },
+            "flag": "pd-img",
+            "show": 1
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "title",
+            "content": "Banner Title",
+            "flag": "title",
+            "show": 1
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "sub-title",
+            "content": "Sub-Title",
+            "flag": "slogan",
+            "show": 1
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "desp",
+            "content": "Banner Content....",
+            "flag": "desp",
+            "show": 1
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "price",
+            "content": "$399",
+            "flag": "price",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-more",
+            "content": "Learn More",
+            "flag": "more",
+            "show": 1
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-video",
+            "content": "Button Title",
+            "flag": "video",
+            "show": 1
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-buy-now",
+            "content": "BUY NOW",
+            "flag": "buy",
+            "show": 0
+          }
+        ],
+        "item": [
+          {
+            "type": "pic",
+            "group": "1",
+            "link": "",
+            "class": "keyvisual",
+            "content": {
+              "desktop": "",
+              "mobile": ""
+            },
+            "flag": "pd-img",
+            "show": 1
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "title",
+            "content": "Banner Title",
+            "flag": "title",
+            "show": 1
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "sub-title",
+            "content": "Sub-Title",
+            "flag": "slogan",
+            "show": 1
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "desp",
+            "content": "Banner Content....",
+            "flag": "desp",
+            "show": 1
+          },
+          {
+            "type": "text",
+            "group": "2",
+            "link": "",
+            "class": "price",
+            "content": "$399",
+            "flag": "price",
+            "show": 0
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-more",
+            "content": "Learn More",
+            "flag": "more",
+            "show": 1
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-video",
+            "content": "Button Title",
+            "flag": "video",
+            "show": 1
+          },
+          {
+            "type": "button",
+            "group": "3",
+            "link": "",
+            "class": "af-btn btn-buy-now",
+            "content": "BUY NOW",
+            "flag": "buy",
+            "show": 0
+          }
+        ]
+      }
+    ],
+    "bottomBanner": []
+  },
+  "ProductLine": {
+    "productLine": {
+      "count": 22,
+      "level": [
+        {
+          "id": 1084,
+          "name": "Laptop Gaming ASUS ROG",
+          "globalName": "Laptops",
+          "image": {
+            "menuPDs": "https://dlcdnwebimgs.asus.com/gain/AE927DDC-E861-4B68-A569-F5381F483EFD/w96/h170",
+            "discoverPD": "https://dlcdnwebimgs.asus.com/gain/AE927DDC-E861-4B68-A569-F5381F483EFD/w240/h175",
+            "general": "https://dlcdnwebimgs.asus.com/gain/AE927DDC-E861-4B68-A569-F5381F483EFD/w240/h175",
+            "series": "",
+            "seriesGroup": ""
+          },
+          "url": "vn/laptops-group/",
+          "description": "Laptop gaming ASUS ROG gồm ba dòng: ROG Flow 2 trong 1 siêu di động, laptop gaming mỏng nhẹ ROG Zephyrus và laptop gaming mạnh ROG Strix cho eSports. Laptop ROG 2026 trang bị GPU NVIDIA RTX 50 Series, CPU Intel Core Ultra và AMD Ryzen AI, màn hình ROG Nebula HDR, tản nhiệt ROG Intelligent Cooling.",
+          "type": 0,
+          "itemId": 0,
+          "tagId": 0,
+          "subLevel": []
+        },
+        {
+          "id": 96,
+          "name": "Bo mạch chủ",
+          "globalName": "Motherboards",
+          "image": {
+            "menuPDs": "https://dlcdnwebimgs.asus.com/gain/0F38E063-066D-4BE3-9284-811CFEA6A0CE/w96/h170",
+            "discoverPD": "https://dlcdnwebimgs.asus.com/gain/0F38E063-066D-4BE3-9284-811CFEA6A0CE/w240/h175",
+            "general": "https://dlcdnwebimgs.asus.com/gain/0F38E063-066D-4BE3-9284-811CFEA6A0CE/w240/h175",
+            "series": "",
+            "seriesGroup": ""
+          },
+          "url": "vn/motherboards-group/",
+          "description": "",
+          "type": 0,
+          "itemId": 0,
+          "tagId": 0,
+          "subLevel": []
+        },
+        {
+          "id": 172,
+          "name": "Card Đồ họa",
+          "globalName": "Graphics Cards",
+          "image": {
+            "menuPDs": "https://dlcdnwebimgs.asus.com/gain/954F6E07-DF42-414A-BE69-1521EA659ADC/w96/h170",
+            "discoverPD": "https://dlcdnwebimgs.asus.com/gain/954F6E07-DF42-414A-BE69-1521EA659ADC/w240/h175",
+            "general": "https://dlcdnwebimgs.asus.com/gain/954F6E07-DF42-414A-BE69-1521EA659ADC/w240/h175",
+            "series": "",
+            "seriesGroup": ""
+          },
+          "url": "vn/graphics-cards-group/",
+          "description": "",
+          "type": 0,
+          "itemId": 0,
+          "tagId": 0,
+          "subLevel": []
+        },
+        {
+          "id": 248,
+          "name": "Màn hình",
+          "globalName": "Monitors",
+          "image": {
+            "menuPDs": "https://dlcdnwebimgs.asus.com/gain/44F0B24D-67A0-4716-A88C-B8B621B0D1F7/w96/h170",
+            "discoverPD": "https://dlcdnwebimgs.asus.com/gain/44F0B24D-67A0-4716-A88C-B8B621B0D1F7/w240/h175",
+            "general": "https://dlcdnwebimgs.asus.com/gain/44F0B24D-67A0-4716-A88C-B8B621B0D1F7/w240/h175",
+            "series": "",
+            "seriesGroup": ""
+          },
+          "url": "vn/monitors-group/",
+          "description": "",
+          "type": 0,
+          "itemId": 0,
+          "tagId": 0,
+          "subLevel": []
+        },
+        {
+          "id": 20,
+          "name": "Phones",
+          "globalName": "Phones",
+          "image": {
+            "menuPDs": "https://dlcdnwebimgs.asus.com/gain/A77B9915-4015-4F08-AFFB-42270536B824/w96/h170",
+            "discoverPD": "https://dlcdnwebimgs.asus.com/gain/A77B9915-4015-4F08-AFFB-42270536B824/w240/h175",
+            "general": "https://dlcdnwebimgs.asus.com/gain/A77B9915-4015-4F08-AFFB-42270536B824/w240/h175",
+            "series": "",
+            "seriesGroup": ""
+          },
+          "url": "vn/phones-group/allmodels/",
+          "description": "",
+          "type": 0,
+          "itemId": 0,
+          "tagId": 0,
+          "subLevel": []
+        },
+        {
+          "id": 1160,
+          "name": "MÁY BỘ PC GAMING",
+          "globalName": "Desktops",
+          "image": {
+            "menuPDs": "https://dlcdnwebimgs.asus.com/gain/41DEF0E5-A89D-4078-8EC0-4314DF6A77B0/w96/h170",
+            "discoverPD": "https://dlcdnwebimgs.asus.com/gain/41DEF0E5-A89D-4078-8EC0-4314DF6A77B0/w240/h175",
+            "general": "https://dlcdnwebimgs.asus.com/gain/41DEF0E5-A89D-4078-8EC0-4314DF6A77B0/w240/h175",
+            "series": "",
+            "seriesGroup": ""
+          },
+          "url": "vn/desktops-group/",
+          "description": "Tận hưởng dòng máy gaming hiện đại đỉnh cao với máy bộ ROG gaming, được thiết kế để đem lại hiệu năng mạnh mẽ cùng hệ thống tản nhiệt tối tân và khả năng nâng cấp dễ dàng.",
+          "type": 0,
+          "itemId": 0,
+          "tagId": 0,
+          "subLevel": []
+        },
+        {
+          "id": 856,
+          "name": "Nguồn máy tính",
+          "globalName": "Power Supply Units",
+          "image": {
+            "menuPDs": "https://dlcdnwebimgs.asus.com/gain/DD0607BB-A52B-4947-81D4-6E90FFE609C1/w96/h170",
+            "discoverPD": "https://dlcdnwebimgs.asus.com/gain/DD0607BB-A52B-4947-81D4-6E90FFE609C1/w240/h175",
+            "general": "https://dlcdnwebimgs.asus.com/gain/DD0607BB-A52B-4947-81D4-6E90FFE609C1/w240/h175",
+            "series": "",
+            "seriesGroup": ""
+          },
+          "url": "vn/power-supply-units-group/",
+          "description": "",
+          "type": 0,
+          "itemId": 0,
+          "tagId": 0,
+          "subLevel": []
+        },
+        {
+          "id": 1236,
+          "name": "Dock VGA gắn ngoài",
+          "globalName": "External Graphics Docks",
+          "image": {
+            "menuPDs": "https://dlcdnwebimgs.asus.com/gain/C9A4CB77-E474-4489-AB86-B519FC47234E/w96/h170",
+            "discoverPD": "https://dlcdnwebimgs.asus.com/gain/C9A4CB77-E474-4489-AB86-B519FC47234E/w240/h175",
+            "general": "https://dlcdnwebimgs.asus.com/gain/C9A4CB77-E474-4489-AB86-B519FC47234E/w240/h175",
+            "series": "",
+            "seriesGroup": ""
+          },
+          "url": "vn/external-graphics-docks-group/allmodels/",
+          "description": "",
+          "type": 0,
+          "itemId": 0,
+          "tagId": 0,
+          "subLevel": []
+        },
+        {
+          "id": 324,
+          "name": "Thiết bị mạng",
+          "globalName": "Networking",
+          "image": {
+            "menuPDs": "https://dlcdnwebimgs.asus.com/gain/8E7A4860-965C-424A-AC63-E228E0D0B391/w96/h170",
+            "discoverPD": "https://dlcdnwebimgs.asus.com/gain/8E7A4860-965C-424A-AC63-E228E0D0B391/w240/h175",
+            "general": "https://dlcdnwebimgs.asus.com/gain/8E7A4860-965C-424A-AC63-E228E0D0B391/w240/h175",
+            "series": "",
+            "seriesGroup": ""
+          },
+          "url": "vn/networking-group/allmodels/",
+          "description": "",
+          "type": 0,
+          "itemId": 0,
+          "tagId": 0,
+          "subLevel": []
+        },
+        {
+          "id": 400,
+          "name": "Bàn phím",
+          "globalName": "Keyboards",
+          "image": {
+            "menuPDs": "https://dlcdnwebimgs.asus.com/gain/FE102E9F-C72D-407F-A49B-2AB1006A0669/w96/h170",
+            "discoverPD": "https://dlcdnwebimgs.asus.com/gain/FE102E9F-C72D-407F-A49B-2AB1006A0669/w240/h175",
+            "general": "https://dlcdnwebimgs.asus.com/gain/FE102E9F-C72D-407F-A49B-2AB1006A0669/w240/h175",
+            "series": "",
+            "seriesGroup": ""
+          },
+          "url": "vn/keyboards-group/",
+          "description": "",
+          "type": 0,
+          "itemId": 0,
+          "tagId": 0,
+          "subLevel": []
+        },
+        {
+          "id": 476,
+          "name": "Chuột & Lót chuột",
+          "globalName": "Mice & Mouse Pads",
+          "image": {
+            "menuPDs": "https://dlcdnwebimgs.asus.com/gain/F919198E-4F2B-4A8A-969A-E6E4757674AC/w96/h170",
+            "discoverPD": "https://dlcdnwebimgs.asus.com/gain/F919198E-4F2B-4A8A-969A-E6E4757674AC/w240/h175",
+            "general": "https://dlcdnwebimgs.asus.com/gain/F919198E-4F2B-4A8A-969A-E6E4757674AC/w240/h175",
+            "series": "",
+            "seriesGroup": ""
+          },
+          "url": "vn/mice-mouse-pads-group/",
+          "description": "",
+          "type": 0,
+          "itemId": 0,
+          "tagId": 0,
+          "subLevel": []
+        },
+        {
+          "id": 552,
+          "name": "Tai nghe & audio",
+          "globalName": "Headsets & Audio",
+          "image": {
+            "menuPDs": "https://dlcdnwebimgs.asus.com/gain/070A915A-ED63-4C9E-B837-F6F1766E2863/w96/h170",
+            "discoverPD": "https://dlcdnwebimgs.asus.com/gain/070A915A-ED63-4C9E-B837-F6F1766E2863/w240/h175",
+            "general": "https://dlcdnwebimgs.asus.com/gain/070A915A-ED63-4C9E-B837-F6F1766E2863/w240/h175",
+            "series": "",
+            "seriesGroup": ""
+          },
+          "url": "vn/headsets-audio-group/",
+          "description": "",
+          "type": 0,
+          "itemId": 0,
+          "tagId": 0,
+          "subLevel": []
+        },
+        {
+          "id": 704,
+          "name": "Cases",
+          "globalName": "Cases",
+          "image": {
+            "menuPDs": "https://dlcdnwebimgs.asus.com/gain/30D1F34B-0C37-4D9D-92E4-487372FD254F/w96/h170",
+            "discoverPD": "https://dlcdnwebimgs.asus.com/gain/30D1F34B-0C37-4D9D-92E4-487372FD254F/w240/h175",
+            "general": "https://dlcdnwebimgs.asus.com/gain/30D1F34B-0C37-4D9D-92E4-487372FD254F/w240/h175",
+            "series": "",
+            "seriesGroup": ""
+          },
+          "url": "vn/cases-group/allmodels/",
+          "description": "",
+          "type": 0,
+          "itemId": 0,
+          "tagId": 0,
+          "subLevel": []
+        },
+        {
+          "id": 932,
+          "name": "Apparel, Bags, & Gear",
+          "globalName": "Apparel, Bags, Gear & Chair",
+          "image": {
+            "menuPDs": "https://dlcdnwebimgs.asus.com/gain/5AC10F2B-B36C-40D7-8950-78EE7F4E298E/w96/h170",
+            "discoverPD": "https://dlcdnwebimgs.asus.com/gain/5AC10F2B-B36C-40D7-8950-78EE7F4E298E/w240/h175",
+            "general": "https://dlcdnwebimgs.asus.com/gain/5AC10F2B-B36C-40D7-8950-78EE7F4E298E/w240/h175",
+            "series": "",
+            "seriesGroup": ""
+          },
+          "url": "vn/apparel-bags-gear-group/",
+          "description": "",
+          "type": 0,
+          "itemId": 0,
+          "tagId": 0,
+          "subLevel": []
+        },
+        {
+          "id": 628,
+          "name": "Streaming Kits",
+          "globalName": "Streaming Kits",
+          "image": {
+            "menuPDs": "https://dlcdnwebimgs.asus.com/gain/7A8E0C01-7EBA-49FF-977E-352D6EAAA8BC/w96/h170",
+            "discoverPD": "https://dlcdnwebimgs.asus.com/gain/7A8E0C01-7EBA-49FF-977E-352D6EAAA8BC/w240/h175",
+            "general": "https://dlcdnwebimgs.asus.com/gain/7A8E0C01-7EBA-49FF-977E-352D6EAAA8BC/w240/h175",
+            "series": "",
+            "seriesGroup": ""
+          },
+          "url": "vn/streaming-kits-group/allmodels/",
+          "description": "",
+          "type": 0,
+          "itemId": 0,
+          "tagId": 0,
+          "subLevel": []
+        },
+        {
+          "id": 49508,
+          "name": "Tay cầm",
+          "globalName": "Controllers",
+          "image": {
+            "menuPDs": "https://dlcdnwebimgs.asus.com/gain/85A00D94-1EFE-424F-9C02-CE0EDBB646D1/w96/h170",
+            "discoverPD": "https://dlcdnwebimgs.asus.com/gain/85A00D94-1EFE-424F-9C02-CE0EDBB646D1/w240/h175",
+            "general": "https://dlcdnwebimgs.asus.com/gain/85A00D94-1EFE-424F-9C02-CE0EDBB646D1/w240/h175",
+            "series": "",
+            "seriesGroup": ""
+          },
+          "url": "vn/controllers-group/allmodels/",
+          "description": "",
+          "type": 0,
+          "itemId": 0,
+          "tagId": 0,
+          "subLevel": []
+        },
+        {
+          "id": 49997,
+          "name": "Ổ lưu trữ",
+          "globalName": "Storage",
+          "image": {
+            "menuPDs": "https://dlcdnwebimgs.asus.com/gain/D8D19FB9-2485-478F-9E58-4344265E0E69/w96/h170",
+            "discoverPD": "https://dlcdnwebimgs.asus.com/gain/D8D19FB9-2485-478F-9E58-4344265E0E69/w240/h175",
+            "general": "https://dlcdnwebimgs.asus.com/gain/D8D19FB9-2485-478F-9E58-4344265E0E69/w240/h175",
+            "series": "",
+            "seriesGroup": ""
+          },
+          "url": "vn/storage/rog-strix-arion-model/",
+          "description": "",
+          "type": 0,
+          "itemId": 0,
+          "tagId": 0,
+          "subLevel": []
+        },
+        {
+          "id": 49589,
+          "name": "Protection and Gadgets",
+          "globalName": "Protection and Gadgets",
+          "image": {
+            "menuPDs": "https://dlcdnwebimgs.asus.com/gain/09D0ECE7-D85B-49F2-8432-8938293A39BB/w96/h170",
+            "discoverPD": "https://dlcdnwebimgs.asus.com/gain/09D0ECE7-D85B-49F2-8432-8938293A39BB/w240/h175",
+            "general": "https://dlcdnwebimgs.asus.com/gain/09D0ECE7-D85B-49F2-8432-8938293A39BB/w240/h175",
+            "series": "",
+            "seriesGroup": ""
+          },
+          "url": "vn/protection-and-gadgets-group/",
+          "description": "",
+          "type": 0,
+          "itemId": 0,
+          "tagId": 0,
+          "subLevel": []
+        },
+        {
+          "id": 106060,
+          "name": "Làm mát",
+          "globalName": "Cooling",
+          "image": {
+            "menuPDs": "https://dlcdnwebimgs.asus.com/gain/FB3145A7-F4C6-493F-BF30-3137E3DFD470/w96/h170",
+            "discoverPD": "https://dlcdnwebimgs.asus.com/gain/FB3145A7-F4C6-493F-BF30-3137E3DFD470/w240/h175",
+            "general": "https://dlcdnwebimgs.asus.com/gain/FB3145A7-F4C6-493F-BF30-3137E3DFD470/w240/h175",
+            "series": "",
+            "seriesGroup": ""
+          },
+          "url": "vn/cooling-group/",
+          "description": "",
+          "type": 0,
+          "itemId": 0,
+          "tagId": 0,
+          "subLevel": []
+        },
+        {
+          "id": 219999,
+          "name": "Gaming Handhelds",
+          "globalName": "Gaming Handhelds",
+          "image": {
+            "menuPDs": "https://dlcdnwebimgs.asus.com/gain/886CF192-21BD-4122-A4A2-8D50E7948E27/w96/h170",
+            "discoverPD": "https://dlcdnwebimgs.asus.com/gain/886CF192-21BD-4122-A4A2-8D50E7948E27/w240/h175",
+            "general": "https://dlcdnwebimgs.asus.com/gain/886CF192-21BD-4122-A4A2-8D50E7948E27/w240/h175",
+            "series": "",
+            "seriesGroup": ""
+          },
+          "url": "vn/gaming-handhelds-group/",
+          "description": "",
+          "type": 0,
+          "itemId": 0,
+          "tagId": 0,
+          "subLevel": []
+        },
+        {
+          "id": 239576,
+          "name": "ROG SAGA",
+          "globalName": "ROG SAGA",
+          "image": {
+            "menuPDs": "https://dlcdnwebimgs.asus.com/gain/2E269D3B-9AB2-4FA2-B9BE-A14F94796F2D/w96/h170",
+            "discoverPD": "https://dlcdnwebimgs.asus.com/gain/2E269D3B-9AB2-4FA2-B9BE-A14F94796F2D/w240/h175",
+            "general": "https://dlcdnwebimgs.asus.com/gain/2E269D3B-9AB2-4FA2-B9BE-A14F94796F2D/w240/h175",
+            "series": "",
+            "seriesGroup": ""
+          },
+          "url": "vn/rog-saga-group/",
+          "description": "",
+          "type": 0,
+          "itemId": 0,
+          "tagId": 0,
+          "subLevel": []
+        },
+        {
+          "id": 246839,
+          "name": "Docks, Chargers and Cables",
+          "globalName": "Docks, Chargers and Cables",
+          "image": {
+            "menuPDs": "https://dlcdnwebimgs.asus.com/gain/7A2BEAAD-93C1-4980-8ACB-ABFAE9285009/w96/h170",
+            "discoverPD": "https://dlcdnwebimgs.asus.com/gain/7A2BEAAD-93C1-4980-8ACB-ABFAE9285009/w240/h175",
+            "general": "https://dlcdnwebimgs.asus.com/gain/7A2BEAAD-93C1-4980-8ACB-ABFAE9285009/w240/h175",
+            "series": "",
+            "seriesGroup": ""
+          },
+          "url": "vn/docks-chargers-and-cables-group/",
+          "description": "",
+          "type": 0,
+          "itemId": 0,
+          "tagId": 0,
+          "subLevel": []
+        }
+      ]
+    }
+  },
+  "Category": {
+    "rogCategoryVal": []
+  },
+  "HotProduct": {
+    "data": {}
+  },
+  "SpotLight": {
+    "spotLight": [],
+    "setSpotLightStatus": []
+  },
+  "Article": {
+    "articlesData": [],
+    "articleList": [],
+    "articleContent": [],
+    "articleRecommend": [],
+    "articleCategoryList": []
+  },
+  "Section": {
+    "section": [
+      {
+        "sectionName": "ROG-Highlight",
+        "title": "ROG HIGHLIGHTS",
+        "description": "",
+        "linkTitle": "",
+        "link": "https://rog.asus.com/vn/articles",
+        "linkTarget": "",
+        "grid": [
+          {
+            "title": "Tổng Hợp Thông Tin GTA 6: GTA 6 Ra Mắt Khi Nào, Cấu Hình Yêu Cầu Ra Sao?",
+            "titleTag": "GAMING",
+            "description": "Bài viết này tổng hợp toàn bộ thông tin GTA 6 mới nhất về lịch phát hành, giá bán, bối cảnh, công nghệ và cấu hình dự đoán, đồng thời gợi ý cách chuẩn bị phần cứng để sẵn sàng bước vào thế giới Leonida một cách mượt mà.",
+            "link": "https://rog.asus.com/vn/articles/gaming/thong-tin-gta-6-moi-cau-hinh-yeu-cau/",
+            "linkTarget": "_self",
+            "imageUrl": "https://dlcdnrog.asus.com/rog/media/1783354489863.webp",
+            "type": "",
+            "date": "Jun 30, 2026",
+            "author": "ROG"
+          },
+          {
+            "title": "Tất Tần Tật Cách Sử Dụng Scenario Profiles Trong Armoury Crate Để Tối Ưu Laptop Gaming ROG",
+            "titleTag": "GUIDES",
+            "description": "Tính năng sử dụng Scenario Profiles trong Armoury Crate là giải pháp tối ưu giúp laptop gaming ROG tự động thay đổi 5 thông số hệ thống (Operating Mode, Aura Sync RGB, GameVisual màn hình, System Configuration phím tắt, tản nhiệt quạt) theo từng ứng dụng",
+            "link": "https://rog.asus.com/vn/articles/guides/su-dung-scenario-profiles-trong-armoury-crate/",
+            "linkTarget": "_self",
+            "imageUrl": "https://dlcdnrog.asus.com/rog/media/1782687713219.webp",
+            "type": "",
+            "date": "Jun 28, 2026",
+            "author": "ROG"
+          },
+          {
+            "title": "Hướng Dẫn Sử Dụng Aura Sync Trong Armoury Crate Để Đồng Bộ Đèn LED Laptop Gaming ROG",
+            "titleTag": "GUIDES",
+            "description": "Việc sử dụng Aura Sync trong Armoury Crate là cách chuẩn và hiệu quả nhất để đồng bộ đèn LED trên laptop gaming ROG, chuột, bàn phím, tai nghe và nhiều thiết bị tương thích trong cùng hệ sinh thái",
+            "link": "https://rog.asus.com/vn/articles/guides/su-dung-aura-sync-trong-armoury-crate/",
+            "linkTarget": "_self",
+            "imageUrl": "https://dlcdnrog.asus.com/rog/media/178266308938.webp",
+            "type": "",
+            "date": "Jun 28, 2026",
+            "author": "ROG"
+          },
+          {
+            "title": "Cách Tăng Thời Lượng Pin Laptop Gaming ROG Với Armoury Crate",
+            "titleTag": "GUIDES",
+            "description": "Việc chỉnh tăng thời lượng pin laptop gaming ROG với Armoury Crate là giải pháp trực diện để sinh viên kéo dài thời gian sử dụng laptop ROG trong suốt các tiết học mà không phải luôn mang theo sạc.",
+            "link": "https://rog.asus.com/vn/articles/guides/tang-thoi-luong-pin-laptop-gaming-asus-rog/",
+            "linkTarget": "_self",
+            "imageUrl": "https://dlcdnrog.asus.com/rog/media/1782659467395.webp",
+            "type": "",
+            "date": "Jun 28, 2026",
+            "author": "ROG"
+          },
+          {
+            "title": "Laptop Gaming 2 Màn Hình Mỏng Nhẹ Có Mạnh Không? Thực Tế Dùng ROG Zephyrus DUO 2026 Làm Đồ Họa",
+            "titleTag": "ROG GAMING LAPTOPS",
+            "description": "Đây là chiếc laptop gaming 2 màn hình 16 inch đầu tiên trên thế giới, được ASUS ROG thiết kế lại toàn bộ khung máy, tản nhiệt, bàn phím rời và phần mềm ScreenPad Plus",
+            "link": "https://rog.asus.com/vn/articles/rog-gaming-laptops/laptop-gaming-2-man-hinh-16-inch/",
+            "linkTarget": "_self",
+            "imageUrl": "https://dlcdnrog.asus.com/rog/media/1782116514738.webp",
+            "type": "",
+            "date": "Jun 22, 2026",
+            "author": "ROG"
+          }
+        ]
+      },
+      {
+        "sectionName": "ROG-Story",
+        "title": "THE ART OF THE ROG UNIVERSE",
+        "description": "Technology never sleeps, nor should the action. For those keen on winning power, the Republic of Gamers awaits. Driven by relentless innovation, ROG is committed to producing out-of-this-world experiences for gamers and enthusiasts everywhere.",
+        "linkTitle": "",
+        "link": "https://rog.asus.com/microsite/rog-saga/",
+        "linkTarget": "",
+        "grid": [
+          {
+            "title": "pc",
+            "titleTag": "",
+            "description": "",
+            "link": "",
+            "linkTarget": "",
+            "imageUrl": "https://dlcdnwebimgs.asus.com/gain/FDFFE426-0A29-40D5-8E26-C838EB26CA8F",
+            "type": "",
+            "date": null,
+            "author": null
+          },
+          {
+            "title": "mobile",
+            "titleTag": "",
+            "description": "",
+            "link": "",
+            "linkTarget": "",
+            "imageUrl": "https://dlcdnwebimgs.asus.com/gain/C2447980-FC01-41FD-B062-184649D61350",
+            "type": "",
+            "date": null,
+            "author": null
+          }
+        ]
+      }
+    ],
+    "newArticles": {
+      "sectionName": "ROG-Highlight",
+      "title": "ROG HIGHLIGHTS",
+      "description": "",
+      "linkTitle": "",
+      "link": "https://rog.asus.com/vn/articles",
+      "linkTarget": "",
+      "grid": [
+        {
+          "title": "Tổng Hợp Thông Tin GTA 6: GTA 6 Ra Mắt Khi Nào, Cấu Hình Yêu Cầu Ra Sao?",
+          "titleTag": "GAMING",
+          "description": "Bài viết này tổng hợp toàn bộ thông tin GTA 6 mới nhất về lịch phát hành, giá bán, bối cảnh, công nghệ và cấu hình dự đoán, đồng thời gợi ý cách chuẩn bị phần cứng để sẵn sàng bước vào thế giới Leonida một cách mượt mà.",
+          "link": "https://rog.asus.com/vn/articles/gaming/thong-tin-gta-6-moi-cau-hinh-yeu-cau/",
+          "linkTarget": "_self",
+          "imageUrl": "https://dlcdnrog.asus.com/rog/media/1783354489863.webp",
+          "type": "",
+          "date": "Jun 30, 2026",
+          "author": "ROG"
+        },
+        {
+          "title": "Tất Tần Tật Cách Sử Dụng Scenario Profiles Trong Armoury Crate Để Tối Ưu Laptop Gaming ROG",
+          "titleTag": "GUIDES",
+          "description": "Tính năng sử dụng Scenario Profiles trong Armoury Crate là giải pháp tối ưu giúp laptop gaming ROG tự động thay đổi 5 thông số hệ thống (Operating Mode, Aura Sync RGB, GameVisual màn hình, System Configuration phím tắt, tản nhiệt quạt) theo từng ứng dụng",
+          "link": "https://rog.asus.com/vn/articles/guides/su-dung-scenario-profiles-trong-armoury-crate/",
+          "linkTarget": "_self",
+          "imageUrl": "https://dlcdnrog.asus.com/rog/media/1782687713219.webp",
+          "type": "",
+          "date": "Jun 28, 2026",
+          "author": "ROG"
+        },
+        {
+          "title": "Hướng Dẫn Sử Dụng Aura Sync Trong Armoury Crate Để Đồng Bộ Đèn LED Laptop Gaming ROG",
+          "titleTag": "GUIDES",
+          "description": "Việc sử dụng Aura Sync trong Armoury Crate là cách chuẩn và hiệu quả nhất để đồng bộ đèn LED trên laptop gaming ROG, chuột, bàn phím, tai nghe và nhiều thiết bị tương thích trong cùng hệ sinh thái",
+          "link": "https://rog.asus.com/vn/articles/guides/su-dung-aura-sync-trong-armoury-crate/",
+          "linkTarget": "_self",
+          "imageUrl": "https://dlcdnrog.asus.com/rog/media/178266308938.webp",
+          "type": "",
+          "date": "Jun 28, 2026",
+          "author": "ROG"
+        },
+        {
+          "title": "Cách Tăng Thời Lượng Pin Laptop Gaming ROG Với Armoury Crate",
+          "titleTag": "GUIDES",
+          "description": "Việc chỉnh tăng thời lượng pin laptop gaming ROG với Armoury Crate là giải pháp trực diện để sinh viên kéo dài thời gian sử dụng laptop ROG trong suốt các tiết học mà không phải luôn mang theo sạc.",
+          "link": "https://rog.asus.com/vn/articles/guides/tang-thoi-luong-pin-laptop-gaming-asus-rog/",
+          "linkTarget": "_self",
+          "imageUrl": "https://dlcdnrog.asus.com/rog/media/1782659467395.webp",
+          "type": "",
+          "date": "Jun 28, 2026",
+          "author": "ROG"
+        },
+        {
+          "title": "Laptop Gaming 2 Màn Hình Mỏng Nhẹ Có Mạnh Không? Thực Tế Dùng ROG Zephyrus DUO 2026 Làm Đồ Họa",
+          "titleTag": "ROG GAMING LAPTOPS",
+          "description": "Đây là chiếc laptop gaming 2 màn hình 16 inch đầu tiên trên thế giới, được ASUS ROG thiết kế lại toàn bộ khung máy, tản nhiệt, bàn phím rời và phần mềm ScreenPad Plus",
+          "link": "https://rog.asus.com/vn/articles/rog-gaming-laptops/laptop-gaming-2-man-hinh-16-inch/",
+          "linkTarget": "_self",
+          "imageUrl": "https://dlcdnrog.asus.com/rog/media/1782116514738.webp",
+          "type": "",
+          "date": "Jun 22, 2026",
+          "author": "ROG"
+        }
+      ]
+    },
+    "gridAction": [],
+    "gridActionTitle": ""
+  },
+  "StoryBanner": {
+    "storyBanner": {
+      "subject": "THE ART OF THE ROG UNIVERSE",
+      "description": "Technology never sleeps, nor should the action. For those keen on winning power, the Republic of Gamers awaits. Driven by relentless innovation, ROG is committed to producing out-of-this-world experiences for gamers and enthusiasts everywhere.",
+      "imgUrl": {
+        "pc": "https://dlcdnwebimgs.asus.com/gain/FDFFE426-0A29-40D5-8E26-C838EB26CA8F",
+        "mobile": "https://dlcdnwebimgs.asus.com/gain/C2447980-FC01-41FD-B062-184649D61350"
+      },
+      "url": "https://rog.asus.com/microsite/rog-saga/"
+    }
+  }
+}

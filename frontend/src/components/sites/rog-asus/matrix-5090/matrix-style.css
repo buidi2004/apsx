@@ -1,0 +1,56 @@
+/* ============================================================
+   ROG Matrix GeForce RTX 5090 — 30th Anniversary Edition
+   Retina Crispness & GPU Accelerated Compositing
+   ============================================================ */
+
+.matrix-overview-container {
+  position: relative;
+  width: 100%;
+  background: #000000;
+  color: #ffffff;
+  /* Containment & overflow: DO NOT clip pinned GSAP children */
+  overflow: visible;
+}
+
+/* 1:1 Retina Image Rendering Optimization */
+.matrix-overview-container img {
+  image-rendering: -webkit-optimize-contrast;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* 1:1 Video Container and Player Smoothing */
+.matrix-overview-container video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-color: #000000;
+  outline: none;
+}
+
+/* Responsive adjustment for #hd layout */
+#hd {
+  width: 100% !important;
+  max-width: 100vw !important;
+  margin: 0 auto;
+  background: #000000;
+}
+
+/* Ensure reveal elements always transition smoothly without permanent black voids */
+#hd [class*="reveal"] {
+  will-change: opacity, transform;
+  transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Fix sticky subbar overlap */
+.matrix-overview-container .hd-nav {
+  z-index: 90 !important;
+}
+
+/* Lightbox video modal transitions */
+.matrix-post-features-wrap {
+  position: relative;
+  z-index: 10;
+}

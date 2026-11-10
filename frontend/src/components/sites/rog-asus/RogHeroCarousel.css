@@ -1,0 +1,90 @@
+/* RogHeroCarousel */
+
+.rog-hero {
+  position: relative;
+  width: 100%;
+  height: 555px;
+  overflow: hidden;
+  background: #000;
+}
+
+.rog-hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  pointer-events: none;
+}
+.rog-hero-slide-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.rog-hero-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.rog-hero-indicators {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 2;
+}
+/* gray track + red fill (source: BannerSlideShow__line / __progress) */
+.rog-hero-bar {
+  width: 60px;
+  height: 4px;
+  border: none;
+  border-radius: 2px;
+  background: rgba(153, 153, 153, 0.5);
+  cursor: pointer;
+  padding: 0;
+  overflow: hidden;
+  display: block;
+}
+.rog-hero-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #ff4c5f;
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+.rog-hero-fill-active {
+  animation: rog-hero-progress 5s linear forwards;
+}
+.rog-hero-fill-paused {
+  animation-play-state: paused;
+}
+@keyframes rog-hero-progress {
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+.rog-hero-pause {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  padding: 2px;
+  margin-left: 4px;
+}
+.rog-hero-pause:hover {
+  color: #fff;
+}
+
+@media (max-width: 1023px) {
+  .rog-hero {
+    height: 600px;
+  }
+  .rog-hero-bar {
+    width: 40px;
+  }
+}

@@ -1,0 +1,426 @@
+/* RogSeriesPage — series shop-listing (source /vn/laptops/rog-flow-series/) */
+
+.rog-series {
+  background: #f5f5f5;
+  color: #111;
+  font-family: var(--rog-body-font);
+}
+
+/* hero banner */
+.rog-series-hero {
+  max-width: 1330px;
+  margin: 0 auto;
+  padding: 14px 24px 0;
+}
+.rog-series-hero img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* title */
+.rog-series-head {
+  max-width: 1330px;
+  margin: 0 auto;
+  padding: 26px 24px 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+.rog-series-title {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 38px;
+  margin: 0 0 8px;
+  color: #111;
+}
+.rog-series-hatch {
+  color: #111;
+  letter-spacing: -2px;
+}
+.rog-series-desc {
+  font-size: 14.5px;
+  color: #333;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 1180px;
+}
+.rog-series-win11 {
+  flex-shrink: 0;
+  background: #0078d4;
+  color: #fff;
+  font-size: 12.5px;
+  padding: 6px 12px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+.rog-series-rule {
+  max-width: 1330px;
+  margin: 18px auto 0;
+  height: 6px;
+  background: linear-gradient(90deg, #2a2a2a 0%, #3a3a3a 60%, #1c1c1c 100%);
+  transform: skewX(-30deg);
+  width: calc(100% - 48px);
+}
+
+/* toolbar */
+.rog-series-toolbar {
+  max-width: 1330px;
+  margin: 18px auto 0;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 14px;
+}
+.rog-series-count {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.rog-series-chip {
+  background: #e2e2e2;
+  color: #333;
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 3px;
+}
+.rog-series-clear {
+  background: none;
+  border: none;
+  color: var(--rog-red-bright);
+  font-size: 13.5px;
+  cursor: pointer;
+  padding: 0;
+}
+.rog-series-sort {
+  color: #333;
+}
+
+/* body layout */
+.rog-series-body {
+  max-width: 1330px;
+  margin: 14px auto 0;
+  padding: 0 24px 40px;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+/* filters */
+.rog-series-filters {
+  background: #fff;
+  padding: 18px 20px 8px;
+  font-size: 14px;
+}
+.rog-series-fgroup {
+  border-bottom: 1px solid #e2e2e2;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+.rog-series-fgroup:last-child {
+  border-bottom: none;
+}
+.rog-series-fgroup-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 14.5px;
+  letter-spacing: 0.5px;
+  color: #111;
+  margin-bottom: 10px;
+}
+.rog-series-fgroup-toggle {
+  color: #555;
+}
+.rog-series-fitem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #333;
+  padding: 5px 0;
+  cursor: pointer;
+}
+.rog-series-fitem input {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--rog-red);
+}
+.rog-series-fitem-disabled {
+  color: #aaa;
+}
+.rog-series-fcount {
+  color: #888;
+}
+.rog-series-price-inputs {
+  display: grid;
+  grid-template-columns: auto 1fr auto 1fr;
+  gap: 6px;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: #555;
+}
+.rog-series-price-inputs input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  font-size: 12.5px;
+}
+.rog-series-apply {
+  grid-column: 1 / -1;
+  justify-self: start;
+  background: var(--rog-red);
+  color: #fff;
+  border: none;
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 12.5px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+/* product cards */
+.rog-series-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+.rog-series-card {
+  position: relative;
+  background: #fff;
+  padding: 0 0 16px;
+  display: flex;
+  flex-direction: column;
+}
+.rog-series-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  color: #555;
+  padding: 12px 16px 0;
+}
+.rog-series-status-icon {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6px 0 6px 10px;
+  border-color: transparent transparent transparent currentColor;
+}
+.rog-series-status-in {
+  color: #1a7a1a;
+}
+.rog-series-status-out {
+  color: #555;
+}
+.rog-series-deal {
+  position: absolute;
+  top: 40px;
+  left: 16px;
+  border: 1.5px solid #111;
+  background: #fff;
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 12.5px;
+  letter-spacing: 1px;
+  padding: 3px 10px;
+  z-index: 2;
+}
+.rog-series-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 220px;
+  margin: 10px 16px 0;
+}
+.rog-series-img img {
+  max-width: 78%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.rog-series-name {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 24px;
+  margin: 12px 16px 2px;
+  color: #111;
+}
+.rog-series-model {
+  font-size: 14px;
+  color: #666;
+  margin: 0 16px 12px;
+}
+.rog-series-specs {
+  list-style: none;
+  margin: 0 16px 10px;
+  padding: 0;
+}
+.rog-series-specs li {
+  font-size: 13px;
+  color: #444;
+  line-height: 1.45;
+  padding-left: 12px;
+  position: relative;
+  margin-bottom: 3px;
+}
+.rog-series-specs li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 4px;
+  height: 4px;
+  background: #666;
+  transform: rotate(45deg);
+}
+.rog-series-collapse {
+  background: none;
+  border: none;
+  color: #111;
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 12.5px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  text-align: left;
+  margin: 0 16px 12px;
+  padding: 0;
+}
+.rog-series-price-wrap {
+  border-top: 1px solid #e2e2e2;
+  margin: 0 16px;
+  padding: 12px 0 14px;
+}
+.rog-series-price-label {
+  display: block;
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 4px;
+}
+.rog-series-price {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 26px;
+  color: #111;
+}
+.rog-series-save {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+}
+.rog-series-save-new {
+  color: var(--rog-red-bright);
+  font-style: normal;
+}
+.rog-series-save-old {
+  color: #888;
+  font-style: normal;
+  text-decoration: line-through;
+  margin-left: 8px;
+}
+.rog-series-ctas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 16px 16px;
+}
+.rog-series-cta-main {
+  background: var(--rog-red);
+  color: #fff;
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  text-align: center;
+  padding: 12px;
+}
+.rog-series-cta-main:hover {
+  background: var(--rog-red-bright);
+}
+.rog-series-cta-more {
+  border: 1.5px solid var(--rog-red);
+  color: var(--rog-red);
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  text-align: center;
+  padding: 10px;
+}
+.rog-series-cta-more:hover {
+  background: rgba(204, 0, 14, 0.06);
+}
+.rog-series-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border-top: 1px solid #e2e2e2;
+  margin: 0 16px;
+  padding-top: 12px;
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 13.5px;
+  letter-spacing: 0.5px;
+  color: #333;
+}
+.rog-series-compare {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.rog-series-compare input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--rog-red);
+}
+.rog-series-buyloc {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* bottom breadcrumb */
+.rog-series-crumb {
+  background: #000;
+  color: #9a9a9a;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 32px;
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 12.5px;
+  letter-spacing: 1px;
+}
+.rog-series-crumb-eye {
+  color: #555;
+}
+.rog-series-crumb-strong {
+  color: #d5d5d5;
+}
+
+@media (max-width: 1023px) {
+  .rog-series-body {
+    grid-template-columns: 1fr;
+  }
+  .rog-series-cards {
+    grid-template-columns: 1fr;
+  }
+  .rog-series-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .rog-series-title {
+    font-size: 28px;
+  }
+}

@@ -1,0 +1,899 @@
+/* RogProductDetail — ASUS ROG product detail & spec page styles */
+
+.rog-pd {
+  background: #000;
+  color: #fff;
+  min-height: 100vh;
+}
+
+.rog-pd-breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  font-size: 13.5px;
+  color: #9a9a9a;
+}
+.rog-pd-breadcrumb a {
+  color: #d5d5d5;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.rog-pd-breadcrumb a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* Sub-nav sticky header bar */
+.rog-pd-subbar {
+  position: sticky;
+  top: 50px;
+  z-index: 40;
+  background: rgba(14, 14, 14, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #262626;
+}
+.rog-pd-subbar-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.rog-pd-subbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.rog-pd-subbar-thumb {
+  width: 44px;
+  height: auto;
+  display: block;
+}
+.rog-pd-subbar-title {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.5px;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* Subbar Tabs */
+.rog-pd-subbar-tabs {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 100%;
+}
+.rog-pd-tab-link {
+  font-family: var(--rog-heading-font);
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #a0a0a0;
+  text-decoration: none;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 2px;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.rog-pd-tab-link:hover {
+  color: #fff;
+}
+.rog-pd-tab-link.is-active {
+  color: var(--rog-red-bright, #e60012);
+  border-bottom-color: var(--rog-red-bright, #e60012);
+}
+
+.rog-pd-subbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.rog-pd-subbar-price-wrap {
+  text-align: right;
+  line-height: 1.2;
+}
+.rog-pd-subbar-price-label {
+  font-size: 11px;
+  color: #888;
+  display: block;
+  text-transform: uppercase;
+}
+.rog-pd-subbar-price {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--rog-red-bright, #e60012);
+  font-family: var(--rog-heading-font);
+}
+.rog-pd-buy-btn {
+  background: var(--rog-red, #cc000e);
+  color: #fff;
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 8px 22px;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.15s ease;
+  display: inline-block;
+  white-space: nowrap;
+}
+.rog-pd-buy-btn:hover {
+  background: #ff0015;
+  transform: translateY(-1px);
+}
+
+/* hero (Overview Mode) */
+.rog-pd-hero {
+  position: relative;
+  background: #000;
+}
+.rog-pd-kv {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-height: 850px;
+  object-fit: cover;
+  object-position: center;
+}
+.rog-pd-hero-text {
+  position: absolute;
+  left: 48px;
+  bottom: 48px;
+  max-width: 720px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.85) 60%, rgba(0, 0, 0, 0.95) 100%);
+  padding: 24px;
+  border-radius: 4px;
+}
+.rog-pd-hero-text h1 {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 46px;
+  line-height: 1.15;
+  margin: 0 0 10px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8);
+}
+.rog-pd-tagline {
+  font-size: 19px;
+  line-height: 1.4;
+  color: #e5e5e5;
+  margin: 0 0 16px;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
+}
+.rog-pd-hero-cta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 18px;
+}
+.rog-pd-hero-cta .rog-pd-buy-btn {
+  padding: 12px 32px;
+  font-size: 15px;
+}
+.rog-pd-specs-anchor-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 11px 24px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.rog-pd-specs-anchor-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #fff;
+}
+
+/* Dedicated Spec Page Hero */
+.rog-spec-hero {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 44px 24px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 36px;
+  border-bottom: 1px solid #222;
+}
+.rog-spec-hero-info {
+  max-width: 680px;
+}
+.rog-spec-hero-subtitle {
+  font-family: var(--rog-heading-font);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--rog-red-bright, #e60012);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+.rog-spec-hero-info h1 {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1.15;
+  margin: 0 0 8px;
+}
+.rog-spec-hero-model {
+  font-size: 15px;
+  color: #999;
+  margin-bottom: 18px;
+}
+.rog-spec-hero-pricing {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.rog-spec-hero-price-label {
+  font-size: 13px;
+  color: #888;
+  text-transform: uppercase;
+}
+.rog-spec-hero-price {
+  font-family: var(--rog-heading-font);
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+}
+.rog-spec-hero-media {
+  max-width: 380px;
+  flex-shrink: 0;
+  background: #0a0a0a;
+  border: 1px solid #222;
+  border-radius: 4px;
+  padding: 16px;
+}
+.rog-spec-hero-media img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Quote banner (Kojima / Ludens) */
+.rog-pd-quote-section {
+  background: linear-gradient(135deg, #0e0e14 0%, #171722 50%, #0c0c10 100%);
+  border-top: 1px solid #2b2b3a;
+  border-bottom: 1px solid #2b2b3a;
+  padding: 56px 24px;
+}
+.rog-pd-quote-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  text-align: center;
+}
+.rog-pd-quote-text {
+  font-family: var(--rog-heading-font);
+  font-size: 22px;
+  font-style: italic;
+  line-height: 1.6;
+  color: #f0f0f5;
+  margin: 0 0 20px;
+}
+.rog-pd-quote-author {
+  font-size: 17px;
+  font-weight: 700;
+  color: #ff3344;
+  letter-spacing: 1px;
+}
+.rog-pd-quote-role {
+  font-size: 13.5px;
+  color: #8c8c9e;
+  margin-top: 4px;
+}
+
+/* highlight tiles */
+.rog-pd-highlights {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: #111;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+.rog-pd-tile {
+  background: #181818;
+  padding: 24px 22px;
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.35;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #eee;
+  border: 1px solid #262626;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  display: flex;
+  align-items: center;
+}
+.rog-pd-tile:hover {
+  background: var(--rog-red, #cc000e);
+  border-color: var(--rog-red, #cc000e);
+  color: #fff;
+}
+
+/* feature stories */
+.rog-pd-stories {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 24px 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+.rog-pd-story {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid #1f1f1f;
+}
+.rog-pd-story.has-media {
+  grid-template-columns: 1.1fr 1fr;
+  align-items: center;
+}
+.rog-pd-story:nth-child(even).has-media {
+  grid-template-columns: 1fr 1.1fr;
+}
+.rog-pd-story:nth-child(even).has-media .rog-pd-story-media {
+  order: 2;
+}
+.rog-pd-story:nth-child(even).has-media .rog-pd-story-body {
+  order: 1;
+}
+.rog-pd-story-media {
+  background: #0d0d0d;
+  border: 1px solid #222;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.rog-pd-story-media img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.3s ease;
+}
+.rog-pd-story-media:hover img {
+  transform: scale(1.02);
+}
+.rog-pd-story-body h2 {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 28px;
+  margin: 0 0 14px;
+  color: #fff;
+  line-height: 1.25;
+}
+.rog-pd-story-body p {
+  font-size: 16px;
+  line-height: 1.65;
+  color: #b5b5b5;
+  margin: 0;
+}
+
+/* specs */
+.rog-pd-specs {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 50px 24px 80px;
+}
+.rog-pd-specs-title {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 34px;
+  margin: 0 0 28px;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+.rog-pd-spec-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14.5px;
+  background: #111;
+  border: 1px solid #2a2a2a;
+}
+.rog-pd-spec-table th,
+.rog-pd-spec-table td {
+  border: 1px solid #262626;
+  padding: 14px 20px;
+  text-align: left;
+  vertical-align: top;
+}
+.rog-pd-spec-table th {
+  width: 28%;
+  color: #fff;
+  background: #161616;
+  font-weight: 700;
+  font-family: var(--rog-heading-font);
+  letter-spacing: 0.3px;
+}
+.rog-pd-spec-table td {
+  color: #c6c6c6;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+.rog-pd-spec-note {
+  font-size: 13px;
+  color: #888;
+  margin-top: 20px;
+  line-height: 1.6;
+}
+
+/* FAQ accordion */
+.rog-pd-faq {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px 60px;
+}
+.rog-pd-faq-title {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 32px;
+  margin: 0 0 24px;
+  text-align: center;
+}
+.rog-pd-faq-list {
+  border: 1px solid #2a2a2a;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.rog-pd-faq-item {
+  border-bottom: 1px solid #262626;
+}
+.rog-pd-faq-item:last-child {
+  border-bottom: none;
+}
+.rog-pd-faq-item button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: #151515;
+  border: none;
+  color: #fff;
+  font-family: var(--rog-body-font);
+  font-size: 16px;
+  font-weight: 600;
+  text-align: left;
+  padding: 18px 24px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.rog-pd-faq-item button:hover {
+  background: #1c1c1c;
+}
+.rog-pd-faq-open button {
+  background: #1c1c1c;
+  color: var(--rog-red-bright, #e60012);
+}
+.rog-pd-faq-item button span {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--rog-red-bright, #e60012);
+  flex-shrink: 0;
+}
+.rog-pd-faq-answer {
+  background: #101010;
+  padding: 16px 24px 20px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #ccc;
+  border-top: 1px solid #222;
+}
+
+@media (max-width: 1023px) {
+  .rog-pd-subbar-inner {
+    padding: 0 16px;
+    height: auto;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  .rog-pd-subbar-tabs {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    gap: 16px;
+  }
+  .rog-pd-subbar-title {
+    font-size: 15px;
+  }
+  .rog-pd-hero-text {
+    left: 16px;
+    bottom: 16px;
+    right: 16px;
+    padding: 16px;
+  }
+  .rog-pd-hero-text h1 {
+    font-size: 28px;
+  }
+  .rog-pd-tagline {
+    font-size: 16px;
+  }
+  .rog-spec-hero {
+    flex-direction: column-reverse;
+    padding: 24px 16px;
+  }
+  .rog-spec-hero-media {
+    max-width: 220px;
+  }
+  .rog-spec-hero-info h1 {
+    font-size: 28px;
+  }
+  .rog-pd-highlights {
+    grid-template-columns: 1fr;
+  }
+  .rog-pd-story.has-media,
+  .rog-pd-story:nth-child(even).has-media {
+    grid-template-columns: 1fr;
+  }
+  .rog-pd-story:nth-child(even).has-media .rog-pd-story-media {
+    order: unset;
+  }
+  .rog-pd-story:nth-child(even).has-media .rog-pd-story-body {
+    order: unset;
+  }
+  .rog-pd-spec-table th,
+  .rog-pd-spec-table td {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+  .rog-pd-spec-table th {
+    width: 35%;
+  }
+}
+
+/* ===== Awards ===== */
+.rog-pd-sec-title {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 30px;
+  margin: 0 0 24px;
+}
+.rog-pd-awards {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 48px 24px 24px;
+}
+.rog-pd-awards-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.rog-pd-award {
+  background: #fff;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 180px;
+  height: 70px;
+}
+.rog-pd-award img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* ===== Media reviews ===== */
+.rog-pd-media,
+.rog-pd-videoreviews {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 40px 24px 24px;
+}
+.rog-pd-media-grid,
+.rog-pd-videoreviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.rog-pd-media-card,
+.rog-pd-videoreview-card {
+  background: #161616;
+  border: 1px solid #2e2e2e;
+  padding: 18px;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+.rog-pd-media-card:hover,
+.rog-pd-videoreview-card:hover {
+  border-color: var(--rog-red-bright);
+  transform: translateY(-3px);
+}
+.rog-pd-media-logo {
+  height: 56px;
+  display: flex;
+  align-items: center;
+}
+.rog-pd-media-logo img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  filter: brightness(1.1);
+}
+.rog-pd-media-score {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--rog-red-bright);
+}
+.rog-pd-media-quote,
+.rog-pd-videoreview-quote {
+  font-size: 13.5px;
+  color: #c6c6c6;
+  line-height: 1.5;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.rog-pd-videoreview-source {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
+}
+
+/* ===== Customer reviews ===== */
+.rog-pd-custreviews {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 40px 24px 24px;
+}
+.rog-pd-custreviews-empty {
+  border: 1px dashed #3a3a3a;
+  padding: 40px 20px;
+  text-align: center;
+  color: #9a9a9a;
+  font-size: 14px;
+}
+.rog-pd-custreviews-stars {
+  color: #444;
+  font-size: 26px;
+  letter-spacing: 6px;
+  margin-bottom: 10px;
+}
+
+/* ===== Related articles ===== */
+.rog-pd-relarticles {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 40px 24px 72px;
+}
+.rog-pd-relarticles-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+.rog-pd-relarticle {
+  background: #161616;
+  color: inherit;
+  display: block;
+}
+.rog-pd-relarticle-img {
+  aspect-ratio: 592 / 333;
+  overflow: hidden;
+}
+.rog-pd-relarticle-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.rog-pd-relarticle:hover .rog-pd-relarticle-img img {
+  transform: scale(1.04);
+}
+.rog-pd-relarticle h3 {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #fff;
+  padding: 12px 14px 14px;
+  margin: 0;
+}
+.rog-pd-relarticle .rog-rel-tag {
+  display: block;
+  padding: 12px 14px 0;
+  color: var(--rog-red-bright);
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+@media (max-width: 1023px) {
+  .rog-pd-media-grid,
+  .rog-pd-videoreviews-grid {
+    grid-template-columns: 1fr;
+  }
+  .rog-pd-relarticles-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== Awards / Media / Video / Customer / Related (additive) ===== */
+.rog-pd-sec-title {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 30px;
+  margin: 0 0 24px;
+}
+.rog-pd-awards {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 48px 24px 24px;
+}
+.rog-pd-awards-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.rog-pd-award {
+  background: #fff;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 180px;
+  height: 70px;
+}
+.rog-pd-award img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.rog-pd-media,
+.rog-pd-videoreviews {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 40px 24px 24px;
+}
+.rog-pd-media-grid,
+.rog-pd-videoreviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.rog-pd-media-card,
+.rog-pd-videoreview-card {
+  background: #161616;
+  border: 1px solid #2e2e2e;
+  padding: 18px;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+.rog-pd-media-card:hover,
+.rog-pd-videoreview-card:hover {
+  border-color: var(--rog-red-bright);
+  transform: translateY(-3px);
+}
+.rog-pd-media-logo {
+  height: 56px;
+  display: flex;
+  align-items: center;
+}
+.rog-pd-media-logo img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  filter: brightness(1.1);
+}
+.rog-pd-media-score {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--rog-red-bright);
+}
+.rog-pd-media-quote,
+.rog-pd-videoreview-quote {
+  font-size: 13.5px;
+  color: #c6c6c6;
+  line-height: 1.5;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.rog-pd-videoreview-source {
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
+}
+.rog-pd-custreviews {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 40px 24px 24px;
+}
+.rog-pd-custreviews-empty {
+  border: 1px dashed #3a3a3a;
+  padding: 40px 20px;
+  text-align: center;
+  color: #9a9a9a;
+  font-size: 14px;
+}
+.rog-pd-custreviews-stars {
+  color: #444;
+  font-size: 26px;
+  letter-spacing: 6px;
+  margin-bottom: 10px;
+}
+.rog-pd-relarticles {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 40px 24px 72px;
+}
+.rog-pd-relarticles-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+.rog-pd-relarticle {
+  background: #161616;
+  color: inherit;
+  display: block;
+}
+.rog-pd-relarticle-img {
+  aspect-ratio: 592 / 333;
+  overflow: hidden;
+}
+.rog-pd-relarticle-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.rog-pd-relarticle:hover .rog-pd-relarticle-img img {
+  transform: scale(1.04);
+}
+.rog-pd-relarticle h3 {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #fff;
+  padding: 12px 14px 14px;
+  margin: 0;
+}
+.rog-pd-relarticle .rog-rel-tag {
+  display: block;
+  padding: 12px 14px 0;
+  color: var(--rog-red-bright);
+  font-family: var(--rog-heading-font);
+  font-weight: 700;
+  font-size: 13px;
+}
+@media (max-width: 1023px) {
+  .rog-pd-media-grid,
+  .rog-pd-videoreviews-grid,
+  .rog-pd-relarticles-grid {
+    grid-template-columns: 1fr;
+  }
+}

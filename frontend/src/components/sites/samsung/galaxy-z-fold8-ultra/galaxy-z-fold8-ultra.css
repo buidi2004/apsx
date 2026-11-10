@@ -1,0 +1,54 @@
+/* Samsung Galaxy Z Fold 8 Ultra Scoped Styles */
+
+:root {
+  --global-scrollbar-width: 0px;
+}
+
+html.samsung-page-active {
+  background-color: #000 !important;
+}
+
+.samsung-page {
+  overflow-x: clip;
+  width: 100%;
+  position: relative;
+  background-color: #000;
+  color: #fff;
+  font-family: "SamsungSharpSans", "SamsungOne", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.galaxy-z-fold8-ultra-container {
+  overflow-x: clip;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #000;
+  color: #fff;
+  position: relative;
+}
+
+.galaxy-z-fold8-ultra-container img {
+  max-width: 100%;
+  height: auto;
+}
+
+.galaxy-z-fold8-ultra-container video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Floating Navigation subbar sticks directly underneath 50px RogNavbar */
+.pd-g-floating-nav,
+.floating-navigation,
+.floating-navigation__wrap {
+  position: sticky !important;
+  top: 50px !important;
+  z-index: 40 !important;
+}
+
+/* Fix any SVG collapse */
+.galaxy-z-fold8-ultra-container svg {
+  display: inline-block;
+}
