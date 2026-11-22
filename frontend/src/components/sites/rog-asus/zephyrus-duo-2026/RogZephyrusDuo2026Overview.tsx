@@ -2,7 +2,9 @@
 
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCart } from "@/lib/cart";
 import { RogApi } from "@/lib/api-client";
 import "../RogProductDetail.css";
 import "./duo-style.css";
@@ -10,6 +12,33 @@ import { DUO_FEATURES_HTML } from "./duo-html";
 import RogZephyrusDuo2026PostFeatures from "./RogZephyrusDuo2026PostFeatures";
 
 export default function RogZephyrusDuo2026Overview() {
+  const router = useRouter();
+  const { addLine } = useCart();
+  const [livePrice, setLivePrice] = useState("189.990.000 ₫");
+  const [unitPriceNum, setUnitPriceNum] = useState(189990000);
+
+  const handleBuyNow = () => {
+    addLine({
+      slug: "laptops/rog-zephyrus/rog-zephyrus-duo-2026",
+      name: "ROG Zephyrus Duo (2026)",
+      image: "/sites/rog-asus/img/hot/zephyrus-duo.webp",
+      price: unitPriceNum,
+      href: "/vn/laptops/rog-zephyrus/rog-zephyrus-duo-2026",
+      selectedSpecs: "Dual OLED / RTX 5090",
+    });
+    router.push("/vn/checkout");
+  };
+
+  useEffect(() => {
+    RogApi.getBatchPricing(["laptops/rog-zephyrus/rog-zephyrus-duo-2026"])
+      .then((res) => {
+        if (res && res.length > 0 && res[0].formattedPrice) {
+          setLivePrice(res[0].formattedPrice);
+          if (res[0].price) setUnitPriceNum(res[0].price);
+        }
+      })
+      .catch(() => {});
+  }, []);
   useEffect(() => {
 
     // Suppress video play()/pause() abort rejections in Next.js dev overlay
@@ -184,20 +213,21 @@ export default function RogZephyrusDuo2026Overview() {
             </Link>
           </nav>
 
-          <div className="rog-pd-subbar-actions">
+          <div className="rog-pd-subbar-actions" style={{ display: "flex", gap: "10px", alignItems: "center" }}>
             <div className="rog-pd-subbar-price-wrap">
               <span className="rog-pd-subbar-price-label">Giá trên ASUS estore</span>
               <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
-                <span className="rog-pd-subbar-price" style={{ color: "#ff0036", fontWeight: 700 }}>189.990.000 ₫</span>
-                <span style={{ fontSize: "12px", color: "#888", textDecoration: "line-through" }}>199.990.000 ₫</span>
+                <span className="rog-pd-subbar-price" style={{ color: "#ff0036", fontWeight: 700 }}>{livePrice}</span>
               </div>
             </div>
-            <Link
-              href="/vn/where-to-buy"
+            <button
+              type="button"
+              onClick={handleBuyNow}
               className="rog-pd-buy-btn"
+              style={{ cursor: "pointer", border: "none" }}
             >
-              Mua ngay
-            </Link>
+              MUA NGAY
+            </button>
           </div>
         </div>
       </div>

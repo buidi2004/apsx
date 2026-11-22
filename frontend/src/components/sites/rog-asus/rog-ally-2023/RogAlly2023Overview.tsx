@@ -4,6 +4,9 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { useRouter } from "next/navigation";
+import { useCart } from "@/lib/cart";
+import { RogApi } from "@/lib/api-client";
 import "../RogProductDetail.css";
 import "./ally-style.css";
 import "../zephyrus-g16/subbar.css";
@@ -11,8 +14,35 @@ import { ALLY_FEATURES_HTML } from "./ally-html";
 import { RogAllyAwardsAndReviews, RogAllyFooterContent } from "./RogAlly2023PostFeatures";
 
 export default function RogAlly2023Overview() {
+  const router = useRouter();
+  const { addLine } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [livePrice, setLivePrice] = useState("16.990.000 ₫");
+  const [unitPriceNum, setUnitPriceNum] = useState(16990000);
+
+  const handleBuyNow = () => {
+    addLine({
+      slug: "gaming-handhelds/rog-ally/rog-ally-2023",
+      name: "ROG Ally (2023) RC71L",
+      image: "/sites/rog-asus/img/handheld/big-1.webp",
+      price: unitPriceNum,
+      href: "/vn/gaming-handhelds/rog-ally/rog-ally-2023",
+      selectedSpecs: "RC71L-NH001W / Z1 Extreme",
+    });
+    router.push("/vn/checkout");
+  };
+
+  useEffect(() => {
+    RogApi.getBatchPricing(["gaming-handhelds/rog-ally/rog-ally-2023"])
+      .then((res) => {
+        if (res && res.length > 0 && res[0].formattedPrice) {
+          setLivePrice(res[0].formattedPrice);
+          if (res[0].price) setUnitPriceNum(res[0].price);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     // Suppress video play()/pause() abort rejections in dev overlay
@@ -124,8 +154,7 @@ export default function RogAlly2023Overview() {
 
             <div className="ProductTabBar__productBuyPrice__GImtH ProductTabBar__mobile__JCkq0">
               <span className="ProductTabBar__productStartingAt__GEQtS">Giá khởi điểm trên ASUS estore là</span>
-              <span className="ProductTabBar__productMoney__Y7npp">16.990.000 ₫</span>
-              <span className="ProductTabBar__originalPriceValue__BQdUC">17.990.000 ₫</span>
+              <span className="ProductTabBar__productMoney__Y7npp">{livePrice}</span>
             </div>
           </div>
 
@@ -135,16 +164,23 @@ export default function RogAlly2023Overview() {
               <div className="ProductTabBar__productTabBarBuyNow__LuhPt">
                 <div className="ProductTabBar__productBuyPrice__GImtH">
                   <span className="ProductTabBar__productStartingAt__GEQtS">Giá khởi điểm trên ASUS estore là</span>
-                  <span className="ProductTabBar__productMoney__Y7npp">16.990.000 ₫</span>
-                  <span className="ProductTabBar__originalPriceValue__BQdUC">17.990.000 ₫</span>
+                  <span className="ProductTabBar__productMoney__Y7npp">{livePrice}</span>
                 </div>
-                <div className="ButtonRed__redFullButton__0lMzl ButtonRed__isProductBarButton__qIAJB">
+                <div className="ButtonRed__redFullButton__0lMzl ButtonRed__isProductBarButton__qIAJB" style={{ display: "flex", gap: "8px" }}>
+                  <button
+                    type="button"
+                    onClick={handleBuyNow}
+                    className="btn ButtonRed__btnRed__SXGza ButtonRed__isFull__6Glcz"
+                    style={{ background: "#ff0036", color: "#fff", border: "none", cursor: "pointer", padding: "8px 16px", borderRadius: "2px", fontWeight: 700 }}
+                  >
+                    MUA NGAY
+                  </button>
                   <Link
                     href="/vn/gaming-handhelds/rog-ally/rog-ally-2023/spec"
                     className="btn ButtonRed__btnRed__SXGza ButtonRed__isFull__6Glcz ButtonRed__isFilter__EzHBw ButtonRed__modelButton__tDIKt"
                   >
                     <div className="ButtonRed__inner__U++OE">
-                      <span className="buttonName">Lựa Chọn</span>
+                      <span className="buttonName">Cấu hình</span>
                     </div>
                     <div className="ButtonRed__hoverColor__0DIt8" />
                   </Link>

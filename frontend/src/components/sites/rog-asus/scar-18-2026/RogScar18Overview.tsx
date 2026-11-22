@@ -3,7 +3,9 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { RogApi } from "@/lib/api-client";
+import { useRouter } from "next/navigation";
+import { useCart } from "@/lib/cart";
+import { RogApi, type PublicReviewDto } from "@/lib/api-client";
 import "../RogProductDetail.css";
 import "./scar18-style.css";
 import { SCAR18_FEATURES_HTML } from "./scar18-html";
@@ -18,19 +20,61 @@ export default function RogScar18Overview({
   price?: string;
   basePath?: string;
 }) {
+  const router = useRouter();
+  const { addLine } = useCart();
+  const slug = basePath.replace(/^\/vn\//, "");
   const [videoModalOpen, setVideoModalOpen] = useState(false);
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [currentVideoTitle, setCurrentVideoTitle] = useState("ROG Strix Flagship Review");
   const [currentPrice, setCurrentPrice] = useState(price);
+  const [unitPriceNum, setUnitPriceNum] = useState(139990000);
+  const [reviewerName, setReviewerName] = useState("");
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewContent, setReviewContent] = useState("");
+  const [submittingReview, setSubmittingReview] = useState(false);
+  const [reviewSuccessMsg, setReviewSuccessMsg] = useState("");
+
+  const handleBuyNow = () => {
+    addLine({
+      slug,
+      name: productName,
+      image: "/sites/rog-asus/img/hot/strix-scar-18.webp",
+      price: unitPriceNum,
+      href: basePath,
+      selectedSpecs: "RTX 5090 / 64GB RAM",
+    });
+    router.push("/vn/checkout");
+  };
+
+  const handleReviewSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!reviewContent.trim()) return;
+    try {
+      setSubmittingReview(true);
+      await RogApi.submitProductReview(slug, reviewContent.trim(), reviewRating);
+      setReviewSuccessMsg("Cảm ơn bạn! Đánh giá đã được gửi và sẽ hiển thị sau khi duyệt.");
+      setReviewContent("");
+      setTimeout(() => {
+        setReviewModalOpen(false);
+        setReviewSuccessMsg("");
+      }, 2000);
+    } catch {
+      alert("Gửi đánh giá không thành công, vui lòng thử lại sau.");
+    } finally {
+      setSubmittingReview(false);
+    }
+  };
 
   useEffect(() => {
-    RogApi.getBatchPricing(["laptops/rog-strix/rog-strix-scar-18-2026"])
+    RogApi.getBatchPricing([slug])
       .then((prices) => {
-        if (prices && prices.length > 0 && prices[0].formattedPrice) {
-          setCurrentPrice(prices[0].formattedPrice);
+        if (prices && prices.length > 0) {
+          if (prices[0].formattedPrice) setCurrentPrice(prices[0].formattedPrice);
+          if (prices[0].price) setUnitPriceNum(prices[0].price);
         }
       })
       .catch(() => {});
-  }, []);
+  }, [slug]);
 
   useEffect(() => {
     // 0. Initialize Full GSAP, ScrollTrigger, Webflow IX2, and Aura Engine
@@ -196,11 +240,33 @@ export default function RogScar18Overview({
 
       const writeBtn = reviewsWrapper.querySelector("#btnWriteReview");
       if (writeBtn) {
-        writeBtn.addEventListener("click", async () => {
-          const ok = await RogApi.submitProductReview("laptops/rog-strix/rog-strix-scar-18-2026", "Khách hàng yêu cầu gửi đánh giá từ trang sản phẩm ROG Strix SCAR 18 (2026).", 5);
-          alert(ok ? "Cảm ơn bạn! Đánh giá đã được gửi và sẽ được duyệt." : "Không thể gửi đánh giá lúc này.");
+        writeBtn.addEventListener("click", () => {
+          setReviewModalOpen(true);
         });
       }
+
+      RogApi.getProductReviews(slug).then((liveRevs) => {
+        if (liveRevs && liveRevs.length > 0) {
+          const listEl = reviewsWrapper.querySelector(".rog-reviews-list");
+          if (listEl) {
+            const liveHtml = liveRevs.map((r) => `
+              <div class="rog-review-card">
+                <div class="rog-review-header">
+                  <div class="rog-review-user">
+                    <div class="rog-user-avatar">${(r.authorName || "KH").slice(0, 2).toUpperCase()}</div>
+                    <div><div class="rog-user-name">${r.authorName || "Khách hàng ROG"} <span class="rog-verified-pill">✓ Người Mua Đã Duyệt</span></div></div>
+                  </div>
+                  <div class="rog-review-date">${new Date(r.createdAtUtc).toLocaleDateString("vi-VN")}</div>
+                </div>
+                <div class="rog-review-stars">${"★".repeat(Math.max(1, Math.min(5, r.rating)))}${"☆".repeat(Math.max(0, 5 - Math.max(1, Math.min(5, r.rating))))}</div>
+                ${r.title ? `<h4 class="rog-review-title">${r.title}</h4>` : ""}
+                <p class="rog-review-text">${r.content}</p>
+              </div>
+            `).join("");
+            listEl.innerHTML = liveHtml + listEl.innerHTML;
+          }
+        }
+      }).catch(() => {});
     }
 
     return () => {
@@ -271,9 +337,14 @@ export default function RogScar18Overview({
               <span className="rog-pd-subbar-price-label">Giá khởi điểm ASUS estore</span>
               <span className="rog-pd-subbar-price">{currentPrice}</span>
             </div>
-            <Link href="/vn/store" className="rog-pd-buy-btn">
+            <button
+              type="button"
+              onClick={handleBuyNow}
+              className="rog-pd-buy-btn"
+              style={{ cursor: "pointer", border: "none" }}
+            >
               MUA NGAY
-            </Link>
+            </button>
           </div>
         </div>
       </div>
@@ -284,6 +355,80 @@ export default function RogScar18Overview({
         dangerouslySetInnerHTML={{ __html: SCAR18_FEATURES_HTML }}
         suppressHydrationWarning
       />
+
+      {/* Review Submission Modal */}
+      {reviewModalOpen && (
+        <div className="rog-video-modal-backdrop" onClick={() => setReviewModalOpen(false)}>
+          <div
+            className="rog-video-modal-content"
+            style={{ maxWidth: "560px", padding: "28px", background: "#111116", border: "1px solid #333", borderRadius: "6px" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+              <h3 style={{ margin: 0, color: "#fff", fontSize: "16px", textTransform: "uppercase" }}>
+                Viết nhận xét về {productName}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setReviewModalOpen(false)}
+                style={{ background: "transparent", border: "none", color: "#aaa", fontSize: "20px", cursor: "pointer" }}
+              >
+                ✕
+              </button>
+            </div>
+            {reviewSuccessMsg ? (
+              <div style={{ background: "rgba(34, 197, 94, 0.15)", border: "1px solid #22c55e", color: "#4ade80", padding: "12px", borderRadius: "4px" }}>
+                ✓ {reviewSuccessMsg}
+              </div>
+            ) : (
+              <form onSubmit={handleReviewSubmit} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <input
+                  type="text"
+                  value={reviewerName}
+                  onChange={(e) => setReviewerName(e.target.value)}
+                  placeholder="Tên hoặc Nickname của bạn"
+                  style={{ background: "#0a0a0c", border: "1px solid #333", color: "#fff", padding: "8px 12px", borderRadius: "4px" }}
+                />
+                <select
+                  value={reviewRating}
+                  onChange={(e) => setReviewRating(Number(e.target.value))}
+                  style={{ background: "#0a0a0c", border: "1px solid #333", color: "#eab308", padding: "8px 12px", borderRadius: "4px" }}
+                >
+                  <option value={5}>★★★★★ (5 sao - Tuyệt vời)</option>
+                  <option value={4}>★★★★☆ (4 sao - Rất tốt)</option>
+                  <option value={3}>★★★☆☆ (3 sao - Tạm ổn)</option>
+                  <option value={2}>★★☆☆☆ (2 sao - Cần cải thiện)</option>
+                  <option value={1}>★☆☆☆☆ (1 sao - Kém)</option>
+                </select>
+                <textarea
+                  value={reviewContent}
+                  onChange={(e) => setReviewContent(e.target.value)}
+                  required
+                  rows={4}
+                  placeholder="Chia sẻ trải nghiệm sử dụng máy thực tế của bạn..."
+                  style={{ background: "#0a0a0c", border: "1px solid #333", color: "#fff", padding: "8px 12px", borderRadius: "4px", resize: "vertical" }}
+                />
+                <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
+                  <button
+                    type="button"
+                    onClick={() => setReviewModalOpen(false)}
+                    style={{ background: "transparent", color: "#aaa", border: "1px solid #444", padding: "8px 16px", borderRadius: "2px", cursor: "pointer" }}
+                  >
+                    Hủy
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={submittingReview}
+                    style={{ background: "#ff0036", color: "#fff", border: "none", padding: "8px 20px", fontWeight: 700, borderRadius: "2px", cursor: "pointer" }}
+                  >
+                    {submittingReview ? "Đang gửi…" : "Gửi đánh giá"}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Video Lightbox Modal */}
       {videoModalOpen && (

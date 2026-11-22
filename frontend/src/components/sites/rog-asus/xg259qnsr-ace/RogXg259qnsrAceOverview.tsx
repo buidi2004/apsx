@@ -3,7 +3,9 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { RogApi } from "@/lib/api-client";
+import { useCart } from "@/lib/cart";
 import "./xg259-style.css";
 import { XG259_FEATURES_HTML } from "./xg259-html";
 import { initXg259Runtime } from "./xg259-runtime";
@@ -17,13 +19,17 @@ export default function RogXg259qnsrAceOverview({
   price?: string;
   basePath?: string;
 }) {
+  const router = useRouter();
+  const { addLine } = useCart();
   const [buyModalOpen, setBuyModalOpen] = useState(false);
   const [currentPrice, setCurrentPrice] = useState(price);
+  const [unitPriceNum, setUnitPriceNum] = useState(14990000);
 
   useEffect(() => {
     RogApi.getBatchPricing(["monitors/23-to-24-5-inches/rog-strix-xg259qnsr-ace"]).then((res) => {
-      if (res && res.length > 0 && res[0].formattedPrice) {
-        setCurrentPrice(res[0].formattedPrice);
+      if (res && res.length > 0) {
+        if (res[0].formattedPrice) setCurrentPrice(res[0].formattedPrice);
+        if (res[0].price) setUnitPriceNum(res[0].price);
       }
     }).catch(() => {});
 
@@ -167,10 +173,19 @@ export default function RogXg259qnsrAceOverview({
             </p>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              <a
-                href="https://vn.store.asus.com"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={() => {
+                  addLine({
+                    slug: "monitors/23-to-24-5-inches/rog-strix-xg259qnsr-ace",
+                    name: productName,
+                    image: "/sites/rog-asus/img/detail/rog-xg259qnsr-ace.png",
+                    price: unitPriceNum,
+                    href: basePath,
+                    selectedSpecs: "FHD / 380Hz / 0.3ms",
+                  });
+                  router.push("/vn/checkout");
+                }}
                 style={{
                   display: "block",
                   textAlign: "center",
@@ -179,14 +194,15 @@ export default function RogXg259qnsrAceOverview({
                   padding: "14px 24px",
                   fontSize: 14,
                   fontWeight: 700,
-                  textDecoration: "none",
                   letterSpacing: 1,
                   textTransform: "uppercase",
-                  transition: "background 0.2s ease",
+                  borderRadius: 2,
+                  border: "none",
+                  cursor: "pointer",
                 }}
               >
                 Mua Tại ASUS Store VN
-              </a>
+              </button>
               <button
                 type="button"
                 onClick={() => setBuyModalOpen(false)}

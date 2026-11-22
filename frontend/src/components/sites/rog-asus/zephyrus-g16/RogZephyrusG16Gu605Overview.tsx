@@ -3,6 +3,8 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCart } from "@/lib/cart";
 import { RogApi } from "@/lib/api-client";
 import "../RogProductDetail.css";
 import "./g16-style.css";
@@ -11,7 +13,34 @@ import { G16_FEATURES_HTML } from "./g16-html";
 import RogZephyrusG16PostFeatures from "./RogZephyrusG16PostFeatures";
 
 export default function RogZephyrusG16Gu605Overview() {
+  const router = useRouter();
+  const { addLine } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [livePrice, setLivePrice] = useState("73.990.000 ₫");
+  const [unitPriceNum, setUnitPriceNum] = useState(73990000);
+
+  const handleBuyNow = () => {
+    addLine({
+      slug: "laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605",
+      name: "ROG Zephyrus G16 (2025) GU605",
+      image: "/sites/rog-asus/img/detail/gu605-kv.webp",
+      price: unitPriceNum,
+      href: "/vn/laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605",
+      selectedSpecs: "GU605CX-QR083W / RTX 5090",
+    });
+    router.push("/vn/checkout");
+  };
+
+  useEffect(() => {
+    RogApi.getBatchPricing(["laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605"])
+      .then((res) => {
+        if (res && res.length > 0 && res[0].formattedPrice) {
+          setLivePrice(res[0].formattedPrice);
+          if (res[0].price) setUnitPriceNum(res[0].price);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     // Suppress video play()/pause() abort rejections in dev overlay
@@ -139,8 +168,7 @@ export default function RogZephyrusG16Gu605Overview() {
 
             <div className="ProductTabBar__productBuyPrice__GImtH ProductTabBar__mobile__JCkq0">
               <span className="ProductTabBar__productStartingAt__GEQtS">Giá khởi điểm trên ASUS estore là</span>
-              <span className="ProductTabBar__productMoney__Y7npp">73.990.000 ₫</span>
-              <span className="ProductTabBar__originalPriceValue__BQdUC">74.990.000 ₫</span>
+              <span className="ProductTabBar__productMoney__Y7npp">{livePrice}</span>
             </div>
           </div>
 
@@ -150,16 +178,23 @@ export default function RogZephyrusG16Gu605Overview() {
               <div className="ProductTabBar__productTabBarBuyNow__LuhPt">
                 <div className="ProductTabBar__productBuyPrice__GImtH">
                   <span className="ProductTabBar__productStartingAt__GEQtS">Giá khởi điểm trên ASUS estore là</span>
-                  <span className="ProductTabBar__productMoney__Y7npp">73.990.000 ₫</span>
-                  <span className="ProductTabBar__originalPriceValue__BQdUC">74.990.000 ₫</span>
+                  <span className="ProductTabBar__productMoney__Y7npp">{livePrice}</span>
                 </div>
-                <div className="ButtonRed__redFullButton__0lMzl ButtonRed__isProductBarButton__qIAJB">
+                <div className="ButtonRed__redFullButton__0lMzl ButtonRed__isProductBarButton__qIAJB" style={{ display: "flex", gap: "8px" }}>
+                  <button
+                    type="button"
+                    onClick={handleBuyNow}
+                    className="btn ButtonRed__btnRed__SXGza ButtonRed__isFull__6Glcz"
+                    style={{ background: "#ff0036", color: "#fff", border: "none", cursor: "pointer", padding: "8px 16px", borderRadius: "2px", fontWeight: 700 }}
+                  >
+                    MUA NGAY
+                  </button>
                   <Link
                     href="/vn/laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605/spec/"
                     className="btn ButtonRed__btnRed__SXGza ButtonRed__isFull__6Glcz ButtonRed__isFilter__EzHBw ButtonRed__modelButton__tDIKt"
                   >
                     <div className="ButtonRed__inner__U++OE">
-                      <span className="buttonName">Lựa Chọn</span>
+                      <span className="buttonName">Cấu hình</span>
                     </div>
                     <div className="ButtonRed__hoverColor__0DIt8" />
                   </Link>

@@ -2,7 +2,10 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useCart } from "@/lib/cart";
+import { RogApi, type PublicReviewDto } from "@/lib/api-client";
 import "./RogProductDetail.css";
 import {
   type DetailStory,
@@ -1352,7 +1355,94 @@ export default function RogProductDetail({
   customProduct?: DetailProduct;
 }) {
   const p = customProduct ?? DETAIL_PRODUCTS[product] ?? FLOW_Z13_KJP;
+  const router = useRouter();
+  const { addLine } = useCart();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  const cleanSlug = p.basePath.replace(/^\/vn\//, "").replace(/\/spec$/, "");
+  const [livePrice, setLivePrice] = useState<string>(p.price || "");
+  const [unitPriceNum, setUnitPriceNum] = useState<number>(0);
+  const [cartNotice, setCartNotice] = useState(false);
+
+  // Reviews state
+  const [reviews, setReviews] = useState<PublicReviewDto[]>([]);
+  const [reviewsLoading, setReviewsLoading] = useState(true);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [reviewerName, setReviewerName] = useState("");
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewTitle, setReviewTitle] = useState("");
+  const [reviewContent, setReviewContent] = useState("");
+  const [submittingReview, setSubmittingReview] = useState(false);
+  const [reviewSuccessMsg, setReviewSuccessMsg] = useState("");
+
+  useEffect(() => {
+    if (!cleanSlug) return;
+    RogApi.getBatchPricing([cleanSlug])
+      .then((res) => {
+        if (res && res.length > 0) {
+          const item = res[0];
+          if (item.formattedPrice) setLivePrice(item.formattedPrice);
+          if (item.price) setUnitPriceNum(item.price);
+        }
+      })
+      .catch(() => {});
+  }, [cleanSlug]);
+
+  useEffect(() => {
+    if (!cleanSlug) return;
+    let cancelled = false;
+    RogApi.getProductReviews(cleanSlug)
+      .then((data) => {
+        if (!cancelled) setReviews(data || []);
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setReviewsLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [cleanSlug]);
+
+  const handleAddToCart = () => {
+    let numericPrice = unitPriceNum;
+    if (!numericPrice && livePrice) {
+      const parsed = parseInt(livePrice.replace(/[^0-9]/g, ""), 10);
+      if (!isNaN(parsed)) numericPrice = parsed;
+    }
+    addLine({
+      slug: cleanSlug,
+      name: p.name,
+      image: p.thumbImg || p.kv,
+      price: numericPrice,
+      href: p.basePath,
+      selectedSpecs: p.modelCode || undefined,
+    });
+    setCartNotice(true);
+    setTimeout(() => setCartNotice(false), 3000);
+  };
+
+  const handleBuyNow = () => {
+    handleAddToCart();
+    router.push("/vn/checkout");
+  };
+
+  const handleSubmitReview = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!reviewContent.trim()) return;
+    try {
+      setSubmittingReview(true);
+      await RogApi.submitProductReview(cleanSlug, reviewContent.trim(), reviewRating);
+      setReviewSuccessMsg("Cảm ơn bạn! Đánh giá đã được gửi và sẽ hiển thị sau khi ban quản trị phê duyệt.");
+      setReviewContent("");
+      setReviewTitle("");
+      setTimeout(() => setShowReviewForm(false), 2000);
+    } catch {
+      alert("Gửi đánh giá thất bại, vui lòng thử lại sau.");
+    } finally {
+      setSubmittingReview(false);
+    }
+  };
 
   return (
     <div className="rog-pd">
@@ -1439,21 +1529,36 @@ export default function RogProductDetail({
             </Link>
           </nav>
 
-          <div className="rog-pd-subbar-actions">
-            {p.price && (
+          <div className="rog-pd-subbar-actions" style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+            {livePrice && (
               <div className="rog-pd-subbar-price-wrap">
                 <span className="rog-pd-subbar-price-label">{p.priceLabel ?? "Giá trên ASUS estore"}</span>
-                <span className="rog-pd-subbar-price">{p.price}</span>
+                <span className="rog-pd-subbar-price">{livePrice}</span>
               </div>
             )}
-            <Link
-              href={p.storeUrl ?? "/vn/store"}
+            <button
+              type="button"
+              onClick={handleAddToCart}
               className="rog-pd-buy-btn"
+              style={{ background: "#222", border: "1px solid #ff0036", color: "#fff", cursor: "pointer", padding: "8px 14px" }}
+            >
+              THÊM VÀO GIỎ
+            </button>
+            <button
+              type="button"
+              onClick={handleBuyNow}
+              className="rog-pd-buy-btn"
+              style={{ cursor: "pointer", padding: "8px 16px" }}
             >
               MUA NGAY
-            </Link>
+            </button>
           </div>
         </div>
+        {cartNotice && (
+          <div style={{ background: "rgba(34, 197, 94, 0.9)", color: "#fff", textAlign: "center", padding: "8px", fontSize: "13px", fontWeight: 700 }}>
+            ✓ Đã thêm {p.name} vào giỏ hàng!
+          </div>
+        )}
       </div>
 
       {mode === "spec" ? (
@@ -1466,19 +1571,29 @@ export default function RogProductDetail({
               {p.modelCode && (
                 <div className="rog-spec-hero-model">Model: {p.modelCode}</div>
               )}
-              {p.price && (
+              {livePrice && (
                 <div className="rog-spec-hero-pricing">
                   <span className="rog-spec-hero-price-label">{p.priceLabel ?? "Giá trên ASUS estore"}</span>
-                  <span className="rog-spec-hero-price">{p.price}</span>
+                  <span className="rog-spec-hero-price">{livePrice}</span>
                 </div>
               )}
               <div className="rog-spec-hero-cta" style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
-                <Link
-                  href={p.storeUrl ?? "/vn/store"}
+                <button
+                  type="button"
+                  onClick={handleAddToCart}
                   className="rog-pd-buy-btn"
+                  style={{ background: "#222", border: "1px solid #ff0036", color: "#fff", cursor: "pointer" }}
                 >
-                  MUA NGAY TẠI ASUS STORE
-                </Link>
+                  THÊM VÀO GIỎ
+                </button>
+                <button
+                  type="button"
+                  onClick={handleBuyNow}
+                  className="rog-pd-buy-btn"
+                  style={{ cursor: "pointer" }}
+                >
+                  MUA NGAY
+                </button>
                 <Link
                   href={p.basePath}
                   className="rog-pd-specs-anchor-btn"
@@ -1523,13 +1638,23 @@ export default function RogProductDetail({
             <div className="rog-pd-hero-text">
               <h1>{p.name}</h1>
               <p className="rog-pd-tagline">{p.tagline}</p>
-              <div className="rog-pd-hero-cta">
-                <Link
-                  href={p.storeUrl ?? "/vn/store"}
+              <div className="rog-pd-hero-cta" style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
+                <button
+                  type="button"
+                  onClick={handleAddToCart}
                   className="rog-pd-buy-btn"
+                  style={{ background: "#222", border: "1px solid #ff0036", color: "#fff", cursor: "pointer" }}
                 >
-                  MUA NGAY {p.price ? `(${p.price})` : ""}
-                </Link>
+                  THÊM VÀO GIỎ
+                </button>
+                <button
+                  type="button"
+                  onClick={handleBuyNow}
+                  className="rog-pd-buy-btn"
+                  style={{ cursor: "pointer" }}
+                >
+                  MUA NGAY {livePrice ? `(${livePrice})` : ""}
+                </button>
                 <Link href={`${p.basePath}/spec`} className="rog-pd-specs-anchor-btn">
                   CHI TIẾT & THÔNG SỐ KỸ THUẬT →
                 </Link>
@@ -1671,13 +1796,127 @@ export default function RogProductDetail({
         </section>
       )}
 
-      {/* customer reviews — source renders an empty widget */}
-      <section className="rog-pd-custreviews">
-        <h2 className="rog-pd-sec-title">CUSTOMER REVIEWS</h2>
-        <div className="rog-pd-custreviews-empty">
-          <div className="rog-pd-custreviews-stars" aria-hidden>★★★★★</div>
-          <p>Chưa có đánh giá nào từ khách hàng cho sản phẩm này.</p>
+      {/* customer reviews — live from RogAdmin */}
+      <section className="rog-pd-custreviews" id="reviews" style={{ padding: "48px 24px", maxWidth: "1280px", margin: "0 auto" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px", flexWrap: "wrap", gap: "16px" }}>
+          <div>
+            <h2 className="rog-pd-sec-title" style={{ margin: "0 0 6px" }}>CUSTOMER REVIEWS</h2>
+            <div style={{ color: "#888", fontSize: "14px" }}>
+              {reviews.length > 0 ? `${reviews.length} đánh giá từ cộng đồng ROG` : "Chưa có đánh giá nào cho sản phẩm này"}
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowReviewForm(!showReviewForm)}
+            style={{
+              background: "#ff0036",
+              color: "#fff",
+              border: "none",
+              padding: "10px 22px",
+              fontWeight: 800,
+              fontSize: "13px",
+              borderRadius: "2px",
+              cursor: "pointer",
+              letterSpacing: "1px",
+              textTransform: "uppercase",
+            }}
+          >
+            {showReviewForm ? "Đóng form" : "Viết nhận xét"}
+          </button>
         </div>
+
+        {showReviewForm && (
+          <div style={{ background: "#111116", border: "1px solid #333", borderRadius: "6px", padding: "24px", marginBottom: "32px", maxWidth: "600px" }}>
+            <h3 style={{ fontSize: "15px", fontWeight: 800, margin: "0 0 16px", textTransform: "uppercase" }}>Gửi nhận xét về {p.name}</h3>
+            {reviewSuccessMsg ? (
+              <div style={{ background: "rgba(34, 197, 94, 0.15)", border: "1px solid #22c55e", color: "#4ade80", padding: "12px", borderRadius: "4px", fontSize: "13px" }}>
+                ✓ {reviewSuccessMsg}
+              </div>
+            ) : (
+              <form onSubmit={handleSubmitReview} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <div>
+                  <label style={{ display: "block", fontSize: "12px", color: "#888", marginBottom: "4px" }}>Họ tên hoặc Nickname</label>
+                  <input
+                    type="text"
+                    value={reviewerName}
+                    onChange={(e) => setReviewerName(e.target.value)}
+                    placeholder="VD: Game thủ ROG"
+                    style={{ width: "100%", background: "#0a0a0c", border: "1px solid #333", color: "#fff", padding: "8px 12px", borderRadius: "4px", fontSize: "13px" }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: "block", fontSize: "12px", color: "#888", marginBottom: "4px" }}>Đánh giá</label>
+                  <select
+                    value={reviewRating}
+                    onChange={(e) => setReviewRating(Number(e.target.value))}
+                    style={{ width: "100%", background: "#0a0a0c", border: "1px solid #333", color: "#eab308", padding: "8px 12px", borderRadius: "4px", fontSize: "13px" }}
+                  >
+                    <option value={5}>★★★★★ (5 sao - Xuất sắc)</option>
+                    <option value={4}>★★★★☆ (4 sao - Rất tốt)</option>
+                    <option value={3}>★★★☆☆ (3 sao - Tạm ổn)</option>
+                    <option value={2}>★★☆☆☆ (2 sao - Cần cải thiện)</option>
+                    <option value={1}>★☆☆☆☆ (1 sao - Kém)</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={{ display: "block", fontSize: "12px", color: "#888", marginBottom: "4px" }}>Nhận xét chi tiết</label>
+                  <textarea
+                    value={reviewContent}
+                    onChange={(e) => setReviewContent(e.target.value)}
+                    required
+                    rows={4}
+                    placeholder="Chia sẻ trải nghiệm hiệu năng, thiết kế hoặc cảm nhận thực tế..."
+                    style={{ width: "100%", background: "#0a0a0c", border: "1px solid #333", color: "#fff", padding: "8px 12px", borderRadius: "4px", fontSize: "13px", resize: "vertical" }}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={submittingReview}
+                  style={{
+                    alignSelf: "flex-start",
+                    background: "#ff0036",
+                    color: "#fff",
+                    border: "none",
+                    padding: "10px 24px",
+                    fontWeight: 800,
+                    borderRadius: "2px",
+                    cursor: submittingReview ? "not-allowed" : "pointer",
+                    fontSize: "12px",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {submittingReview ? "Đang gửi…" : "Gửi đánh giá"}
+                </button>
+              </form>
+            )}
+          </div>
+        )}
+
+        {reviewsLoading ? (
+          <p style={{ color: "#888" }}>Đang tải đánh giá…</p>
+        ) : reviews.length === 0 ? (
+          <div className="rog-pd-custreviews-empty">
+            <div className="rog-pd-custreviews-stars" aria-hidden>★★★★★</div>
+            <p>Chưa có đánh giá nào từ khách hàng cho sản phẩm này. Hãy là người đầu tiên chia sẻ cảm nhận!</p>
+          </div>
+        ) : (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "16px" }}>
+            {reviews.map((rev) => (
+              <div key={rev.id} style={{ background: "#111116", border: "1px solid #222", borderRadius: "6px", padding: "18px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                  <span style={{ fontWeight: 800, color: "#fff", fontSize: "14px" }}>{rev.authorName || "Khách hàng ROG"}</span>
+                  <span style={{ color: "#eab308", fontSize: "13px" }}>
+                    {"★".repeat(Math.max(1, Math.min(5, rev.rating)))}
+                    {"☆".repeat(Math.max(0, 5 - Math.max(1, Math.min(5, rev.rating))))}
+                  </span>
+                </div>
+                {rev.title && <div style={{ fontWeight: 700, color: "#ff0036", fontSize: "13px", marginBottom: "6px" }}>{rev.title}</div>}
+                <p style={{ color: "#ccc", fontSize: "13px", lineHeight: 1.6, margin: "0 0 8px" }}>{rev.content}</p>
+                <div style={{ color: "#666", fontSize: "11px" }}>{new Date(rev.createdAtUtc).toLocaleDateString("vi-VN")}</div>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* related articles */}

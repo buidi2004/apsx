@@ -3,7 +3,9 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { RogApi } from "@/lib/api-client";
+import { useCart } from "@/lib/cart";
 import "./phone7-style.css";
 import { PHONE7_FEATURES_HTML } from "./phone7-html";
 import { initPhone7Runtime } from "./phone7-runtime";
@@ -17,14 +19,18 @@ export default function RogPhone7Overview({
   price?: string;
   basePath?: string;
 }) {
+  const router = useRouter();
+  const { addLine } = useCart();
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const [buyModalOpen, setBuyModalOpen] = useState(false);
   const [currentPrice, setCurrentPrice] = useState(price);
+  const [unitPriceNum, setUnitPriceNum] = useState(24990000);
 
   useEffect(() => {
     RogApi.getBatchPricing(["phones/rog-phone-7"]).then((res) => {
-      if (res && res.length > 0 && res[0].formattedPrice) {
-        setCurrentPrice(res[0].formattedPrice);
+      if (res && res.length > 0) {
+        if (res[0].formattedPrice) setCurrentPrice(res[0].formattedPrice);
+        if (res[0].price) setUnitPriceNum(res[0].price);
       }
     }).catch(() => {});
 
@@ -210,13 +216,24 @@ export default function RogPhone7Overview({
                 {currentPrice}
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                <Link
-                  href="/vn/store"
+                <button
+                  type="button"
+                  onClick={() => {
+                    addLine({
+                      slug: "phones/rog-phone-7",
+                      name: productName,
+                      image: "/sites/rog-asus/img/detail/rog-phone-7-thumb.webp",
+                      price: unitPriceNum,
+                      href: basePath,
+                      selectedSpecs: "Snapdragon 8 Gen 2 / 16GB / 512GB",
+                    });
+                    router.push("/vn/checkout");
+                  }}
                   className="rog-phone7-buy-btn"
-                  style={{ textAlign: "center", padding: "12px 24px", fontSize: 15 }}
+                  style={{ textAlign: "center", padding: "12px 24px", fontSize: 15, cursor: "pointer", border: "none" }}
                 >
                   ĐẶT MUA TẠI ASUS ESTORE
-                </Link>
+                </button>
                 <Link
                   href="/vn/where-to-buy"
                   style={{

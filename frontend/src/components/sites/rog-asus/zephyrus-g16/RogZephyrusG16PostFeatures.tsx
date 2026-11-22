@@ -2,8 +2,8 @@
 
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import { useState } from "react";
-import { RogApi } from "@/lib/api-client";
+import { useState, useEffect } from "react";
+import { RogApi, type PublicReviewDto } from "@/lib/api-client";
 
 type Award = {
   id: string;
@@ -249,6 +249,39 @@ export default function RogZephyrusG16PostFeatures() {
   const [articlePage, setArticlePage] = useState(0);
   const [recPage, setRecPage] = useState(0);
 
+  // Live reviews state
+  const [reviews, setReviews] = useState<PublicReviewDto[]>([]);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [reviewerName, setReviewerName] = useState("");
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewContent, setReviewContent] = useState("");
+  const [submittingReview, setSubmittingReview] = useState(false);
+  const [reviewSuccessMsg, setReviewSuccessMsg] = useState("");
+
+  useEffect(() => {
+    RogApi.getProductReviews("laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605")
+      .then((data) => {
+        if (data) setReviews(data);
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleSubmitReview = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!reviewContent.trim()) return;
+    try {
+      setSubmittingReview(true);
+      await RogApi.submitProductReview("laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605", reviewContent.trim(), reviewRating);
+      setReviewSuccessMsg("Cảm ơn bạn! Đánh giá đã được gửi và sẽ hiển thị sau khi quản trị viên phê duyệt.");
+      setReviewContent("");
+      setTimeout(() => setShowReviewForm(false), 2000);
+    } catch {
+      alert("Gửi đánh giá không thành công, vui lòng thử lại sau.");
+    } finally {
+      setSubmittingReview(false);
+    }
+  };
+
   const articlesPerPage = 4;
   const totalArticlePages = Math.ceil(RELATED_ARTICLES.length / articlesPerPage);
   const currentArticles = RELATED_ARTICLES.slice(
@@ -431,31 +464,33 @@ export default function RogZephyrusG16PostFeatures() {
       </div>
 
       {/* ============================================================ */}
-      {/* 2. CUSTOMER REVIEWS (BAZAARVOICE INTEGRATION CONTAINER)        */}
+      {/* 2. CUSTOMER REVIEWS (LIVE FROM ROGADMIN)                     */}
       {/* ============================================================ */}
-      <div className="Product__productReviewsWrapper__Q4tw6" style={{ maxWidth: "1280px", margin: "64px auto 0", padding: "0 24px" }}>
+      <div className="Product__productReviewsWrapper__Q4tw6" id="reviews" style={{ maxWidth: "1280px", margin: "64px auto 0", padding: "0 24px" }}>
         <div className="Product__productReviewsTitle__CsKxo">
           <h2 className="Product__productReviewsTitleText__aEPU6" style={{ fontSize: "28px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "1px" }}>
             CUSTOMER REVIEWS
           </h2>
         </div>
         <div className="Product__productReviews__QyRI4" style={{ backgroundColor: "#111", border: "1px solid #222", borderRadius: "8px", padding: "32px", marginTop: "24px" }}>
-          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "24px" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "24px", marginBottom: reviews.length > 0 ? "24px" : "0" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-              <div style={{ fontSize: "48px", fontWeight: 900, color: "#ff0036", lineHeight: 1 }}>4.9</div>
+              <div style={{ fontSize: "48px", fontWeight: 900, color: "#ff0036", lineHeight: 1 }}>
+                {reviews.length > 0 ? (reviews.reduce((a, b) => a + b.rating, 0) / reviews.length).toFixed(1) : "5.0"}
+              </div>
               <div>
                 <div style={{ display: "flex", gap: "4px", color: "#ff0036", fontSize: "18px" }}>
                   <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
                 </div>
                 <div style={{ fontSize: "13px", color: "#888", marginTop: "4px" }}>
-                  Dựa trên đánh giá của cộng đồng ROG Gamers toàn cầu
+                  {reviews.length > 0 ? `${reviews.length} đánh giá từ cộng đồng ROG đã kiểm duyệt` : "Chưa có đánh giá nào. Hãy là người đầu tiên nhận xét!"}
                 </div>
               </div>
             </div>
             <div style={{ display: "flex", gap: "12px" }}>
               <button
                 type="button"
-                onClick={async () => { const ok = await RogApi.submitProductReview("laptops/rog-zephyrus/rog-zephyrus-g16-gu605", "Khách hàng muốn gửi đánh giá sản phẩm ROG Zephyrus G16.", 5); alert(ok ? "Cảm ơn bạn! Đánh giá đã được gửi và sẽ được duyệt." : "Không thể gửi đánh giá lúc này."); }}
+                onClick={() => setShowReviewForm(!showReviewForm)}
                 style={{
                   backgroundColor: "#ff0036",
                   color: "#fff",
@@ -469,10 +504,95 @@ export default function RogZephyrusG16PostFeatures() {
                   textTransform: "uppercase",
                 }}
               >
-                Viết đánh giá
+                {showReviewForm ? "Đóng form" : "Viết nhận xét"}
               </button>
             </div>
           </div>
+
+          {showReviewForm && (
+            <div style={{ background: "#181820", border: "1px solid #333", borderRadius: "6px", padding: "20px", marginTop: "20px", maxWidth: "600px" }}>
+              <h3 style={{ fontSize: "14px", fontWeight: 800, margin: "0 0 12px", textTransform: "uppercase" }}>Gửi nhận xét về Zephyrus G16</h3>
+              {reviewSuccessMsg ? (
+                <div style={{ background: "rgba(34, 197, 94, 0.15)", border: "1px solid #22c55e", color: "#4ade80", padding: "10px", borderRadius: "4px", fontSize: "13px" }}>
+                  ✓ {reviewSuccessMsg}
+                </div>
+              ) : (
+                <form onSubmit={handleSubmitReview} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                  <div>
+                    <label style={{ display: "block", fontSize: "12px", color: "#888", marginBottom: "4px" }}>Họ tên hoặc Nickname</label>
+                    <input
+                      type="text"
+                      value={reviewerName}
+                      onChange={(e) => setReviewerName(e.target.value)}
+                      placeholder="VD: Game thủ ROG"
+                      style={{ width: "100%", background: "#0a0a0c", border: "1px solid #333", color: "#fff", padding: "8px 12px", borderRadius: "4px", fontSize: "13px" }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: "block", fontSize: "12px", color: "#888", marginBottom: "4px" }}>Đánh giá số sao</label>
+                    <select
+                      value={reviewRating}
+                      onChange={(e) => setReviewRating(Number(e.target.value))}
+                      style={{ width: "100%", background: "#0a0a0c", border: "1px solid #333", color: "#eab308", padding: "8px 12px", borderRadius: "4px", fontSize: "13px" }}
+                    >
+                      <option value={5}>★★★★★ (5 sao - Tuyệt vời)</option>
+                      <option value={4}>★★★★☆ (4 sao - Rất tốt)</option>
+                      <option value={3}>★★★☆☆ (3 sao - Tạm ổn)</option>
+                      <option value={2}>★★☆☆☆ (2 sao - Cần cải thiện)</option>
+                      <option value={1}>★☆☆☆☆ (1 sao - Kém)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ display: "block", fontSize: "12px", color: "#888", marginBottom: "4px" }}>Nội dung nhận xét</label>
+                    <textarea
+                      value={reviewContent}
+                      onChange={(e) => setReviewContent(e.target.value)}
+                      required
+                      rows={3}
+                      placeholder="Chia sẻ cảm nhận về hiệu năng, thiết kế màn hình OLED..."
+                      style={{ width: "100%", background: "#0a0a0c", border: "1px solid #333", color: "#fff", padding: "8px 12px", borderRadius: "4px", fontSize: "13px", resize: "vertical" }}
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={submittingReview}
+                    style={{
+                      alignSelf: "flex-start",
+                      background: "#ff0036",
+                      color: "#fff",
+                      border: "none",
+                      padding: "8px 20px",
+                      fontWeight: 700,
+                      borderRadius: "2px",
+                      cursor: submittingReview ? "not-allowed" : "pointer",
+                      fontSize: "12px",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {submittingReview ? "Đang gửi…" : "Gửi đánh giá"}
+                  </button>
+                </form>
+              )}
+            </div>
+          )}
+
+          {reviews.length > 0 && (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px", marginTop: "20px" }}>
+              {reviews.map((rev) => (
+                <div key={rev.id} style={{ background: "#181820", border: "1px solid #282830", borderRadius: "6px", padding: "16px" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                    <span style={{ fontWeight: 800, color: "#fff", fontSize: "13px" }}>{rev.authorName || "Game thủ ROG"}</span>
+                    <span style={{ color: "#eab308", fontSize: "12px" }}>
+                      {"★".repeat(Math.max(1, Math.min(5, rev.rating)))}
+                      {"☆".repeat(Math.max(0, 5 - Math.max(1, Math.min(5, rev.rating))))}
+                    </span>
+                  </div>
+                  <p style={{ color: "#ccc", fontSize: "13px", lineHeight: 1.6, margin: "0 0 6px" }}>{rev.content}</p>
+                  <div style={{ color: "#666", fontSize: "11px" }}>{new Date(rev.createdAtUtc).toLocaleDateString("vi-VN")}</div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

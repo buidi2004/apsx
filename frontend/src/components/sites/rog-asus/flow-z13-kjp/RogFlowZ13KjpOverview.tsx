@@ -2,12 +2,43 @@
 
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCart } from "@/lib/cart";
+import { RogApi } from "@/lib/api-client";
 import "../RogProductDetail.css";
 import "./kjp-style.css";
 import { KJP_FEATURES_HTML } from "./kjp-html";
 
 export default function RogFlowZ13KjpOverview() {
+  const router = useRouter();
+  const { addLine } = useCart();
+  const [livePrice, setLivePrice] = useState("109.990.000 ₫");
+  const [unitPriceNum, setUnitPriceNum] = useState(109990000);
+
+  const handleBuyNow = () => {
+    addLine({
+      slug: "laptops/rog-flow/rog-flow-z13-kjp",
+      name: "ROG Flow Z13-KJP (2026)",
+      image: "/sites/rog-asus/img/detail/z13-kjp-front.webp",
+      price: unitPriceNum,
+      href: "/vn/laptops/rog-flow/rog-flow-z13-kjp",
+      selectedSpecs: "Ryzen AI Max+ 395 / 128GB RAM",
+    });
+    router.push("/vn/checkout");
+  };
+
+  useEffect(() => {
+    RogApi.getBatchPricing(["laptops/rog-flow/rog-flow-z13-kjp"])
+      .then((res) => {
+        if (res && res.length > 0 && res[0].formattedPrice) {
+          setLivePrice(res[0].formattedPrice);
+          if (res[0].price) setUnitPriceNum(res[0].price);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   useEffect(() => {
     // Suppress video play()/pause() abort rejections in modern browsers
     const handleRejection = (e: PromiseRejectionEvent) => {
@@ -116,17 +147,19 @@ export default function RogFlowZ13KjpOverview() {
             </Link>
           </nav>
 
-          <div className="rog-pd-subbar-actions">
+          <div className="rog-pd-subbar-actions" style={{ display: "flex", gap: "10px", alignItems: "center" }}>
             <div className="rog-pd-subbar-price-wrap">
               <span className="rog-pd-subbar-price-label">Giá trên ASUS estore</span>
-              <span className="rog-pd-subbar-price">109.990.000 ₫</span>
+              <span className="rog-pd-subbar-price">{livePrice}</span>
             </div>
-            <Link
-              href="/vn/store"
+            <button
+              type="button"
+              onClick={handleBuyNow}
               className="rog-pd-buy-btn"
+              style={{ cursor: "pointer", border: "none" }}
             >
               MUA NGAY
-            </Link>
+            </button>
           </div>
         </div>
       </div>
