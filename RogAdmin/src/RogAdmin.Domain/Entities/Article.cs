@@ -22,6 +22,12 @@ public class Article : BaseEntity
     /// <summary>Text overlay của FE Highlights — hiện FE chưa render, giữ để dùng sau.</summary>
     public string? OverlayText { get; set; }
 
+    /// <summary>Toàn văn nội dung bài viết dưới dạng HTML / Rich Text cho trang chi tiết /vn/articles/[...slug]</summary>
+    public string? ContentHtml { get; set; }
+
+    /// <summary>Tác giả bài viết</summary>
+    public string? Author { get; set; } = "ROG Editor";
+
     public int SortOrder { get; set; }
     public bool IsActive { get; set; } = true;
 }

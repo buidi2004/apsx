@@ -6,7 +6,7 @@ namespace RogAdmin.Api.Controllers.Admin;
 
 [ApiController]
 [Route("api/admin/scraper")]
-[Authorize]
+[Authorize(Roles = "Admin")]
 public class ScraperController(IScraperService scraperService) : ControllerBase
 {
     public record TriggerScrapeRequest(string Url);

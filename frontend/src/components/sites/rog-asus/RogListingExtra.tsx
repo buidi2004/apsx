@@ -2,7 +2,8 @@
 "use client";
 
 import Link from "next/link";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { RogApi, type VideoItemDto } from "@/lib/api-client";
 import "./RogListingExtra.css";
 
 /* ---------- Data scraped from rog.asus.com/vn/laptops-group/ ---------- */
@@ -235,7 +236,41 @@ const DISCLAIMER = [
 
 /* ---------- Sections ---------- */
 
+type HotProductItem = {
+  img: string;
+  name: string;
+  deal: boolean;
+  priceLabel?: string | null;
+  price?: string | null;
+  cta?: string | null;
+  href: string;
+  specs: string[];
+};
+
 function HotProducts() {
+  const [hotList, setHotList] = useState<HotProductItem[]>(HOT_PRODUCTS);
+
+  useEffect(() => {
+    let ignore = false;
+    RogApi.getProducts({ category: "laptops", pageSize: 6 }).then((res) => {
+      if (!ignore && res.items && res.items.length > 0) {
+        setHotList(
+          res.items.map((p) => ({
+            img: p.thumbnailUrl || "/sites/rog-asus/img/hot/strix-scar-18.webp",
+            name: p.name,
+            specs: [p.tagline || p.modelCode || ""],
+            deal: !!p.discountLabel,
+            priceLabel: (p.oldPrice ? "Giá ưu đãi" : "Giá khởi điểm") as string | null,
+            price: (p.price ? new Intl.NumberFormat("vi-VN").format(p.price) + " đ" : "") as string | null,
+            cta: "TÌM HIỂU THÊM" as string | null,
+            href: `/vn/${p.slug}`,
+          }))
+        );
+      }
+    }).catch(() => {});
+    return () => { ignore = true; };
+  }, []);
+
   return (
     <section className="rog-hot">
       <div className="rog-hot-head">
@@ -250,7 +285,7 @@ function HotProducts() {
         </a>
       </div>
       <div className="rog-hot-grid">
-        {HOT_PRODUCTS.map((p) => (
+        {hotList.map((p) => (
           <div className="rog-hot-card" key={p.name}>
             {p.deal && <span className="rog-hot-deal">DEAL</span>}
             {p.href.startsWith("/") ? (
@@ -322,14 +357,27 @@ function HotProducts() {
 }
 
  export function VideoSection() {
-  const [big, ...rest] = VIDEOS;
+  const [videoList, setVideoList] = useState<VideoItemDto[]>(VIDEOS);
+
+  useEffect(() => {
+    let ignore = false;
+    RogApi.getVideos().then((res) => {
+      if (!ignore && res && res.length > 0) {
+        setVideoList(res);
+      }
+    }).catch(() => {});
+    return () => { ignore = true; };
+  }, []);
+
+  if (videoList.length === 0) return null;
+  const [big, ...rest] = videoList;
   return (
     <section className="rog-vids">
       <h2 className="rog-vids-title">VIDEO</h2>
       <div className="rog-vids-layout">
         <a
           className={`rog-vid${big.big ? " rog-vid-big" : ""}`}
-          href="https://www.youtube.com/@asusrogvietnam"
+          href={big.videoUrl || "https://www.youtube.com/@asusrogvietnam"}
           target="_blank"
           rel="noreferrer"
         >
@@ -346,7 +394,7 @@ function HotProducts() {
             <a
               className="rog-vid"
               key={v.img}
-              href="https://www.youtube.com/@asusrogvietnam"
+              href={v.videoUrl || "https://www.youtube.com/@asusrogvietnam"}
               target="_blank"
               rel="noreferrer"
             >
@@ -367,6 +415,25 @@ function HotProducts() {
 
  export function RelatedArticles() {
   const trackRef = useRef<HTMLDivElement>(null);
+  const [articleList, setArticleList] = useState(RELATED_ARTICLES);
+
+  useEffect(() => {
+    let ignore = false;
+    RogApi.getArticles("highlights").then((res) => {
+      if (!ignore && res && res.length > 0) {
+        setArticleList(
+          res.map((a) => ({
+            img: a.img,
+            title: a.title,
+            excerpt: a.excerpt || "",
+            href: a.href,
+          }))
+        );
+      }
+    }).catch(() => {});
+    return () => { ignore = true; };
+  }, []);
+
   const scrollBy = (dir: number) => {
     trackRef.current?.scrollBy({ left: dir * 640, behavior: "smooth" });
   };
@@ -375,8 +442,8 @@ function HotProducts() {
       <h2 className="rog-rel-title">BÀI VIẾT LIÊN QUAN</h2>
       <div className="rog-rel-wrap">
         <div className="rog-rel-track" ref={trackRef}>
-          {RELATED_ARTICLES.map((a) => (
-            <a className="rog-rel-card" key={a.title} href={a.href} target="_blank" rel="noreferrer">
+          {articleList.map((a) => (
+            <Link className="rog-rel-card" key={a.title} href={a.href}>
               <div className="rog-rel-img">
                 {a.img ? <img src={a.img} alt={a.title} /> : <span className="rog-rel-img-empty" aria-hidden />}
               </div>
@@ -385,7 +452,7 @@ function HotProducts() {
                 <h3 className="rog-rel-card-title">{a.title}</h3>
                 <p className="rog-rel-excerpt">{a.excerpt}</p>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
         <button
@@ -404,11 +471,29 @@ function HotProducts() {
 }
 
  export function RelatedProducts() {
+  const [productList, setProductList] = useState(RELATED_PRODUCTS);
+
+  useEffect(() => {
+    let ignore = false;
+    RogApi.getProducts({ pageSize: 6 }).then((res) => {
+      if (!ignore && res.items && res.items.length > 0) {
+        setProductList(
+          res.items.slice(0, 4).map((p) => ({
+            img: p.thumbnailUrl || "/sites/rog-asus/img/detail/scar18-kv.webp",
+            name: p.name,
+            href: `/vn/${p.slug}`,
+          }))
+        );
+      }
+    }).catch(() => {});
+    return () => { ignore = true; };
+  }, []);
+
   return (
     <section className="rog-relprod">
       <h2 className="rog-relprod-title">SẢN PHẨM LIÊN QUAN</h2>
       <div className="rog-relprod-grid">
-        {RELATED_PRODUCTS.map((p) =>
+        {productList.map((p) =>
           p.href.startsWith("/") ? (
             <Link className="rog-relprod-card" key={p.name} href={p.href}>
               <div className="rog-relprod-img">

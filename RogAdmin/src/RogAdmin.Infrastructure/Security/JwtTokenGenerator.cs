@@ -40,4 +40,34 @@ public class JwtTokenGenerator(IOptions<JwtOptions> options) : IJwtTokenGenerato
 
         return (new JwtSecurityTokenHandler().WriteToken(token), expiresAtUtc);
     }
+
+    /// <summary>JWT cho khách hàng storefront. Role cố định "Customer" để tách khỏi khu vực admin.</summary>
+    public (string Token, DateTime ExpiresAtUtc) GenerateCustomerToken(Customer customer)
+    {
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key));
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var expiresAtUtc = DateTime.UtcNow.AddHours(_options.ExpireHours);
+
+        var claims = new List<Claim>
+        {
+            new(JwtRegisteredClaimNames.Sub, customer.Id.ToString()),
+            new(ClaimTypes.NameIdentifier, customer.Id.ToString()),
+            new(ClaimTypes.Name, customer.Email),
+            new(ClaimTypes.Email, customer.Email),
+            new(ClaimTypes.GivenName, customer.FullName),
+            new(ClaimTypes.Role, "Customer"),
+            new("tier", customer.Tier.ToString()),
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
+        };
+
+        var token = new JwtSecurityToken(
+            issuer: _options.Issuer,
+            audience: _options.Audience,
+            claims: claims,
+            notBefore: DateTime.UtcNow,
+            expires: expiresAtUtc,
+            signingCredentials: credentials);
+
+        return (new JwtSecurityTokenHandler().WriteToken(token), expiresAtUtc);
+    }
 }

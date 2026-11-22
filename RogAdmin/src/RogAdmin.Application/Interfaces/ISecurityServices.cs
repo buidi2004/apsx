@@ -13,4 +13,5 @@ public interface IPasswordHasher
 public interface IJwtTokenGenerator
 {
     (string Token, DateTime ExpiresAtUtc) GenerateToken(AdminUser user);
+    (string Token, DateTime ExpiresAtUtc) GenerateCustomerToken(Customer customer);
 }

@@ -3,6 +3,7 @@ import Link from "next/link";
 import RogNavbar from "@/components/sites/rog-asus/RogNavbar";
 import RogPromoBar from "@/components/sites/rog-asus/RogPromoBar";
 import RogFooter from "@/components/sites/rog-asus/RogFooter";
+import { RogApi } from "@/lib/api-client";
 
 export const metadata: Metadata = {
   title: "Quy Chế Pháp Lý & Chính Sách Bảo Mật｜ROG - Republic of Gamers｜Việt Nam",
@@ -10,7 +11,17 @@ export const metadata: Metadata = {
     "Chính sách bảo vệ quyền riêng tư và xử lý dữ liệu cá nhân của ASUS ROG Việt Nam.",
 };
 
-export default function PrivacyPolicyPage() {
+export default async function PrivacyPolicyPage() {
+  let siteConfig = null;
+  try {
+    siteConfig = await RogApi.getSiteConfig();
+  } catch {}
+
+  const company = siteConfig?.footer?.company;
+  const companyName = company?.name || "Công Ty TNHH Công Nghệ Asus (Việt Nam)";
+  const companyAddress = company?.address || "285 Cách Mạng Tháng Tám, Phường 12, Quận 10, TP. Hồ Chí Minh";
+  const hotline = company?.phone || "1800 65 88";
+
   return (
     <div className="rog-page">
       <RogNavbar />
@@ -31,7 +42,7 @@ export default function PrivacyPolicyPage() {
             CHÍNH SÁCH BẢO MẬT THÔNG TIN
           </h1>
           <p style={{ color: "#888", fontSize: "13px", marginBottom: "32px" }}>
-            Cập nhật lần cuối: Tháng 01/2026 · Công Ty TNHH Công Nghệ Asus (Việt Nam)
+            Cập nhật lần cuối: Tháng 01/2026 · {companyName}
           </p>
 
           <div style={{ color: "#bbb", fontSize: "15px", lineHeight: 1.8, display: "flex", flexDirection: "column", gap: "24px" }}>
@@ -73,9 +84,9 @@ export default function PrivacyPolicyPage() {
               <p>
                 Mọi thắc mắc liên quan đến quyền bảo vệ dữ liệu cá nhân, vui lòng liên hệ:
                 <br />
-                Công Ty TNHH Công Nghệ Asus (Việt Nam) — 285 Cách Mạng Tháng Tám, Phường 12, Quận 10, TP. Hồ Chí Minh.
+                {companyName} — {companyAddress}.
                 <br />
-                Hotline miễn phí: <strong>1800 65 88</strong>
+                Hotline miễn phí: <strong>{hotline}</strong>
               </p>
             </section>
           </div>

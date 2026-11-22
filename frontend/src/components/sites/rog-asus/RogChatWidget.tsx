@@ -1,7 +1,10 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
-import { useState } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { RogApi } from "@/lib/api-client";
 import "./RogChatWidget.css";
 
 export default function RogChatWidget({
@@ -9,22 +12,45 @@ export default function RogChatWidget({
 }: {
   variant?: "search" | "greeting";
 }) {
+  const router = useRouter();
   const [pillVisible, setPillVisible] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [greetingText, setGreetingText] = useState("Xin chào! Bạn đang cần thông tin sản phẩm hoặc muốn so sánh sản phẩm?");
+
+  useEffect(() => {
+    RogApi.getSiteConfig()
+      .then((cfg) => {
+        if (cfg && (cfg as any).chatGreeting) {
+          setGreetingText((cfg as any).chatGreeting);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && searchQuery.trim()) {
+      router.push(`/vn/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
 
   return (
     <div className="rog-chat">
       {pillVisible && (
         <div className="rog-chat-pill">
           {variant === "greeting" ? (
-            <span className="rog-chat-greeting">
-              Xin chào! Bạn đang cần thông tin sản phẩm hoặc muốn so sánh sản
-              phẩm?
-            </span>
+            <Link href="/vn/compare" style={{ textDecoration: "none", color: "inherit" }}>
+              <span className="rog-chat-greeting" style={{ cursor: "pointer" }}>
+                {greetingText}
+              </span>
+            </Link>
           ) : (
             <input
               type="text"
-              placeholder="Bạn đang tìm kiếm gì?"
+              placeholder="Bạn đang tìm kiếm gì? (Enter để tìm)"
               aria-label="Tìm kiếm"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
           )}
           <button
@@ -37,7 +63,12 @@ export default function RogChatWidget({
           </button>
         </div>
       )}
-      <button type="button" className="rog-chat-avatar" aria-label="Trợ lý ROG">
+      <button
+        type="button"
+        className="rog-chat-avatar"
+        aria-label="Trợ lý ROG Omni"
+        onClick={() => setPillVisible((v) => !v)}
+      >
         <img
           src="/sites/rog-asus/img/rog-omni-mascot.png"
           alt="Trợ lý ROG Omni"

@@ -42,7 +42,8 @@ public record ProductDetailDto(
     string DiscountLabel,
     StockStatus StockStatus,
     string StoreUrl,
-    List<ProductSpecDto> Specs
+    List<ProductSpecDto> Specs,
+    List<string>? GalleryImages = null
 );
 
 public record ProductPriceDto(

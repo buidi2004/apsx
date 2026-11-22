@@ -20,6 +20,12 @@ public static class DependencyInjection
         services.AddScoped<IPublicContentService, PublicContentService>();
         services.AddScoped<IProductCatalogService, ProductCatalogService>();
         services.AddScoped<IScraperService, ScraperService>();
+        services.AddScoped<IDealerAdminService, DealerAdminService>();
+        services.AddScoped<IWarrantyAdminService, WarrantyAdminService>();
+        services.AddScoped<IOrderService, OrderService>();
+        services.AddScoped<IReportService, ReportService>();
+        services.AddScoped<ICustomerAuthService, CustomerAuthService>();
+        services.AddScoped<IAuditLogService, AuditLogService>();
         return services;
     }
 }

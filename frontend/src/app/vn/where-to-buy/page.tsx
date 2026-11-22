@@ -19,8 +19,61 @@ type Dealer = {
   badge?: string;
 };
 
+const DEFAULT_DEALERS: Dealer[] = [
+  {
+    name: "GEARVN",
+    type: "Đại Lý Ủy Quyền Chính Thức ROG",
+    city: "all",
+    cityLabel: "Toàn Quốc (TP.HCM, Hà Nội)",
+    address: "78-80 Hoàng Hoa Thám, P.12, Q.Tân Bình, TP.HCM & 162 Thái Hà, Đống Đa, Hà Nội",
+    hotline: "1800 6975",
+    website: "https://gearvn.com",
+    badge: "ROG AUTHORIZED PARTNER",
+  },
+  {
+    name: "PHONG VŨ",
+    type: "Hệ Thống Bán Lẻ Công Nghệ Toàn Quốc",
+    city: "all",
+    cityLabel: "Toàn Quốc",
+    address: "264 Nguyễn Thị Minh Khai, P.6, Q.3, TP.HCM & Tầng 1, Tòa nhà Ladeco, 266 Đội Cấn, Ba Đình, Hà Nội",
+    hotline: "1800 6867",
+    website: "https://phongvu.vn",
+    badge: "CHIẾN LƯỢC",
+  },
+  {
+    name: "CELLPHONES",
+    type: "Hệ Thống Bán Lẻ Thiết Bị Công Nghệ",
+    city: "all",
+    cityLabel: "Toàn Quốc",
+    address: "134 Nguyễn Thái Học, P.Phạm Ngũ Lão, Q.1, TP.HCM",
+    hotline: "1800 2097",
+    website: "https://cellphones.com.vn",
+    badge: "ROG AUTHORIZED PARTNER",
+  },
+  {
+    name: "AN PHÁT COMPUTER",
+    type: "Đại Lý Ủy Quyền Chính Thức ROG",
+    city: "all",
+    cityLabel: "Hà Nội, TP.HCM, Bắc Ninh",
+    address: "49 Thái Hà, P.Trung Liệt, Q.Đống Đa, Hà Nội",
+    hotline: "1900 0323",
+    website: "https://anphatpc.com.vn",
+    badge: "ROG AUTHORIZED PARTNER",
+  },
+  {
+    name: "HACOM (HANOICOMPUTER)",
+    type: "Đại Lý Bán Lẻ Máy Tính & Hi-End PC",
+    city: "all",
+    cityLabel: "Hà Nội, Hải Phòng, TP.HCM",
+    address: "131 Lê Thanh Nghị, Hai Bà Trưng, Hà Nội",
+    hotline: "1900 1903",
+    website: "https://hacom.vn",
+    badge: "ROG AUTHORIZED PARTNER",
+  },
+];
+
 export default function WhereToBuyPage() {
-  const [dealers, setDealers] = useState<Dealer[]>([]);
+  const [dealers, setDealers] = useState<Dealer[]>(DEFAULT_DEALERS);
   const [filterCity, setFilterCity] = useState<string>("all");
 
   useEffect(() => {

@@ -3,6 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { RogApi } from "@/lib/api-client";
 import "./phone7-style.css";
 import { PHONE7_FEATURES_HTML } from "./phone7-html";
 import { initPhone7Runtime } from "./phone7-runtime";
@@ -18,8 +19,15 @@ export default function RogPhone7Overview({
 }) {
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const [buyModalOpen, setBuyModalOpen] = useState(false);
+  const [currentPrice, setCurrentPrice] = useState(price);
 
   useEffect(() => {
+    RogApi.getBatchPricing(["phones/rog-phone-7"]).then((res) => {
+      if (res && res.length > 0 && res[0].formattedPrice) {
+        setCurrentPrice(res[0].formattedPrice);
+      }
+    }).catch(() => {});
+
     let cleanup: (() => void) | undefined;
     initPhone7Runtime().then((c) => {
       cleanup = c;
@@ -106,7 +114,7 @@ export default function RogPhone7Overview({
           <div className="rog-phone7-subbar-actions">
             <div className="rog-phone7-price-wrap">
               <span className="rog-phone7-price-label">Giá trên ASUS estore</span>
-              <span className="rog-phone7-price">{price}</span>
+              <span className="rog-phone7-price">{currentPrice}</span>
             </div>
             <button
               type="button"
@@ -199,7 +207,7 @@ export default function RogPhone7Overview({
                 Snapdragon 8 Gen 2 | 165Hz AMOLED | 6000 mAh | 16GB / 512GB
               </p>
               <div style={{ fontSize: 24, fontWeight: 700, color: "#ff0033", marginBottom: 24 }}>
-                {price}
+                {currentPrice}
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                 <Link

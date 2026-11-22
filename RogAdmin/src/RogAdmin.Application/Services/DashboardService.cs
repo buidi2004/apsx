@@ -12,7 +12,14 @@ public class DashboardService(
     IRepository<ProductCategory> categories,
     IRepository<FooterLink> footerLinks,
     IRepository<SiteSetting> settings,
-    IRepository<AdminUser> users) : IDashboardService
+    IRepository<AdminUser> users,
+    IRepository<Product> products,
+    IRepository<ProductPrice> prices,
+    IRepository<Dealer> dealers,
+    IRepository<WarrantyRecord> warrantyRecords,
+    IRepository<Customer> customers,
+    IRepository<Order> orders,
+    IReviewRepository reviews) : IDashboardService
 {
     public async Task<DashboardStatsDto> GetStatsAsync(CancellationToken ct = default)
     {
@@ -33,6 +40,16 @@ public class DashboardService(
             FooterLinksTotal = await footerLinks.Query().CountAsync(ct),
             SiteSettingsTotal = await settings.Query().CountAsync(ct),
             AdminUsersTotal = await users.Query().CountAsync(ct),
+
+            // 8 chỉ số KPI kinh doanh & cảnh báo review
+            ProductsTotal = await products.Query().CountAsync(ct),
+            ProductsInStock = await prices.Query().CountAsync(p => p.StockStatus == StockStatus.InStock, ct),
+            DealersTotal = await dealers.Query().CountAsync(ct),
+            WarrantyRecordsTotal = await warrantyRecords.Query().CountAsync(ct),
+            CustomersTotal = await customers.Query().CountAsync(ct),
+            OrdersTotal = await orders.Query().CountAsync(ct),
+            OrdersPending = await orders.Query().CountAsync(o => o.Status == OrderStatus.Pending, ct),
+            PendingReviewsTotal = await reviews.Query().CountAsync(r => !r.IsApproved, ct),
         };
     }
 }

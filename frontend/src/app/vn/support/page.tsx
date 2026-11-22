@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RogNavbar from "@/components/sites/rog-asus/RogNavbar";
 import RogPromoBar from "@/components/sites/rog-asus/RogPromoBar";
 import RogFooter from "@/components/sites/rog-asus/RogFooter";
@@ -55,6 +55,8 @@ const POLICIES = [
 ];
 
 export default function SupportPage() {
+  const [centers, setCenters] = useState(CENTERS);
+  const [policies, setPolicies] = useState(POLICIES);
   const [serial, setSerial] = useState("");
   const [result, setResult] = useState<{
     model: string;
@@ -62,6 +64,21 @@ export default function SupportPage() {
     expiry: string;
     type: string;
   } | null>(null);
+
+  useEffect(() => {
+    let ignore = false;
+    RogApi.getSupportInfo()
+      .then((res) => {
+        if (!ignore && res) {
+          if (res.centers && res.centers.length > 0) setCenters(res.centers);
+          if (res.policies && res.policies.length > 0) setPolicies(res.policies);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   const handleCheck = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -254,7 +271,7 @@ export default function SupportPage() {
               marginBottom: "60px",
             }}
           >
-            {POLICIES.map((p) => (
+            {policies.map((p) => (
               <div
                 key={p.title}
                 style={{
@@ -296,9 +313,9 @@ export default function SupportPage() {
               gap: "24px",
             }}
           >
-            {CENTERS.map((c) => (
+            {centers.map((c) => (
               <div
-                key={c.city}
+                key={c.name}
                 style={{
                   background: "#121216",
                   border: "1px solid #222",

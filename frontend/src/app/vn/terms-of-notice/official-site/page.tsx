@@ -3,6 +3,7 @@ import Link from "next/link";
 import RogNavbar from "@/components/sites/rog-asus/RogNavbar";
 import RogPromoBar from "@/components/sites/rog-asus/RogPromoBar";
 import RogFooter from "@/components/sites/rog-asus/RogFooter";
+import { RogApi } from "@/lib/api-client";
 
 export const metadata: Metadata = {
   title: "Thông Tin Hợp Pháp & Điều Khoản Sử Dụng｜ROG - Republic of Gamers｜Việt Nam",
@@ -10,7 +11,18 @@ export const metadata: Metadata = {
     "Điều khoản sử dụng website chính thức ASUS ROG Việt Nam và quyền sở hữu trí tuệ thương hiệu.",
 };
 
-export default function OfficialSiteTermsPage() {
+export default async function OfficialSiteTermsPage() {
+  let siteConfig = null;
+  try {
+    siteConfig = await RogApi.getSiteConfig();
+  } catch {}
+
+  const company = siteConfig?.footer?.company;
+  const companyName = company?.name || "Công Ty TNHH Công Nghệ Asus (Việt Nam)";
+  const companyAddress = company?.address || "285 Cách Mạng Tháng Tám, Phường 12, Quận 10, TP. Hồ Chí Minh";
+  const businessReg = company?.businessRegistration || "0304965680 do Sở Kế hoạch và Đầu tư TP. Hồ Chí Minh cấp ngày 03/05/2007";
+  const ecommerceLic = company?.ecommerceLicense || "0304965680/KD-0321 do Sở Công thương TP.HCM cấp";
+
   return (
     <div className="rog-page">
       <RogNavbar />
@@ -62,13 +74,13 @@ export default function OfficialSiteTermsPage() {
                 3. Thông tin pháp lý doanh nghiệp
               </h2>
               <p>
-                <strong>Công Ty TNHH Công Nghệ Asus (Việt Nam)</strong>
+                <strong>{companyName}</strong>
                 <br />
-                Địa chỉ: 285 Cách Mạng Tháng Tám, Phường 12, Quận 10, TP. Hồ Chí Minh
+                Địa chỉ: {companyAddress}
                 <br />
-                Giấy chứng nhận đăng ký doanh nghiệp số 0304965680 do Sở Kế hoạch và Đầu tư TP. Hồ Chí Minh cấp ngày 03/05/2007.
+                Giấy chứng nhận đăng ký doanh nghiệp số {businessReg}.
                 <br />
-                Giấy phép kinh doanh hoạt động mua bán hàng hóa số 0304965680/KD-0321 do Sở Công thương TP.HCM cấp.
+                Giấy phép kinh doanh hoạt động mua bán hàng hóa số {ecommerceLic}.
               </p>
             </section>
           </div>

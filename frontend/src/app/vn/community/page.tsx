@@ -1,15 +1,12 @@
-import type { Metadata } from "next";
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import RogNavbar from "@/components/sites/rog-asus/RogNavbar";
 import RogPromoBar from "@/components/sites/rog-asus/RogPromoBar";
 import RogFooter from "@/components/sites/rog-asus/RogFooter";
 import RogChatWidget from "@/components/sites/rog-asus/RogChatWidget";
-
-export const metadata: Metadata = {
-  title: "Cộng Đồng Game Thủ ROG VN & ROG Elite Rewards｜ROG",
-  description:
-    "Gia nhập Cộng đồng Republic of Gamers Việt Nam. Tham gia chương trình tích điểm đổi quà ROG Elite Rewards, giải đấu ROG Masters và hội game thủ.",
-};
+import { RogApi } from "@/lib/api-client";
 
 const CHANNELS = [
   {
@@ -50,6 +47,23 @@ const ELITE_TIERS = [
 ];
 
 export default function CommunityPage() {
+  const [channels, setChannels] = useState(CHANNELS);
+  const [tiers, setTiers] = useState(ELITE_TIERS);
+
+  useEffect(() => {
+    let ignore = false;
+    RogApi.getCommunityInfo()
+      .then((res) => {
+        if (!ignore && res) {
+          if (res.channels && res.channels.length > 0) setChannels(res.channels);
+          if (res.tiers && res.tiers.length > 0) setTiers(res.tiers);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      ignore = true;
+    };
+  }, []);
   return (
     <div className="rog-page">
       <RogNavbar />
@@ -178,7 +192,7 @@ export default function CommunityPage() {
                 marginTop: "40px",
               }}
             >
-              {ELITE_TIERS.map((t) => (
+              {tiers.map((t) => (
                 <div
                   key={t.tier}
                   style={{
@@ -220,7 +234,7 @@ export default function CommunityPage() {
               gap: "24px",
             }}
           >
-            {CHANNELS.map((ch) => (
+            {channels.map((ch) => (
               <div
                 key={ch.name}
                 style={{

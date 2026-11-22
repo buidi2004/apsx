@@ -2,7 +2,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { RogApi } from "@/lib/api-client";
 import "./RogSeriesPage.css";
 
 export type SeriesType = "flow" | "zephyrus" | "strix";
@@ -353,19 +354,49 @@ type FilterGroup = {
 export default function RogSeriesPage({ series = "flow" }: { series?: SeriesType }) {
   const [compare, setCompare] = useState<Record<string, boolean>>({});
   const cfg = SERIES_DATA[series] ?? SERIES_DATA.flow;
+  const [products, setProducts] = useState(cfg.products);
+
+  useEffect(() => {
+    setProducts(cfg.products);
+    const slugs = cfg.products
+      .map((p) => p.href.replace(/^\/vn\//, ""))
+      .filter((s) => s.startsWith("laptops/"));
+    if (slugs.length === 0) return;
+
+    RogApi.getBatchPricing(slugs).then((prices) => {
+      if (!prices || prices.length === 0) return;
+      const priceMap = new Map(prices.map((pr) => [pr.slug.toLowerCase(), pr]));
+      setProducts((current) =>
+        current.map((item) => {
+          const itemSlug = item.href.replace(/^\/vn\//, "").toLowerCase();
+          const found = priceMap.get(itemSlug);
+          if (found && found.formattedPrice) {
+            return {
+              ...item,
+              price: found.formattedPrice,
+              oldPrice: found.formattedOldPrice || item.oldPrice,
+              save: found.discountLabel || item.save,
+              status: found.stockStatus === 1 ? "TEMPORARILY OUT OF STOCK" : "CÒN HÀNG",
+            };
+          }
+          return item;
+        })
+      );
+    }).catch(() => {});
+  }, [series, cfg.products]);
 
   const filterGroups: FilterGroup[] = [
     {
       title: "CÓ SẴN TẠI ROG STORE",
       open: true,
       items: [
-        { label: "In Stock on eShop", count: cfg.products.filter((p) => p.status === "CÒN HÀNG").length, checked: false },
+        { label: "In Stock on eShop", count: products.filter((p) => p.status === "CÒN HÀNG").length, checked: false },
         { label: "Pre-order on eShop", count: 0, checked: false, disabled: true },
-        { label: "Temporarily Out of Stock on eShop", count: cfg.products.filter((p) => p.status !== "CÒN HÀNG").length, checked: false },
-        { label: "All Products", count: cfg.products.length, checked: false },
+        { label: "Temporarily Out of Stock on eShop", count: products.filter((p) => p.status !== "CÒN HÀNG").length, checked: false },
+        { label: "All Products", count: products.length, checked: false },
       ],
     },
-    { title: "MUA", open: true, items: [{ label: "Deals", count: cfg.products.filter((p) => p.deal).length, checked: false }] },
+    { title: "MUA", open: true, items: [{ label: "Deals", count: products.filter((p) => p.deal).length, checked: false }] },
     {
       title: "GIÁ",
       open: true,
@@ -432,7 +463,7 @@ export default function RogSeriesPage({ series = "flow" }: { series?: SeriesType
       {/* count + sort row */}
       <div className="rog-series-toolbar">
         <div className="rog-series-count">
-          <span>{cfg.products.length} Sản phẩm</span>
+          <span>{products.length} Sản phẩm</span>
           <span className="rog-series-chip">{cfg.chip} ✕</span>
           <button type="button" className="rog-series-clear">Xóa tất cả</button>
         </div>
@@ -495,7 +526,7 @@ export default function RogSeriesPage({ series = "flow" }: { series?: SeriesType
 
         {/* product cards */}
         <div className="rog-series-cards">
-          {cfg.products.map((p) => (
+          {products.map((p) => (
             <div className="rog-series-card" key={p.model}>
               <span className="rog-series-status">
                 <span className={`rog-series-status-icon${p.status === "CÒN HÀNG" ? " rog-series-status-in" : " rog-series-status-out"}`} aria-hidden />

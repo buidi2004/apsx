@@ -5,6 +5,7 @@ import RogNavbar from "@/components/sites/rog-asus/RogNavbar";
 import RogPromoBar from "@/components/sites/rog-asus/RogPromoBar";
 import RogFooter from "@/components/sites/rog-asus/RogFooter";
 import RogChatWidget from "@/components/sites/rog-asus/RogChatWidget";
+import { RogApi } from "@/lib/api-client";
 
 export const metadata: Metadata = {
   title: "Sáng Tạo & Công Nghệ Đột Phá｜ROG - Republic of Gamers｜Việt Nam",
@@ -65,7 +66,31 @@ const INNOVATIONS = [
   },
 ];
 
-export default function InnovationsPage() {
+export default async function InnovationsPage() {
+  let items = INNOVATIONS;
+  try {
+    const live = await RogApi.getInnovations();
+    if (live && live.length > 0) {
+      items = live.map((i) => {
+        let highlights: string[] = [];
+        try {
+          highlights = JSON.parse(i.highlightsJson);
+        } catch {
+          highlights = [];
+        }
+        return {
+          tag: i.tag,
+          title: i.title,
+          desc: i.desc,
+          highlights,
+          img: i.img,
+        };
+      });
+    }
+  } catch {
+    // Fallback on error
+  }
+
   return (
     <div className="rog-page">
       <RogNavbar />
@@ -135,7 +160,7 @@ export default function InnovationsPage() {
 
         {/* Feature Sections */}
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "60px 24px 0" }}>
-          {INNOVATIONS.map((item, idx) => (
+          {items.map((item, idx) => (
             <div
               key={item.title}
               style={{
@@ -145,7 +170,7 @@ export default function InnovationsPage() {
                 alignItems: "center",
                 marginBottom: "80px",
                 paddingBottom: "80px",
-                borderBottom: idx < INNOVATIONS.length - 1 ? "1px solid #1a1a20" : "none",
+                borderBottom: idx < items.length - 1 ? "1px solid #1a1a20" : "none",
                 direction: idx % 2 === 1 ? "rtl" : "ltr",
               }}
             >

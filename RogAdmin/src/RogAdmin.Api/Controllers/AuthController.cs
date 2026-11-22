@@ -20,4 +20,14 @@ public class AuthController(IAuthService authService) : ControllerBase
         var response = await authService.LoginAsync(request, ct);
         return Ok(response);
     }
+
+    /// <summary>Lấy thông tin tài khoản admin đang đăng nhập từ JWT claims.</summary>
+    [HttpGet("me")]
+    [Authorize]
+    public IActionResult Me()
+    {
+        var username = User.Identity?.Name ?? string.Empty;
+        var role = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value ?? string.Empty;
+        return Ok(new { username, role });
+    }
 }

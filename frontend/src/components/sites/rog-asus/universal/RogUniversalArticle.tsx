@@ -19,8 +19,12 @@ export interface CachedArticle {
 
 export async function fetchRogArticle(slugPath: string): Promise<CachedArticle | null> {
   const backendArticle = await fetchArticleDetail(slugPath);
-  if (!backendArticle?.contentHtml) return null;
-  return backendArticle;
+  if (!backendArticle) return null;
+  if (!backendArticle.contentHtml && !backendArticle.lead) return null;
+  return {
+    ...backendArticle,
+    contentHtml: backendArticle.contentHtml || (backendArticle.lead ? `<p class="rog-default-lead">${backendArticle.lead}</p>` : ""),
+  };
 }
 
 export default async function RogUniversalArticle({ slug }: Props) {

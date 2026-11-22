@@ -27,17 +27,35 @@
       <div class="brand">ROG<span>ADMIN</span></div>
       <nav>
         <a href="#dashboard" data-page="dashboard">📊 Dashboard</a>
+        <a href="#reports" data-page="reports">📈 Báo cáo Thống kê</a>
+        <a href="#orders" data-page="orders">📦 Quản lý Đơn hàng</a>
         <a href="#products" data-page="products">💰 Sản phẩm & Giá</a>
+        <a href="#dealers" data-page="dealers">🏪 Hệ thống Đại lý</a>
+        <a href="#warranty" data-page="warranty">🛡️ Hồ sơ Bảo hành</a>
+        <a href="#reviews" data-page="reviews">⭐ Duyệt Đánh giá</a>
+        <a href="#support-centers" data-page="support-centers">🏢 Trung tâm & CS Bảo hành</a>
+        <a href="#community" data-page="community">🌐 Kênh MXH & ROG Elite</a>
+        <a href="#campaigns" data-page="campaigns">🎉 Sự kiện & Ưu đãi</a>
+        <a href="#downloads" data-page="downloads">💾 Kho Phần mềm</a>
+        <a href="#innovations" data-page="innovations">💡 Công nghệ ROG</a>
+        <a href="#wallpapers" data-page="wallpapers">🖼️ Hình nền 4K</a>
+        <a href="#about-stories" data-page="about-stories">📖 Giới thiệu ROG</a>
+        <a href="#videos" data-page="videos">🎥 Video Review</a>
+        <a href="#customers" data-page="customers">👤 Khách & ROG Elite</a>
+        <a href="#newsletter" data-page="newsletter">📧 Đăng ký Nhận tin</a>
+        <a href="#media" data-page="media">📁 Thư viện Media</a>
         <a href="#articles" data-page="articles">📰 Bài viết</a>
         <a href="#hero-slides" data-page="hero-slides">🖼️ Slide Hero</a>
         <a href="#product-categories" data-page="product-categories">🎮 Danh mục SP</a>
         <a href="#footer-links" data-page="footer-links">🔗 Link Footer</a>
         <a href="#site-settings" data-page="site-settings">⚙️ Cấu hình site</a>
+        <a href="#audit-logs" data-page="audit-logs" data-admin-only>📜 Nhật ký Hoạt động</a>
         <a href="#users" data-page="users" data-admin-only>👥 Tài khoản</a>
       </nav>
       <div class="sidebar-footer">
         <div id="current-user" class="current-user"></div>
         <div class="sidebar-actions">
+          <button id="backup-db-btn" class="btn btn-ghost" style="border:1px solid #ff0036;color:#ff0036">💾 Sao lưu CSDL</button>
           <button id="change-password-btn" class="btn btn-ghost">🔑 Đổi mật khẩu</button>
           <button id="logout-btn" class="btn btn-ghost">Đăng xuất</button>
         </div>
@@ -48,20 +66,293 @@
       <!-- Dashboard -->
       <section id="page-dashboard" class="page hidden">
         <h1>Dashboard</h1>
+        <div id="dashboard-alerts"></div>
         <div id="dashboard-stats" class="stats-grid"></div>
+      </section>
+
+      <!-- Báo cáo Thống kê & Phân tích Kinh doanh -->
+      <section id="page-reports" class="page hidden">
+        <div class="page-head">
+          <div>
+            <h1>Báo cáo &amp; Phân tích Kinh doanh</h1>
+            <p style="color:#888;font-size:13px;margin:4px 0 0">Tổng hợp doanh thu bán hàng, sức khỏe tồn kho, cơ cấu đơn hàng và hồ sơ bảo hành toàn hệ thống ROG ASUS.</p>
+          </div>
+          <div class="report-export-actions" style="display:flex;gap:8px;flex-wrap:wrap">
+            <button id="export-sales-report-btn" class="btn btn-ghost" style="border:1px solid #00f0ff;color:#00f0ff">📥 Xuất Doanh thu (CSV)</button>
+            <button id="export-inventory-report-btn" class="btn btn-ghost" style="border:1px solid #39ff14;color:#39ff14">📦 Xuất Tồn kho (CSV)</button>
+            <button id="export-warranty-report-btn" class="btn btn-ghost" style="border:1px solid #ff0055;color:#ff0055">🛡️ Xuất Bảo hành (CSV)</button>
+          </div>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="report-filters" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:16px 0;background:#14161a;padding:12px 16px;border-radius:10px;border:1px solid #2a2e36">
+          <div class="btn-group" style="display:flex;gap:6px">
+            <button type="button" class="btn btn-sm btn-preset active" data-preset="all">Toàn bộ</button>
+            <button type="button" class="btn btn-sm btn-preset" data-preset="7d">7 ngày qua</button>
+            <button type="button" class="btn btn-sm btn-preset" data-preset="30d">30 ngày qua</button>
+            <button type="button" class="btn btn-sm btn-preset" data-preset="month">Tháng này</button>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;margin-left:auto;flex-wrap:wrap">
+            <label style="font-size:12px;color:#9aa0a8">Từ ngày:</label>
+            <input type="date" id="report-from-date" style="background:#0b0c0e;border:1px solid #2a2e36;color:#fff;padding:5px 8px;border-radius:6px" />
+            <label style="font-size:12px;color:#9aa0a8">Đến ngày:</label>
+            <input type="date" id="report-to-date" style="background:#0b0c0e;border:1px solid #2a2e36;color:#fff;padding:5px 8px;border-radius:6px" />
+            <button id="report-apply-btn" class="btn btn-primary btn-sm">Áp dụng lọc</button>
+          </div>
+        </div>
+
+        <!-- Top 4 KPI Metric Cards -->
+        <div id="report-kpi-cards" class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:24px"></div>
+
+        <!-- Charts row: Sales Trend & Status Breakdown -->
+        <div class="report-charts-grid" style="display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:24px">
+          <div class="card" style="background:#14161a;border:1px solid #2a2e36;border-radius:10px;padding:18px">
+            <h3 style="margin:0 0 16px;font-size:15px;color:#00f0ff;display:flex;align-items:center;gap:8px">
+              📊 Xu hướng Doanh thu theo Ngày
+            </h3>
+            <div id="report-sales-chart" style="height:220px;display:flex;align-items:flex-end;gap:12px;padding:10px 0;border-bottom:1px solid #2a2e36;overflow-x:auto"></div>
+          </div>
+          <div class="card" style="background:#14161a;border:1px solid #2a2e36;border-radius:10px;padding:18px">
+            <h3 style="margin:0 0 16px;font-size:15px;color:#ff334b;display:flex;align-items:center;gap:8px">
+              🎯 Cơ cấu Trạng thái Đơn hàng
+            </h3>
+            <div id="report-status-breakdown" style="display:flex;flex-direction:column;gap:12px"></div>
+          </div>
+        </div>
+
+        <!-- Sub Tabs: Top Products, Inventory Health, Warranty, Customers -->
+        <div class="report-tabs-nav" style="display:flex;gap:4px;border-bottom:1px solid #2a2e36;margin-bottom:16px">
+          <button class="tab-btn active" data-report-tab="top-products">🏆 Top Sản phẩm Bán chạy</button>
+          <button class="tab-btn" data-report-tab="inventory">📦 Sức khỏe Tồn kho</button>
+          <button class="tab-btn" data-report-tab="warranty">🛡️ Cảnh báo Bảo hành</button>
+          <button class="tab-btn" data-report-tab="customers">👤 Hội viên &amp; VIP</button>
+        </div>
+
+        <!-- Tab contents -->
+        <div id="report-tab-top-products" class="report-tab-pane">
+          <div class="table-wrap"><table id="report-top-products-table"></table></div>
+        </div>
+        <div id="report-tab-inventory" class="report-tab-pane hidden">
+          <div id="report-inventory-metrics" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px"></div>
+          <h4 style="margin:16px 0 8px;color:#f5a524">⚠️ Danh sách sản phẩm Hết hàng &amp; Cần nhập thêm</h4>
+          <div class="table-wrap"><table id="report-inventory-table"></table></div>
+        </div>
+        <div id="report-tab-warranty" class="report-tab-pane hidden">
+          <div id="report-warranty-metrics" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px"></div>
+          <h4 style="margin:16px 0 8px;color:#ff1a2e">🚨 Cảnh báo: Máy sắp hết hạn bảo hành (trong 60 ngày tới)</h4>
+          <div class="table-wrap"><table id="report-warranty-table"></table></div>
+        </div>
+        <div id="report-tab-customers" class="report-tab-pane hidden">
+          <div id="report-customer-metrics" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px"></div>
+          <h4 style="margin:16px 0 8px;color:#00f0ff">👑 Bảng xếp hạng Khách hàng Chi tiêu cao nhất (Top Spenders)</h4>
+          <div class="table-wrap"><table id="report-customers-table"></table></div>
+        </div>
+      </section>
+
+      <!-- Quản lý Đơn hàng -->
+      <section id="page-orders" class="page hidden">
+        <div class="page-head">
+          <h1>Quản lý Đơn hàng</h1>
+        </div>
+        <div class="filters">
+          <select id="order-status-filter">
+            <option value="">Tất cả trạng thái</option>
+            <option value="Pending">Chờ xác nhận (Pending)</option>
+            <option value="Confirmed">Đã xác nhận (Confirmed)</option>
+            <option value="Shipping">Đang giao hàng (Shipping)</option>
+            <option value="Completed">Hoàn tất (Completed)</option>
+            <option value="Cancelled">Đã hủy (Cancelled)</option>
+          </select>
+          <input id="order-search" type="search" placeholder="Tìm theo mã đơn (ROG-...), tên khách, SĐT, email..." />
+        </div>
+        <div class="table-wrap"><table id="orders-table"></table></div>
+        <div id="orders-pager" class="pager"></div>
       </section>
 
       <!-- Sản phẩm & Giá cả -->
       <section id="page-products" class="page hidden">
         <div class="page-head">
           <h1>Sản phẩm & Giá cả</h1>
-          <button class="btn btn-primary" data-create="product">+ Thêm sản phẩm</button>
+          <div style="display:flex;gap:8px">
+            <button id="product-scrape-btn" class="btn btn-ghost" style="border:1px solid #ff0033;color:#ff0033">⚡ Cào máy từ ASUS</button>
+            <button class="btn btn-primary" data-create="product">+ Thêm sản phẩm</button>
+          </div>
         </div>
         <div class="filters">
           <input id="product-search" type="search" placeholder="Tìm theo tên, model hoặc slug..." />
         </div>
         <div class="table-wrap"><table id="products-table"></table></div>
         <div id="products-pager" class="pager"></div>
+      </section>
+
+      <!-- Hệ thống Đại lý -->
+      <section id="page-dealers" class="page hidden">
+        <div class="page-head">
+          <h1>Hệ thống Đại lý Phân phối</h1>
+          <button class="btn btn-primary" data-create="dealer">+ Thêm đại lý</button>
+        </div>
+        <div class="filters">
+          <select id="dealer-city-filter">
+            <option value="all">Tất cả khu vực</option>
+            <option value="Hà Nội">Hà Nội</option>
+            <option value="TP.HCM">TP.HCM</option>
+            <option value="Đà Nẵng">Đà Nẵng</option>
+          </select>
+          <input id="dealer-search" type="search" placeholder="Tìm theo tên đại lý, hotline..." />
+        </div>
+        <div class="table-wrap"><table id="dealers-table"></table></div>
+        <div id="dealers-pager" class="pager"></div>
+      </section>
+
+      <!-- Hồ sơ Bảo hành -->
+      <section id="page-warranty" class="page hidden">
+        <div class="page-head">
+          <h1>Hồ sơ & Serial Bảo hành</h1>
+          <button class="btn btn-primary" data-create="warranty">+ Thêm máy/serial</button>
+        </div>
+        <div class="filters">
+          <input id="warranty-search" type="search" placeholder="Tìm theo số serial (R4NRCX0001...), dòng máy..." />
+        </div>
+        <div class="table-wrap"><table id="warranty-table"></table></div>
+        <div id="warranty-pager" class="pager"></div>
+      </section>
+
+      <!-- Đánh giá Sản phẩm -->
+      <section id="page-reviews" class="page hidden">
+        <div class="page-head">
+          <h1>Kiểm duyệt Đánh giá Sản phẩm</h1>
+        </div>
+        <div class="filters">
+          <select id="review-status-filter">
+            <option value="">Tất cả trạng thái</option>
+            <option value="false" selected>Chờ duyệt (Pending)</option>
+            <option value="true">Đã duyệt (Approved)</option>
+          </select>
+          <input id="review-search" type="search" placeholder="Tìm theo slug sản phẩm, tên khách..." />
+        </div>
+        <div class="table-wrap"><table id="reviews-table"></table></div>
+        <div id="reviews-pager" class="pager"></div>
+      </section>
+
+      <!-- Trung tâm & Chính sách Bảo hành -->
+      <section id="page-support-centers" class="page hidden">
+        <div class="page-head">
+          <h1>Trung tâm Bảo hành Khách hàng</h1>
+          <button class="btn btn-primary" data-create="service-center">+ Thêm trung tâm</button>
+        </div>
+        <div class="table-wrap"><table id="service-centers-table"></table></div>
+
+        <div class="page-head" style="margin-top:40px">
+          <h1>Chính sách & Đặc quyền Hậu mãi VIP</h1>
+          <button class="btn btn-primary" data-create="warranty-policy">+ Thêm chính sách</button>
+        </div>
+        <div class="table-wrap"><table id="warranty-policies-table"></table></div>
+      </section>
+
+      <!-- Kênh MXH & Đặc quyền ROG Elite -->
+      <section id="page-community" class="page hidden">
+        <div class="page-head">
+          <h1>Kênh Kết nối Mạng Xã Hội Chính thức</h1>
+          <button class="btn btn-primary" data-create="social-channel">+ Thêm kênh MXH</button>
+        </div>
+        <div class="table-wrap"><table id="social-channels-table"></table></div>
+
+        <div class="page-head" style="margin-top:40px">
+          <h1>Hạng Thành viên & Đặc quyền ROG Elite Rewards</h1>
+          <button class="btn btn-primary" data-create="elite-tier">+ Thêm hạng thành viên</button>
+        </div>
+        <div class="table-wrap"><table id="elite-tiers-table"></table></div>
+      </section>
+
+      <!-- Sự kiện & Ưu đãi -->
+      <section id="page-campaigns" class="page hidden">
+        <div class="page-head">
+          <h1>Sự kiện & Chương trình Khuyến mãi</h1>
+          <button class="btn btn-primary" data-create="campaign">+ Thêm sự kiện</button>
+        </div>
+        <div class="table-wrap"><table id="campaigns-table"></table></div>
+      </section>
+
+      <!-- Kho Phần mềm -->
+      <section id="page-downloads" class="page hidden">
+        <div class="page-head">
+          <h1>Kho Phần mềm, Driver & Wallpaper</h1>
+          <button class="btn btn-primary" data-create="download">+ Thêm phần mềm</button>
+        </div>
+        <div class="table-wrap"><table id="downloads-table"></table></div>
+      </section>
+
+      <!-- Sáng tạo & Công nghệ -->
+      <section id="page-innovations" class="page hidden">
+        <div class="page-head">
+          <h1>Sáng tạo & Công nghệ Đột phá (Innovations)</h1>
+          <button class="btn btn-primary" data-create="innovation">+ Thêm công nghệ</button>
+        </div>
+        <div class="table-wrap"><table id="innovations-table"></table></div>
+      </section>
+
+      <!-- Hình nền 4K -->
+      <section id="page-wallpapers" class="page hidden">
+        <div class="page-head">
+          <h1>Bộ sưu tập Hình nền 4K (Wallpapers)</h1>
+          <button class="btn btn-primary" data-create="wallpaper">+ Thêm hình nền</button>
+        </div>
+        <div class="table-wrap"><table id="wallpapers-table"></table></div>
+      </section>
+
+      <!-- Cột mốc lịch sử ROG -->
+      <section id="page-about-stories" class="page hidden">
+        <div class="page-head">
+          <h1>Cột mốc Lịch sử & Câu chuyện ROG (About Stories)</h1>
+          <button class="btn btn-primary" data-create="about-story">+ Thêm cột mốc</button>
+        </div>
+        <div class="table-wrap"><table id="about-stories-table"></table></div>
+      </section>
+
+      <!-- Video Showcase -->
+      <section id="page-videos" class="page hidden">
+        <div class="page-head">
+          <h1>🎥 Video Review & Showcase</h1>
+          <button class="btn btn-primary" data-create="video">+ Thêm video review</button>
+        </div>
+        <div class="table-wrap"><table id="videos-table"></table></div>
+      </section>
+
+      <!-- Khách hàng & ROG Elite -->
+      <section id="page-customers" class="page hidden">
+        <div class="page-head">
+          <h1>Khách hàng & Hạng ROG Elite</h1>
+        </div>
+        <div class="filters">
+          <input id="customer-search" type="search" placeholder="Tìm theo email, họ tên, SĐT..." />
+        </div>
+        <div class="table-wrap"><table id="customers-table"></table></div>
+        <div id="customers-pager" class="pager"></div>
+      </section>
+
+      <!-- Đăng ký Nhận tin -->
+      <section id="page-newsletter" class="page hidden">
+        <div class="page-head">
+          <h1>Danh sách Đăng ký Nhận tin (Newsletter)</h1>
+          <button id="newsletter-export-btn" class="btn btn-ghost" style="border:1px solid #4a5568">📥 Xuất file CSV</button>
+        </div>
+        <div class="filters">
+          <input id="newsletter-search" type="search" placeholder="Tìm theo email..." />
+        </div>
+        <div class="table-wrap"><table id="newsletter-table"></table></div>
+        <div id="newsletter-pager" class="pager"></div>
+      </section>
+
+      <!-- Thư viện Media -->
+      <section id="page-media" class="page hidden">
+        <div class="page-head">
+          <h1>Thư viện Media & Tải ảnh</h1>
+          <div>
+            <input type="file" id="media-file-input" accept="image/*" style="display:none" />
+            <button id="media-upload-trigger-btn" class="btn btn-primary">📤 Tải ảnh lên</button>
+          </div>
+        </div>
+        <div id="media-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-top:20px;"></div>
       </section>
 
       <!-- Bài viết -->
@@ -121,6 +412,30 @@
         <div id="settings-form" class="settings-form"></div>
       </section>
 
+      <!-- Nhật ký Hoạt động (Audit Logs) -->
+      <section id="page-audit-logs" class="page hidden">
+        <div class="page-head">
+          <h1>Nhật ký Hoạt động (Audit Logs)</h1>
+        </div>
+        <div class="filters">
+          <select id="audit-action-filter">
+            <option value="">Tất cả hành động</option>
+            <option value="UPDATE_PRICE">Đổi giá sản phẩm</option>
+            <option value="UPDATE_ORDER_STATUS">Đổi trạng thái đơn</option>
+            <option value="DELETE_ORDER">Xóa đơn hàng</option>
+            <option value="APPROVE_REVIEW">Duyệt đánh giá</option>
+            <option value="REJECT_REVIEW">Hạ duyệt đánh giá</option>
+            <option value="DELETE_REVIEW">Xóa đánh giá</option>
+            <option value="CREATE_PRODUCT">Thêm sản phẩm</option>
+            <option value="DELETE_PRODUCT">Xóa sản phẩm</option>
+            <option value="BACKUP_EXPORT">Sao lưu CSDL</option>
+          </select>
+          <input id="audit-search" type="search" placeholder="Tìm theo người thực hiện, đối tượng, ID, chi tiết..." />
+        </div>
+        <div class="table-wrap"><table id="audit-logs-table"></table></div>
+        <div id="audit-logs-pager" class="pager"></div>
+      </section>
+
       <!-- Tài khoản (chỉ Admin) -->
       <section id="page-users" class="page hidden">
         <div class="page-head">
@@ -143,6 +458,34 @@
       <div class="modal-foot">
         <button id="modal-cancel" class="btn btn-ghost">Hủy</button>
         <button id="modal-save" class="btn btn-primary">Lưu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ GALLERY MODAL ============ -->
+  <div id="gallery-modal" class="modal hidden">
+    <div class="modal-box" style="max-width: 800px;">
+      <div class="modal-head">
+        <h2 id="gallery-modal-title">🖼️ Album Ảnh Sản Phẩm</h2>
+        <button id="gallery-modal-close" class="btn btn-ghost">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="gallery-add-box" style="margin-bottom: 20px; padding: 15px; background: #1a1a24; border-radius: 4px;">
+          <h3 style="margin-top:0; font-size:14px; color:#ff0036;">Thêm ảnh vào Album</h3>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+            <input type="text" id="gallery-img-url" placeholder="URL hình ảnh hoặc chọn file bên cạnh..." style="flex:1;" />
+            <label class="btn btn-ghost" style="cursor:pointer; margin:0;">
+              📁 Chọn ảnh...
+              <input type="file" id="gallery-file-input" accept="image/*" style="display:none;" />
+            </label>
+            <input type="text" id="gallery-img-caption" placeholder="Chú thích (VD: Góc nhìn trực diện)" style="width:200px;" />
+            <button id="gallery-add-btn" class="btn btn-primary">Thêm</button>
+          </div>
+        </div>
+        <div id="gallery-images-list" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:15px; max-height:400px; overflow-y:auto;"></div>
+      </div>
+      <div class="modal-foot">
+        <button id="gallery-modal-done" class="btn btn-ghost">Đóng</button>
       </div>
     </div>
   </div>

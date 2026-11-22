@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RogAdmin.Application.Common;
 using RogAdmin.Application.Dtos.Products;
+using RogAdmin.Application.Exceptions;
 using RogAdmin.Application.Interfaces;
 using RogAdmin.Domain.Entities;
 using RogAdmin.Domain.Enums;
@@ -22,12 +23,21 @@ public class ProductCatalogService(
         string? search,
         int page = 1,
         int pageSize = 20,
+        bool includeInactive = false,
         CancellationToken ct = default)
     {
-        var q = productRepo.Query()
+        page = Math.Max(1, page);
+        pageSize = Math.Clamp(pageSize, 1, 100);
+
+        IQueryable<Product> q = productRepo.Query()
             .AsNoTracking()
-            .Include(p => p.Price)
-            .Where(p => p.IsActive);
+            .Include(p => p.Price);
+
+        // API công khai chỉ thấy sản phẩm đang bật; trang quản trị cần thấy cả sản phẩm ẩn.
+        if (!includeInactive)
+        {
+            q = q.Where(p => p.IsActive);
+        }
 
         if (!string.IsNullOrWhiteSpace(category))
         {
@@ -77,13 +87,22 @@ public class ProductCatalogService(
         };
     }
 
-    public async Task<ProductDetailDto?> GetProductBySlugAsync(string slug, CancellationToken ct = default)
+    public async Task<ProductDetailDto?> GetProductBySlugAsync(string slug, bool includeInactive = false, CancellationToken ct = default)
     {
         var slugLower = slug.Trim().ToLower();
-        var product = await productRepo.Query()
+        IQueryable<Product> query = productRepo.Query()
             .AsNoTracking()
             .Include(p => p.Price)
             .Include(p => p.Specs.OrderBy(s => s.OrderIndex))
+            .Include(p => p.GalleryImages.OrderBy(i => i.SortOrder));
+
+        // API công khai không được lộ sản phẩm đã ẩn; trang quản trị vẫn xem được.
+        if (!includeInactive)
+        {
+            query = query.Where(p => p.IsActive);
+        }
+
+        var product = await query
             .FirstOrDefaultAsync(p => p.Slug.ToLower() == slugLower || p.Slug.ToLower().EndsWith("/" + slugLower), ct);
 
         if (product == null) return null;
@@ -104,7 +123,8 @@ public class ProductCatalogService(
             product.Price?.DiscountLabel ?? "",
             product.Price?.StockStatus ?? StockStatus.InStock,
             product.Price?.StoreUrl ?? "/vn/where-to-buy",
-            product.Specs.Select(s => new ProductSpecDto(s.SpecGroup, s.SpecKey, s.SpecValue)).ToList()
+            product.Specs.Select(s => new ProductSpecDto(s.SpecGroup, s.SpecKey, s.SpecValue)).ToList(),
+            product.GalleryImages.Select(i => i.ImageUrl).ToList()
         );
     }
 
@@ -290,6 +310,11 @@ public class ProductCatalogService(
         StockStatus? stockStatus,
         CancellationToken ct = default)
     {
+        if (price < 0 || oldPrice is < 0)
+        {
+            throw AppException.BadRequest("Giá bán và giá cũ không được âm.");
+        }
+
         var product = await productRepo.Query()
             .Include(p => p.Price)
             .FirstOrDefaultAsync(p => p.Id == productId, ct);

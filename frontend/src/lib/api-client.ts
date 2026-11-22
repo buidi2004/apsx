@@ -42,6 +42,17 @@ export interface PublicArticleDto {
   isBig?: boolean;
 }
 
+export interface PublicReviewDto {
+  id: string;
+  productSlug: string;
+  authorName: string;
+  title: string;
+  content: string;
+  rating: number;
+  isApproved: boolean;
+  createdAtUtc: string;
+}
+
 export interface ProductListItemDto {
   id: number;
   slug: string;
@@ -82,6 +93,7 @@ export interface ProductDetailDto {
   stockStatus: number;
   storeUrl: string;
   specs: ProductSpecDto[];
+  galleryImages?: string[];
 }
 
 export interface ProductPriceDto {
@@ -117,9 +129,193 @@ export interface WarrantyCheckDto {
   serviceCenter: string;
 }
 
+export interface CampaignDto {
+  badge: string;
+  title: string;
+  period: string;
+  desc: string;
+  img: string;
+  ctaText: string;
+  ctaLink: string;
+}
+
+export interface SoftwareDownloadDto {
+  name: string;
+  version: string;
+  size: string;
+  desc: string;
+  featuresJson: string;
+  os: string;
+  badge: string;
+  downloadUrl: string;
+}
+
 export interface CompareMatrixDto {
   products: ProductDetailDto[];
   commonSpecKeys: string[];
+}
+
+export interface ServiceCenterDto {
+  city: string;
+  name: string;
+  address: string;
+  phone: string;
+  time: string;
+}
+
+export interface WarrantyPolicyDto {
+  title: string;
+  desc: string;
+}
+
+export interface SupportInfoDto {
+  centers: ServiceCenterDto[];
+  policies: WarrantyPolicyDto[];
+}
+
+export interface SocialChannelDto {
+  name: string;
+  members: string;
+  desc: string;
+  link: string;
+  btn: string;
+}
+
+export interface EliteTierDto {
+  tier: string;
+  points: string;
+  perk: string;
+}
+
+export interface CommunityInfoDto {
+  channels: SocialChannelDto[];
+  tiers: EliteTierDto[];
+}
+
+export interface InnovationDto {
+  tag: string;
+  title: string;
+  desc: string;
+  highlightsJson: string;
+  img: string;
+}
+
+export interface WallpaperDto {
+  title: string;
+  res: string;
+  img: string;
+  downloadUrl: string;
+}
+
+export interface AboutStoryDto {
+  yearTag: string;
+  heading: string;
+  content: string;
+  imageUrl?: string | null;
+}
+
+export interface AboutRogDto {
+  heroTitle: string;
+  heroSubtitle: string;
+  manifestoTitle: string;
+  manifestoText: string;
+  stories: AboutStoryDto[];
+}
+
+// ---------- Commerce: giỏ hàng, đơn hàng, tài khoản khách hàng ----------
+
+export interface CreateOrderItemInput {
+  slug: string;
+  quantity: number;
+  selectedSpecs?: string;
+  name?: string;
+  unitPrice?: number;
+}
+
+export interface CreateOrderInput {
+  customerName: string;
+  email: string;
+  phone: string;
+  address: string;
+  note?: string;
+  items: CreateOrderItemInput[];
+}
+
+export interface OrderItemDto {
+  productId?: number | null;
+  productSlug: string;
+  productName: string;
+  selectedSpecs: string;
+  unitPrice: number;
+  quantity: number;
+  lineTotal: number;
+}
+
+export interface OrderDto {
+  orderCode: string;
+  customerName: string;
+  email: string;
+  phone: string;
+  address: string;
+  note: string;
+  subtotal: number;
+  shippingFee: number;
+  total: number;
+  status: string;
+  statusText: string;
+  createdAt: string;
+  items: OrderItemDto[];
+}
+
+export interface CreateOrderResponse {
+  orderCode: string;
+  total: number;
+  status: string;
+  createdAt: string;
+}
+
+export interface CustomerProfileDto {
+  id: number;
+  email: string;
+  fullName: string;
+  phoneNumber: string;
+  tier: string;
+  points: number;
+  orderCount: number;
+}
+
+export interface CustomerAuthResponse {
+  token: string;
+  expiresAtUtc: string;
+  user: CustomerProfileDto;
+}
+
+export const CUSTOMER_TOKEN_KEY = "rog_customer_token";
+export const CUSTOMER_USER_KEY = "rog_customer_user";
+
+export function getCustomerToken(): string | null {
+  if (typeof window === "undefined") return null;
+  return window.localStorage.getItem(CUSTOMER_TOKEN_KEY);
+}
+
+export function getCustomerUser(): CustomerProfileDto | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(CUSTOMER_USER_KEY);
+    return raw ? (JSON.parse(raw) as CustomerProfileDto) : null;
+  } catch {
+    return null;
+  }
+}
+
+export function saveCustomerAuth(auth: CustomerAuthResponse): void {
+  window.localStorage.setItem(CUSTOMER_TOKEN_KEY, auth.token);
+  window.localStorage.setItem(CUSTOMER_USER_KEY, JSON.stringify(auth.user));
+}
+
+export function clearCustomerAuth(): void {
+  window.localStorage.removeItem(CUSTOMER_TOKEN_KEY);
+  window.localStorage.removeItem(CUSTOMER_USER_KEY);
 }
 
 export interface SiteConfigDto {
@@ -296,6 +492,72 @@ async function safeFetch<T>(endpoint: string, options?: FetchOptions): Promise<T
   return fetchPromise;
 }
 
+function apiUrl(endpoint: string): string {
+  return typeof window === "undefined"
+    ? `${BE_INTERNAL_URL}/api${endpoint}`
+    : `${API_BASE}${endpoint}`;
+}
+
+async function readErrorMessage(response: Response): Promise<string> {
+  try {
+    const data = await response.json();
+    return data?.message || data?.title || `HTTP ${response.status}`;
+  } catch {
+    return `HTTP ${response.status}`;
+  }
+}
+
+async function postJson<T>(endpoint: string, body: unknown, token?: string | null): Promise<T> {
+  const response = await fetch(apiUrl(endpoint), {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(10000),
+  });
+
+  if (!response.ok) {
+    throw new Error(await readErrorMessage(response));
+  }
+
+  return (await response.json()) as T;
+}
+
+async function getJsonAuth<T>(endpoint: string, token?: string | null): Promise<T> {
+  const response = await fetch(apiUrl(endpoint), {
+    headers: {
+      Accept: "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    signal: AbortSignal.timeout(10000),
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error(await readErrorMessage(response));
+  }
+
+  return (await response.json()) as T;
+}
+
+export type VideoItemDto = {
+  img: string;
+  title: string;
+  videoUrl?: string;
+  big?: boolean;
+};
+
+export type ProductGalleryImageDto = {
+  id: number;
+  productId: number;
+  imageUrl: string;
+  caption?: string;
+  sortOrder: number;
+};
+
 export const RogApi = {
   /**
    * Xóa toàn bộ bộ nhớ đệm phía Client
@@ -381,6 +643,37 @@ export const RogApi = {
     return await response.json();
   },
 
+  // ---------- Tài khoản khách hàng ----------
+  async customerRegister(input: {
+    email: string;
+    fullName: string;
+    phoneNumber: string;
+    password: string;
+  }): Promise<CustomerAuthResponse> {
+    return postJson<CustomerAuthResponse>("/public/auth/register", input);
+  },
+
+  async customerLogin(email: string, password: string): Promise<CustomerAuthResponse> {
+    return postJson<CustomerAuthResponse>("/public/auth/login", { email, password });
+  },
+
+  async getCustomerMe(token?: string | null): Promise<CustomerProfileDto> {
+    return getJsonAuth<CustomerProfileDto>("/public/auth/me", token ?? getCustomerToken());
+  },
+
+  // ---------- Đơn hàng ----------
+  async createOrder(input: CreateOrderInput, token?: string | null): Promise<CreateOrderResponse> {
+    return postJson<CreateOrderResponse>("/public/orders", input, token ?? getCustomerToken());
+  },
+
+  async getOrder(orderCode: string): Promise<OrderDto> {
+    return getJsonAuth<OrderDto>(`/public/orders/${encodeURIComponent(orderCode)}`);
+  },
+
+  async getMyOrders(token?: string | null): Promise<OrderDto[]> {
+    return getJsonAuth<OrderDto[]>("/public/orders/mine", token ?? getCustomerToken());
+  },
+
   async subscribeNewsletter(email: string): Promise<boolean> {
     const response = await fetch(`${API_BASE}/public/newsletter/subscribe`, {
       method: "POST",
@@ -397,6 +690,69 @@ export const RogApi = {
       body: JSON.stringify({ productSlug, content, rating }),
     });
     return response.ok;
+  },
+
+  async getProductReviews(productSlug: string, options?: FetchOptions): Promise<PublicReviewDto[]> {
+    return safeFetch<PublicReviewDto[]>(`/public/reviews?productSlug=${encodeURIComponent(productSlug)}`, options);
+  },
+
+  async cancelOrder(orderCode: string, token?: string | null): Promise<boolean> {
+    const url = apiUrl(`/public/orders/${encodeURIComponent(orderCode)}/cancel`);
+    const authToken = token ?? getCustomerToken();
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+      },
+    });
+    if (!response.ok) {
+      throw new Error(await readErrorMessage(response));
+    }
+    return true;
+  },
+
+  async changeCustomerPassword(input: { oldPassword: string; newPassword: string }, token?: string | null): Promise<boolean> {
+    const url = apiUrl("/public/auth/change-password");
+    const authToken = token ?? getCustomerToken();
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+      },
+      body: JSON.stringify(input),
+    });
+    if (!response.ok) {
+      throw new Error(await readErrorMessage(response));
+    }
+    return true;
+  },
+
+  async updateCustomerProfile(input: { fullName: string; phoneNumber: string }, token?: string | null): Promise<CustomerProfileDto> {
+    const url = apiUrl("/public/auth/profile");
+    const authToken = token ?? getCustomerToken();
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+      },
+      body: JSON.stringify(input),
+    });
+    if (!response.ok) {
+      throw new Error(await readErrorMessage(response));
+    }
+    const updated = (await response.json()) as CustomerProfileDto;
+    if (typeof window !== "undefined") {
+      const current = getCustomerUser();
+      if (current) {
+        window.localStorage.setItem(CUSTOMER_USER_KEY, JSON.stringify({ ...current, ...updated }));
+      }
+    }
+    return updated;
   },
 
   /**
@@ -457,5 +813,61 @@ export const RogApi = {
   async checkWarranty(serial: string): Promise<WarrantyCheckDto | null> {
     if (!serial) return null;
     return safeFetch<WarrantyCheckDto | null>(`/public/warranty/check?serial=${encodeURIComponent(serial)}`);
+  },
+
+  /**
+   * Fetch active campaigns and events
+   */
+  async getCampaigns(): Promise<CampaignDto[]> {
+    return safeFetch<CampaignDto[]>("/public/campaigns");
+  },
+
+  /**
+   * Fetch software downloads and utilities
+   */
+  async getDownloads(): Promise<SoftwareDownloadDto[]> {
+    return safeFetch<SoftwareDownloadDto[]>("/public/downloads");
+  },
+
+  /**
+   * Fetch customer support centers and warranty policies
+   */
+  async getSupportInfo(): Promise<SupportInfoDto | null> {
+    return safeFetch<SupportInfoDto | null>("/public/support-info");
+  },
+
+  /**
+   * Fetch community social channels and ROG Elite tier perks
+   */
+  async getCommunityInfo(): Promise<CommunityInfoDto | null> {
+    return safeFetch<CommunityInfoDto | null>("/public/community-info");
+  },
+
+  /**
+   * Fetch ROG innovations and technologies
+   */
+  async getInnovations(): Promise<InnovationDto[]> {
+    return safeFetch<InnovationDto[]>("/public/innovations");
+  },
+
+  /**
+   * Fetch 4K Wallpapers
+   */
+  async getWallpapers(): Promise<WallpaperDto[]> {
+    return safeFetch<WallpaperDto[]>("/public/wallpapers");
+  },
+
+  /**
+   * Fetch About ROG stories, manifesto and pillars
+   */
+  async getAboutRog(): Promise<AboutRogDto | null> {
+    return safeFetch<AboutRogDto | null>("/public/about-rog");
+  },
+
+  /**
+   * Fetch Featured YouTube & product review videos
+   */
+  async getVideos(): Promise<VideoItemDto[]> {
+    return safeFetch<VideoItemDto[]>("/public/videos");
   },
 };

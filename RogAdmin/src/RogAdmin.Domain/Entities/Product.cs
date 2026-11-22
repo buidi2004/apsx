@@ -20,4 +20,5 @@ public class Product : BaseEntity
     // Navigation properties
     public virtual ProductPrice? Price { get; set; }
     public virtual ICollection<ProductSpec> Specs { get; set; } = new List<ProductSpec>();
+    public virtual ICollection<ProductImage> GalleryImages { get; set; } = new List<ProductImage>();
 }

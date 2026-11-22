@@ -24,7 +24,7 @@ public class ProductsController(IProductCatalogService catalogService) : Control
         [FromQuery] int pageSize = 20,
         CancellationToken ct = default)
     {
-        var result = await catalogService.GetProductsAsync(category, search, page, pageSize, ct);
+        var result = await catalogService.GetProductsAsync(category, search, page, pageSize, includeInactive: false, ct);
         return Ok(result);
     }
 
@@ -40,7 +40,7 @@ public class ProductsController(IProductCatalogService catalogService) : Control
         if (string.IsNullOrWhiteSpace(slug))
             return BadRequest(new { message = "Slug không được để trống" });
 
-        var product = await catalogService.GetProductBySlugAsync(slug, ct);
+        var product = await catalogService.GetProductBySlugAsync(slug, includeInactive: false, ct: ct);
         if (product == null)
             return NotFound(new { message = $"Không tìm thấy sản phẩm với slug: {slug}" });
 
@@ -53,7 +53,7 @@ public class ProductsController(IProductCatalogService catalogService) : Control
     /// </summary>
     [HttpGet("pricing/batch")]
     public async Task<ActionResult<List<ProductPriceDto>>> GetBatchPricing(
-        [FromQuery] string slugs,
+        [FromQuery] string? slugs,
         CancellationToken ct = default)
     {
         if (string.IsNullOrWhiteSpace(slugs))

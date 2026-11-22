@@ -211,3 +211,35 @@ export async function fetchCompareProbe() {
   );
 }
 
+export async function fetchInnovationsProbe() {
+  return fetchBackendJson<unknown[]>("/api/public/innovations");
+}
+
+export async function fetchWallpapersProbe() {
+  return fetchBackendJson<unknown[]>("/api/public/wallpapers");
+}
+
+export async function fetchAboutRogProbe() {
+  return fetchBackendJson<unknown>("/api/public/about-rog");
+}
+
+export async function fetchSupportInfoProbe() {
+  return fetchBackendJson<unknown>("/api/public/support-info");
+}
+
+export async function fetchCommunityInfoProbe() {
+  return fetchBackendJson<unknown>("/api/public/community-info");
+}
+
+export async function fetchDownloadsProbe() {
+  return fetchBackendJson<unknown[]>("/api/public/downloads");
+}
+
+export async function fetchCampaignsProbe() {
+  return fetchBackendJson<unknown[]>("/api/public/campaigns");
+}
+
+export async function fetchVideosProbe() {
+  return fetchBackendJson<unknown[]>("/api/public/videos");
+}
+

@@ -26,6 +26,20 @@ public class RogAdminDbContext(DbContextOptions<RogAdminDbContext> options)
     public DbSet<CartItem> CartItems => Set<CartItem>();
     public DbSet<NewsletterSubscriber> NewsletterSubscribers => Set<NewsletterSubscriber>();
     public DbSet<ProductReview> ProductReviews => Set<ProductReview>();
+    public DbSet<EventCampaign> Campaigns => Set<EventCampaign>();
+    public DbSet<SoftwareDownload> SoftwareDownloads => Set<SoftwareDownload>();
+    public DbSet<Order> Orders => Set<Order>();
+    public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+    public DbSet<ServiceCenter> ServiceCenters => Set<ServiceCenter>();
+    public DbSet<WarrantyPolicy> WarrantyPolicies => Set<WarrantyPolicy>();
+    public DbSet<SocialChannel> SocialChannels => Set<SocialChannel>();
+    public DbSet<EliteTierPerk> EliteTierPerks => Set<EliteTierPerk>();
+    public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+    public DbSet<Innovation> Innovations => Set<Innovation>();
+    public DbSet<Wallpaper> Wallpapers => Set<Wallpaper>();
+    public DbSet<AboutStory> AboutStories => Set<AboutStory>();
+    public DbSet<FeaturedVideo> FeaturedVideos => Set<FeaturedVideo>();
+    public DbSet<ProductImage> ProductImages => Set<ProductImage>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -193,6 +207,137 @@ public class RogAdminDbContext(DbContextOptions<RogAdminDbContext> options)
              .WithMany()
              .HasForeignKey(c => c.ProductId)
              .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Order>(e =>
+        {
+            e.ToTable("Orders");
+            e.HasIndex(o => o.OrderCode).IsUnique();
+            e.HasIndex(o => o.CustomerId);
+            e.Property(o => o.OrderCode).HasMaxLength(40).IsRequired();
+            e.Property(o => o.CustomerName).HasMaxLength(150).IsRequired();
+            e.Property(o => o.Email).HasMaxLength(150).IsRequired();
+            e.Property(o => o.Phone).HasMaxLength(30).IsRequired();
+            e.Property(o => o.Address).HasMaxLength(500).IsRequired();
+            e.Property(o => o.Note).HasMaxLength(1000);
+            e.Property(o => o.Status).HasConversion<int>();
+            e.HasMany(o => o.Items)
+             .WithOne(i => i.Order)
+             .HasForeignKey(i => i.OrderId)
+             .OnDelete(DeleteBehavior.Cascade);
+            e.HasOne<Customer>()
+             .WithMany()
+             .HasForeignKey(o => o.CustomerId)
+             .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        modelBuilder.Entity<OrderItem>(e =>
+        {
+            e.ToTable("OrderItems");
+            e.HasIndex(i => i.OrderId);
+            e.Property(i => i.ProductSlug).HasMaxLength(300).IsRequired();
+            e.Property(i => i.ProductName).HasMaxLength(300).IsRequired();
+            e.Property(i => i.SelectedSpecs).HasMaxLength(500);
+        });
+
+        modelBuilder.Entity<ServiceCenter>(e =>
+        {
+            e.ToTable("ServiceCenters");
+            e.Property(s => s.Name).HasMaxLength(200).IsRequired();
+            e.Property(s => s.City).HasMaxLength(100).IsRequired();
+            e.Property(s => s.Address).HasMaxLength(500).IsRequired();
+            e.Property(s => s.Phone).HasMaxLength(50).IsRequired();
+            e.Property(s => s.OperatingHours).HasMaxLength(200).IsRequired();
+            e.HasIndex(s => s.SortOrder);
+        });
+
+        modelBuilder.Entity<WarrantyPolicy>(e =>
+        {
+            e.ToTable("WarrantyPolicies");
+            e.Property(w => w.Title).HasMaxLength(200).IsRequired();
+            e.Property(w => w.Description).HasMaxLength(1000).IsRequired();
+            e.HasIndex(w => w.SortOrder);
+        });
+
+        modelBuilder.Entity<SocialChannel>(e =>
+        {
+            e.ToTable("SocialChannels");
+            e.Property(s => s.Name).HasMaxLength(200).IsRequired();
+            e.Property(s => s.MembersCount).HasMaxLength(100);
+            e.Property(s => s.Description).HasMaxLength(1000);
+            e.Property(s => s.Link).HasMaxLength(500).IsRequired();
+            e.Property(s => s.ButtonText).HasMaxLength(100);
+            e.HasIndex(s => s.SortOrder);
+        });
+
+        modelBuilder.Entity<EliteTierPerk>(e =>
+        {
+            e.ToTable("EliteTierPerks");
+            e.Property(t => t.Tier).HasMaxLength(50).IsRequired();
+            e.Property(t => t.PointsRange).HasMaxLength(100).IsRequired();
+            e.Property(t => t.Perk).HasMaxLength(1000).IsRequired();
+            e.HasIndex(t => t.SortOrder);
+        });
+
+        modelBuilder.Entity<AuditLog>(e =>
+        {
+            e.ToTable("AuditLogs");
+            e.Property(a => a.Username).HasMaxLength(100).IsRequired();
+            e.Property(a => a.Action).HasMaxLength(100).IsRequired();
+            e.Property(a => a.EntityName).HasMaxLength(100).IsRequired();
+            e.Property(a => a.EntityId).HasMaxLength(100);
+            e.Property(a => a.Details).HasMaxLength(2000).IsRequired();
+            e.Property(a => a.IpAddress).HasMaxLength(100);
+            e.HasIndex(a => a.CreatedAt);
+            e.HasIndex(a => a.Action);
+            e.HasIndex(a => a.Username);
+        });
+
+        modelBuilder.Entity<Innovation>(e =>
+        {
+            e.ToTable("Innovations");
+            e.Property(i => i.Tag).HasMaxLength(100).IsRequired();
+            e.Property(i => i.Title).HasMaxLength(200).IsRequired();
+            e.Property(i => i.Description).HasMaxLength(2000).IsRequired();
+            e.Property(i => i.ImageUrl).HasMaxLength(500).IsRequired();
+            e.HasIndex(i => i.SortOrder);
+        });
+
+        modelBuilder.Entity<Wallpaper>(e =>
+        {
+            e.ToTable("Wallpapers");
+            e.Property(w => w.Title).HasMaxLength(200).IsRequired();
+            e.Property(w => w.Resolution).HasMaxLength(100).IsRequired();
+            e.Property(w => w.ImageUrl).HasMaxLength(500).IsRequired();
+            e.Property(w => w.DownloadUrl).HasMaxLength(500);
+            e.HasIndex(w => w.SortOrder);
+        });
+
+        modelBuilder.Entity<AboutStory>(e =>
+        {
+            e.ToTable("AboutStories");
+            e.Property(s => s.YearTag).HasMaxLength(100).IsRequired();
+            e.Property(s => s.Heading).HasMaxLength(300).IsRequired();
+            e.Property(s => s.Content).IsRequired();
+            e.Property(s => s.ImageUrl).HasMaxLength(500);
+            e.HasIndex(s => s.SortOrder);
+        });
+
+        modelBuilder.Entity<FeaturedVideo>(e =>
+        {
+            e.ToTable("FeaturedVideos");
+            e.Property(v => v.Title).HasMaxLength(300).IsRequired();
+            e.Property(v => v.VideoUrl).HasMaxLength(500).IsRequired();
+            e.Property(v => v.ThumbnailUrl).HasMaxLength(500).IsRequired();
+            e.HasIndex(v => v.SortOrder);
+        });
+
+        modelBuilder.Entity<ProductImage>(e =>
+        {
+            e.ToTable("ProductImages");
+            e.Property(i => i.ImageUrl).HasMaxLength(500).IsRequired();
+            e.Property(i => i.Caption).HasMaxLength(200);
+            e.HasIndex(i => new { i.ProductId, i.SortOrder });
         });
     }
 }

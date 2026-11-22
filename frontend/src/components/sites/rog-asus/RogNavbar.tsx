@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import "./RogNavbar.css";
-import { RogApi } from "@/lib/api-client";
+import { RogApi, saveCustomerAuth, getCustomerUser, clearCustomerAuth, type CustomerProfileDto } from "@/lib/api-client";
+import { useCart } from "@/lib/cart";
 
 type NavItem = {
   label: string;
@@ -212,28 +213,38 @@ function UserIcon() {
 }
 
 export default function RogNavbar() {
+  const { count: cartCount, ready: cartReady } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
   const [userModalOpen, setUserModalOpen] = useState(false);
-  const [authUsername, setAuthUsername] = useState("");
+  const [authEmail, setAuthEmail] = useState("");
   const [authPassword, setAuthPassword] = useState("");
   const [authStatus, setAuthStatus] = useState<string | null>(null);
-  const [loggedInUser, setLoggedInUser] = useState<{ username: string; fullName: string; role: string } | null>(null);
+  const [loggedInUser, setLoggedInUser] = useState<CustomerProfileDto | null>(null);
+  const [megaColumns, setMegaColumns] = useState(MEGA_COLUMNS);
   const megaTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("rog_user");
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          queueMicrotask(() => {
-            setLoggedInUser(parsed);
-          });
-        } catch {
-          // ignore
+    RogApi.getSiteConfig()
+      .then((cfg) => {
+        if (cfg && (cfg as any).megaMenuJson) {
+          try {
+            const parsed = JSON.parse((cfg as any).megaMenuJson);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setMegaColumns(parsed);
+            }
+          } catch {}
         }
-      }
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    const saved = getCustomerUser();
+    if (saved) {
+      queueMicrotask(() => {
+        setLoggedInUser(saved);
+      });
     }
   }, []);
 
@@ -302,7 +313,7 @@ export default function RogNavbar() {
                 {megaOpen && (
                   <div className="rog-mega-menu" role="menu">
                     <div className="rog-mega-columns">
-                      {MEGA_COLUMNS.map((col) => (
+                      {megaColumns.map((col) => (
                         <div key={col.col} className="rog-mega-col">
                           {col.items.map((sub) => (
                             <Link
@@ -391,10 +402,33 @@ export default function RogNavbar() {
           </button>
           <Link
             className="rog-nav-icon"
-            href="/vn/store"
-            aria-label="Giỏ hàng"
+            href="/vn/cart"
+            aria-label={`Giỏ hàng${cartCount > 0 ? ` (${cartCount} sản phẩm)` : ""}`}
+            style={{ position: "relative" }}
           >
             <CartIcon />
+            {cartReady && cartCount > 0 && (
+              <span
+                aria-hidden="true"
+                style={{
+                  position: "absolute",
+                  top: "-4px",
+                  right: "-6px",
+                  minWidth: "16px",
+                  height: "16px",
+                  padding: "0 4px",
+                  borderRadius: "8px",
+                  background: "#ff0036",
+                  color: "#fff",
+                  fontSize: "10px",
+                  fontWeight: 800,
+                  lineHeight: "16px",
+                  textAlign: "center",
+                }}
+              >
+                {cartCount > 99 ? "99+" : cartCount}
+              </span>
+            )}
           </Link>
           <button
             type="button"
@@ -534,41 +568,38 @@ export default function RogNavbar() {
               <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                 <div style={{ background: "#181820", padding: "16px", borderRadius: "4px", border: "1px solid #333" }}>
                   <div style={{ fontSize: "12px", color: "#888", marginBottom: "4px" }}>TÀI KHOẢN ĐANG ĐĂNG NHẬP</div>
-                  <div style={{ fontSize: "18px", fontWeight: 800, color: "#fff" }}>{loggedInUser.fullName || loggedInUser.username}</div>
-                  <div style={{ display: "inline-block", marginTop: "6px", background: "#ff0036", color: "#fff", fontSize: "11px", fontWeight: 700, padding: "2px 8px", borderRadius: "2px" }}>
-                    {loggedInUser.role === "Admin" ? "QUẢN TRỊ VIÊN HỆ THỐNG" : "ROG ELITE VIP MEMBER"}
+                  <div style={{ fontSize: "18px", fontWeight: 800, color: "#fff" }}>{loggedInUser.fullName || loggedInUser.email}</div>
+                  <div style={{ fontSize: "12px", color: "#aaa", marginTop: "2px" }}>{loggedInUser.email}</div>
+                  <div style={{ display: "inline-block", marginTop: "8px", background: "#ff0036", color: "#fff", fontSize: "11px", fontWeight: 700, padding: "2px 8px", borderRadius: "2px" }}>
+                    ROG ELITE · {loggedInUser.tier.toUpperCase()} · {loggedInUser.points} ĐIỂM
                   </div>
                 </div>
 
-                {loggedInUser.role === "Admin" && (
-                  <a
-                    href="http://localhost:5161/admin/index.html"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      background: "#222",
-                      border: "1px solid #ff0036",
-                      color: "#ff0036",
-                      textAlign: "center",
-                      padding: "12px",
-                      fontSize: "13px",
-                      fontWeight: 800,
-                      textTransform: "uppercase",
-                      letterSpacing: "1px",
-                      borderRadius: "2px",
-                      textDecoration: "none",
-                      display: "block",
-                    }}
-                  >
-                    ⚙ MỞ BẢNG QUẢN TRỊ ROGADMIN (PORT 5161) →
-                  </a>
-                )}
+                <Link
+                  href="/vn/account"
+                  onClick={() => setUserModalOpen(false)}
+                  style={{
+                    background: "#222",
+                    border: "1px solid #ff0036",
+                    color: "#ff0036",
+                    textAlign: "center",
+                    padding: "12px",
+                    fontSize: "13px",
+                    fontWeight: 800,
+                    textTransform: "uppercase",
+                    letterSpacing: "1px",
+                    borderRadius: "2px",
+                    textDecoration: "none",
+                    display: "block",
+                  }}
+                >
+                  XEM TÀI KHOẢN & ĐƠN HÀNG →
+                </Link>
 
                 <button
                   type="button"
                   onClick={() => {
-                    localStorage.removeItem("rog_user");
-                    localStorage.removeItem("rog_auth_token");
+                    clearCustomerAuth();
                     setLoggedInUser(null);
                     setAuthStatus(null);
                   }}
@@ -593,18 +624,20 @@ export default function RogNavbar() {
                   e.preventDefault();
                   setAuthStatus("Đang xác thực thông tin với máy chủ Backend...");
                   try {
-                    const data = await RogApi.login(
-                      authUsername.trim() || "admin",
-                      authPassword.trim() || "Admin@123"
+                    const data = await RogApi.customerLogin(
+                      authEmail.trim(),
+                      authPassword
                     );
-                      localStorage.setItem("rog_auth_token", data.token);
-                      localStorage.setItem("rog_user", JSON.stringify(data.user));
-                      setLoggedInUser(data.user);
-                      setAuthStatus(`✓ Đăng nhập thành công! Xin chào ${data.user.fullName || data.user.username}`);
-                      setTimeout(() => setUserModalOpen(false), 1200);
-                      return;
-                  } catch {
-                    setAuthStatus("Không thể kết nối máy chủ xác thực.");
+                    saveCustomerAuth(data);
+                    setLoggedInUser(data.user);
+                    setAuthStatus(`✓ Đăng nhập thành công! Xin chào ${data.user.fullName || data.user.email}`);
+                    setTimeout(() => setUserModalOpen(false), 1200);
+                  } catch (error) {
+                    setAuthStatus(
+                      error instanceof Error
+                        ? error.message
+                        : "Không thể kết nối máy chủ xác thực."
+                    );
                   }
                 }}
                 style={{ display: "flex", flexDirection: "column", gap: "16px" }}
@@ -617,14 +650,14 @@ export default function RogNavbar() {
 
                 <div>
                   <label style={{ display: "block", fontSize: "12px", fontWeight: 700, color: "#aaa", marginBottom: "6px" }}>
-                    Tài khoản ASUS / Username / Email
+                    Email tài khoản ROG Elite
                   </label>
                   <input
-                    type="text"
+                    type="email"
                     required
-                    value={authUsername}
-                    onChange={(e) => setAuthUsername(e.target.value)}
-                    placeholder="admin hoặc email của bạn"
+                    value={authEmail}
+                    onChange={(e) => setAuthEmail(e.target.value)}
+                    placeholder="email@example.com"
                     style={{
                       width: "100%",
                       padding: "12px 14px",
@@ -637,7 +670,7 @@ export default function RogNavbar() {
                     }}
                   />
                   <span style={{ fontSize: "11px", color: "#666", marginTop: "4px", display: "block" }}>
-                    Gợi ý tài khoản quản trị: <code>admin</code> / <code>Admin@123</code>
+                    Dùng email đã đăng ký tại trang thành viên ROG Elite.
                   </span>
                 </div>
 
@@ -668,9 +701,9 @@ export default function RogNavbar() {
                   <label style={{ display: "flex", alignItems: "center", gap: "6px", cursor: "pointer" }}>
                     <input type="checkbox" defaultChecked /> Ghi nhớ đăng nhập
                   </label>
-                  <a href="#forgot" onClick={(e) => { e.preventDefault(); alert("Vui lòng liên hệ hotline 1800 6588 để đặt lại mật khẩu."); }} style={{ color: "#ff0036", textDecoration: "none" }}>
+                  <Link href="/vn/account/forgot" onClick={() => setUserModalOpen(false)} style={{ color: "#ff0036", textDecoration: "none" }}>
                     Quên mật khẩu?
-                  </a>
+                  </Link>
                 </div>
 
                 <button
@@ -698,7 +731,7 @@ export default function RogNavbar() {
             <div style={{ marginTop: "24px", paddingTop: "20px", borderTop: "1px solid #222", textAlign: "center", fontSize: "13px", color: "#888" }}>
               Chưa có tài khoản?{" "}
               <Link
-                href="/vn/community"
+                href="/vn/account/register"
                 onClick={() => setUserModalOpen(false)}
                 style={{ color: "#ff0036", fontWeight: 700, textDecoration: "none" }}
               >

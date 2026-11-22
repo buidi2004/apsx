@@ -11,9 +11,10 @@ public interface IProductCatalogService
         string? search,
         int page = 1,
         int pageSize = 20,
+        bool includeInactive = false,
         CancellationToken ct = default);
 
-    Task<ProductDetailDto?> GetProductBySlugAsync(string slug, CancellationToken ct = default);
+    Task<ProductDetailDto?> GetProductBySlugAsync(string slug, bool includeInactive = false, CancellationToken ct = default);
 
     Task<List<ProductPriceDto>> GetBatchPricingAsync(List<string> slugs, CancellationToken ct = default);
 

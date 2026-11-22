@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
 using RogAdmin.Application.Dtos.Public;
+using RogAdmin.Application.Dtos.Reviews;
 using RogAdmin.Application.Interfaces;
 using RogAdmin.Domain.Entities;
 using RogAdmin.Domain.Enums;
@@ -18,6 +19,34 @@ public class PublicContentController(IPublicContentService service, RogAdminDbCo
 {
     public sealed record NewsletterSubscribeRequest(string Email);
     public sealed record ProductReviewRequest(string ProductSlug, string? AuthorName, string? Title, string Content, int Rating);
+
+    [HttpGet("reviews")]
+    public async Task<ActionResult<IReadOnlyList<ProductReviewDto>>> GetApprovedReviews([FromQuery] string? productSlug, CancellationToken ct)
+    {
+        var query = db.ProductReviews.AsNoTracking().Where(r => r.IsApproved);
+        if (!string.IsNullOrWhiteSpace(productSlug))
+        {
+            var trimmed = productSlug.Trim().ToLowerInvariant();
+            query = query.Where(r => r.ProductSlug.ToLower() == trimmed);
+        }
+
+        var reviews = await query
+            .OrderByDescending(r => r.CreatedAtUtc)
+            .Take(100)
+            .Select(r => new ProductReviewDto(
+                r.Id,
+                r.ProductSlug,
+                r.AuthorName,
+                r.Title,
+                r.Content,
+                r.Rating,
+                r.IsApproved,
+                r.CreatedAtUtc
+            ))
+            .ToListAsync(ct);
+
+        return Ok(reviews);
+    }
 
     [HttpPost("reviews")]
     public async Task<IActionResult> SubmitReview([FromBody] ProductReviewRequest request, CancellationToken ct)
@@ -117,4 +146,51 @@ public class PublicContentController(IPublicContentService service, RogAdminDbCo
     [HttpGet("site-config")]
     public async Task<ActionResult<PublicSiteConfigDto>> GetSiteConfig(CancellationToken ct)
         => Ok(await service.GetSiteConfigAsync(ct));
+
+    /// <summary>Danh sách chiến dịch sự kiện và khuyến mãi đang kích hoạt.</summary>
+    [HttpGet("campaigns")]
+    public async Task<IActionResult> GetPublicCampaigns(CancellationToken ct)
+    {
+        var list = await db.Campaigns
+            .AsNoTracking()
+            .Where(c => c.IsActive)
+            .OrderBy(c => c.SortOrder)
+            .Select(c => new
+            {
+                badge = c.Badge,
+                title = c.Title,
+                period = c.Period,
+                desc = c.Desc,
+                img = c.Img,
+                ctaText = c.CtaText,
+                ctaLink = c.CtaLink
+            })
+            .ToListAsync(ct);
+
+        return Ok(list);
+    }
+
+    /// <summary>Kho tải phần mềm điều khiển và driver chính thức.</summary>
+    [HttpGet("downloads")]
+    public async Task<IActionResult> GetPublicDownloads(CancellationToken ct)
+    {
+        var list = await db.SoftwareDownloads
+            .AsNoTracking()
+            .Where(d => d.IsActive)
+            .OrderBy(d => d.SortOrder)
+            .Select(d => new
+            {
+                name = d.Name,
+                version = d.Version,
+                size = d.Size,
+                desc = d.Desc,
+                featuresJson = d.FeaturesJson,
+                os = d.Os,
+                badge = d.Badge,
+                downloadUrl = d.DownloadUrl
+            })
+            .ToListAsync(ct);
+
+        return Ok(list);
+    }
 }

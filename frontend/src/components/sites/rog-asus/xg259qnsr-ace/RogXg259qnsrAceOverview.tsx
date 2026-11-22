@@ -3,6 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { RogApi } from "@/lib/api-client";
 import "./xg259-style.css";
 import { XG259_FEATURES_HTML } from "./xg259-html";
 import { initXg259Runtime } from "./xg259-runtime";
@@ -17,8 +18,15 @@ export default function RogXg259qnsrAceOverview({
   basePath?: string;
 }) {
   const [buyModalOpen, setBuyModalOpen] = useState(false);
+  const [currentPrice, setCurrentPrice] = useState(price);
 
   useEffect(() => {
+    RogApi.getBatchPricing(["monitors/23-to-24-5-inches/rog-strix-xg259qnsr-ace"]).then((res) => {
+      if (res && res.length > 0 && res[0].formattedPrice) {
+        setCurrentPrice(res[0].formattedPrice);
+      }
+    }).catch(() => {});
+
     let cleanup: (() => void) | undefined;
     initXg259Runtime().then((c) => {
       cleanup = c;
@@ -72,7 +80,7 @@ export default function RogXg259qnsrAceOverview({
           </div>
 
           <div className="rog-xg259-subbar-right">
-            <span className="rog-xg259-subbar-price">{price}</span>
+            <span className="rog-xg259-subbar-price">{currentPrice}</span>
             <button
               type="button"
               className="rog-xg259-buy-btn"
@@ -152,7 +160,7 @@ export default function RogXg259qnsrAceOverview({
               {productName}
             </h3>
             <p style={{ color: "#ff0036", fontSize: 24, fontWeight: 700, marginBottom: 20 }}>
-              {price}
+              {currentPrice}
             </p>
             <p style={{ color: "#aaaaaa", fontSize: 14, lineHeight: 1.6, marginBottom: 24 }}>
               Sản phẩm có sẵn tại ASUS Store Việt Nam và các đại lý chính hãng ủy quyền trên toàn quốc.

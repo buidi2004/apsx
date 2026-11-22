@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "./rog-asus.css";
 import RogSmoothScrollProvider from "@/components/sites/rog-asus/RogSmoothScrollProvider";
+import { CartProvider } from "@/lib/cart";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,7 +33,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
     >
       <body className="antialiased">
-        <RogSmoothScrollProvider>{children}</RogSmoothScrollProvider>
+        <RogSmoothScrollProvider>
+          <CartProvider>{children}</CartProvider>
+        </RogSmoothScrollProvider>
       </body>
     </html>
   );

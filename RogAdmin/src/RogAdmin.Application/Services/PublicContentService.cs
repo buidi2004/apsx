@@ -128,7 +128,7 @@ public class PublicContentService(
             Date = article.PublishedDate?.ToString("MMM d, yyyy", CultureInfo.InvariantCulture) ?? string.Empty,
             Image = article.ImageUrl,
             Category = article.Tag.TrimStart('/', ' ').Trim(),
-            ContentHtml = string.Empty,
+            ContentHtml = article.ContentHtml ?? string.Empty,
         };
     }
 

@@ -29,7 +29,17 @@ public class ScraperService(
         try
         {
             var target = url.StartsWith("http") ? url : $"https://rog.asus.com/vn/{url.TrimStart('/')}/";
-            var response = await Client.GetAsync(target, ct);
+
+            // Chống SSRF: chỉ cho phép cào từ domain ASUS.
+            if (!Uri.TryCreate(target, UriKind.Absolute, out var targetUri)
+                || targetUri.Scheme != Uri.UriSchemeHttps
+                || !(targetUri.Host.Equals("asus.com", StringComparison.OrdinalIgnoreCase)
+                     || targetUri.Host.EndsWith(".asus.com", StringComparison.OrdinalIgnoreCase)))
+            {
+                return new ScrapeResultDto(url, "", null, null, 0, false, "Chỉ hỗ trợ cào dữ liệu từ trang asus.com");
+            }
+
+            var response = await Client.GetAsync(targetUri, ct);
             if (!response.IsSuccessStatusCode)
             {
                 return new ScrapeResultDto(url, "", null, null, 0, false, $"Máy chủ ASUS trả về mã {response.StatusCode}");

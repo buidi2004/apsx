@@ -267,18 +267,44 @@ export default function SearchPage() {
     return () => clearTimeout(timer);
   }, [query]);
 
-  const articleEntries: SearchEntry[] = useMemo(
-    () =>
-      Object.values(ARTICLES_DATABASE).map((a) => ({
+  const [liveArticles, setLiveArticles] = useState<SearchEntry[]>([]);
+
+  useEffect(() => {
+    RogApi.getArticles("listing")
+      .then((items) => {
+        if (items && items.length > 0) {
+          const mapped: SearchEntry[] = items.map((a) => ({
+            type: "article" as const,
+            typeLabel: "BÀI VIẾT",
+            title: a.title,
+            desc: a.excerpt || "Tin tức & bài viết ROG",
+            href: a.href || `/vn/articles/${a.id || ""}`,
+            img: a.img,
+          }));
+          setLiveArticles(mapped);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const articleEntries: SearchEntry[] = useMemo(() => {
+    const map = new Map<string, SearchEntry>();
+    for (const a of Object.values(ARTICLES_DATABASE)) {
+      const href = `/vn/articles/${a.slug}`;
+      map.set(href, {
         type: "article" as const,
         typeLabel: "BÀI VIẾT",
         title: a.title,
         desc: a.lead,
-        href: `/vn/articles/${a.slug}`,
+        href,
         img: a.image,
-      })),
-    []
-  );
+      });
+    }
+    for (const live of liveArticles) {
+      map.set(live.href, live);
+    }
+    return Array.from(map.values());
+  }, [liveArticles]);
 
   const allEntries = useMemo(() => {
     const productsToUse = beProducts.length > 0 ? beProducts : BASE_PRODUCTS;

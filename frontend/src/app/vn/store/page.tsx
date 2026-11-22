@@ -8,6 +8,7 @@ import RogPromoBar from "@/components/sites/rog-asus/RogPromoBar";
 import RogFooter from "@/components/sites/rog-asus/RogFooter";
 import RogChatWidget from "@/components/sites/rog-asus/RogChatWidget";
 import { RogApi } from "@/lib/api-client";
+import { parseVnd, useCart } from "@/lib/cart";
 
 type StoreItem = {
   id: string;
@@ -247,12 +248,68 @@ const STORE_ITEMS: StoreItem[] = [
   },
 ];
 
+function mapCategory(categorySlug?: string): { cat: StoreItem["cat"]; catLabel: string } {
+  const c = (categorySlug || "").toLowerCase();
+  if (c.includes("phone")) return { cat: "phone", catLabel: "Điện Thoại Gaming" };
+  if (c.includes("handheld")) return { cat: "handheld", catLabel: "Gaming Handheld" };
+  if (c.includes("monitor")) return { cat: "monitor", catLabel: "Màn Hình" };
+  if (c.includes("gear") || c.includes("keyboard") || c.includes("mouse") || c.includes("audio")) {
+    return { cat: "gear", catLabel: "Gaming Gear" };
+  }
+  if (c.includes("motherboard") || c.includes("card") || c.includes("component")) {
+    return { cat: "component", catLabel: "Linh Kiện Gaming" };
+  }
+  return { cat: "laptop", catLabel: "Laptop Flagship" };
+}
+
 export default function StorePage() {
+  const { addLine } = useCart();
   const [items, setItems] = useState<StoreItem[]>(STORE_ITEMS);
   const [filterCat, setFilterCat] = useState<string>("all");
-  const [cartCount, setCartCount] = useState<number>(0);
+  const [cartNotice, setCartNotice] = useState<string | null>(null);
 
   useEffect(() => {
+    // 1. Fetch live products from BE Catalog
+    RogApi.getProducts({ pageSize: 100 })
+      .then((res) => {
+        if (res && res.items && res.items.length > 0) {
+          const liveItems: StoreItem[] = res.items.map((p) => {
+            const { cat, catLabel } = mapCategory(p.categorySlug);
+            const priceStr =
+              p.price > 0 ? `${p.price.toLocaleString("vi-VN")} ₫` : "Liên hệ";
+            return {
+              id: p.slug,
+              name: p.name,
+              cat,
+              catLabel,
+              price: priceStr,
+              oldPrice: p.oldPrice ? `${p.oldPrice.toLocaleString("vi-VN")} ₫` : undefined,
+              specs: p.tagline || p.modelCode || p.name,
+              img: p.thumbnailUrl || "/sites/rog-asus/img/hot/strix-scar-18.webp",
+              href: p.basePath.startsWith("/vn/") ? p.basePath : `/vn/${p.basePath}`,
+              stock: p.stockStatus !== 1,
+            };
+          });
+
+          // Merge: prioritize live products, keep unique by href or id
+          setItems((prev) => {
+            const merged = [...liveItems];
+            const liveHrefs = new Set(liveItems.map((i) => i.href.replace("/vn/", "")));
+            for (const item of prev) {
+              const h = item.href.replace("/vn/", "");
+              if (!liveHrefs.has(h)) {
+                merged.push(item);
+              }
+            }
+            return merged;
+          });
+        }
+      })
+      .catch(() => {
+        // fallback
+      });
+
+    // 2. Fetch live batch pricing
     const slugs = STORE_ITEMS.map((i) => i.href.replace("/vn/", ""));
     RogApi.getBatchPricing(slugs).then((prices) => {
       if (prices && prices.length > 0) {
@@ -516,7 +573,24 @@ export default function StorePage() {
                   </Link>
                   <button
                     type="button"
-                    onClick={() => setCartCount((c) => c + 1)}
+                    onClick={() => {
+                      const unitPrice = parseVnd(item.price);
+                      if (unitPrice <= 0) {
+                        setCartNotice("Sản phẩm này chưa có giá bán. Vui lòng chọn sản phẩm khác.");
+                        window.setTimeout(() => setCartNotice(null), 2500);
+                        return;
+                      }
+                      addLine({
+                        slug: item.href.replace("/vn/", ""),
+                        name: item.name,
+                        image: item.img,
+                        price: unitPrice,
+                        href: item.href,
+                        selectedSpecs: item.specs,
+                      });
+                      setCartNotice(`Đã thêm "${item.name}" vào giỏ hàng.`);
+                      window.setTimeout(() => setCartNotice(null), 2500);
+                    }}
                     style={{
                       flex: 1,
                       padding: "10px",
@@ -538,7 +612,7 @@ export default function StorePage() {
           </div>
 
           {/* Cart Notice Toast */}
-          {cartCount > 0 && (
+          {cartNotice && (
             <div
               style={{
                 position: "fixed",
@@ -552,9 +626,13 @@ export default function StorePage() {
                 fontSize: "14px",
                 boxShadow: "0 10px 25px rgba(255,0,54,0.4)",
                 zIndex: 999,
+                maxWidth: "420px",
               }}
             >
-              🛒 Đã thêm vào giỏ hàng ({cartCount} sản phẩm)
+              🛒 {cartNotice}{" "}
+              <Link href="/vn/cart" style={{ color: "#fff", textDecoration: "underline" }}>
+                Xem giỏ hàng
+              </Link>
             </div>
           )}
         </div>

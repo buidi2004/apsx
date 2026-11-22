@@ -3,6 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { RogApi } from "@/lib/api-client";
 import { VideoSection, RelatedArticles, RelatedProducts, Disclaimer } from "./RogListingExtra";
 import "./RogProductHome.css";
 
@@ -941,7 +942,28 @@ export default function RogProductHome({ group }: { group: string }) {
   const data = getGroupData(group);
   const [active, setActive] = useState(0);
   const [playing, setPlaying] = useState(true);
+  const [dynamicHot, setDynamicHot] = useState<HotProduct[] | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    const catSlug = group.replace("-group", "");
+    RogApi.getProducts({ category: catSlug, pageSize: 6 })
+      .then((res) => {
+        if (res.items && res.items.length > 0) {
+          setDynamicHot(
+            res.items.map((it) => ({
+              img: it.thumbnailUrl || "/sites/rog-asus/img/hot/strix-scar-18.webp",
+              name: it.name,
+              desc: it.tagline || it.modelCode || "",
+              href: `/vn/${it.slug}`,
+            }))
+          );
+        }
+      })
+      .catch(() => {});
+  }, [group]);
+
+  const hotProducts = dynamicHot && dynamicHot.length > 0 ? dynamicHot : data.hot;
 
   const startTimer = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
@@ -1080,7 +1102,7 @@ export default function RogProductHome({ group }: { group: string }) {
           </a>
         </div>
         <div className="rog-ph-hot-grid">
-          {data.hot.map((p) => (
+          {hotProducts.map((p) => (
             <div className="rog-ph-hot-card" key={p.name}>
               {p.href.startsWith("/") ? (
                 <Link href={p.href}>

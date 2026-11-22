@@ -160,13 +160,22 @@ var app = builder.Build();
 
 // ---------- Pipeline ----------
 // Đọc X-Forwarded-For/Proto từ reverse proxy (nginx/IIS) — nếu không có,
-// đứng sau proxy sẽ bị vòng lặp redirect https và rate-limit gộp chung một IP
-app.UseForwardedHeaders(new ForwardedHeadersOptions
+// đứng sau proxy sẽ bị vòng lặp redirect https và rate-limit gộp chung một IP.
+// Chỉ tin header từ proxy trên máy nội bộ để tránh giả mạo X-Forwarded-For.
+var forwardedOptions = new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
-    KnownNetworks = { new Microsoft.AspNetCore.HttpOverrides.IPNetwork(System.Net.IPAddress.Any, 0) },
-    KnownProxies = { System.Net.IPAddress.IPv6Any },
-});
+};
+forwardedOptions.KnownProxies.Clear();
+forwardedOptions.KnownNetworks.Clear();
+forwardedOptions.KnownProxies.Add(System.Net.IPAddress.Loopback);
+forwardedOptions.KnownProxies.Add(System.Net.IPAddress.IPv6Loopback);
+// Cho phép khai báo thêm IP proxy nội bộ qua cấu hình (vd. nginx trong Docker).
+foreach (var proxy in builder.Configuration.GetSection("ReverseProxy:KnownProxies").Get<string[]>() ?? [])
+{
+    if (System.Net.IPAddress.TryParse(proxy, out var addr)) forwardedOptions.KnownProxies.Add(addr);
+}
+app.UseForwardedHeaders(forwardedOptions);
 
 if (!app.Environment.IsDevelopment())
 {
@@ -234,6 +243,36 @@ using (var scope = app.Services.CreateScope())
     if (provider.Equals("Sqlite", StringComparison.OrdinalIgnoreCase))
     {
         await db.Database.EnsureCreatedAsync();
+
+        // Bản WIP trước tạo sai bảng/cột (EventCampaigns + CreatedAtUtc/UpdatedAtUtc) làm app crash khi nâng cấp DB cũ.
+        // EventCampaigns chưa từng được seed nên xoá an toàn; SoftwareDownloads nếu sai schema và còn rỗng thì tạo lại.
+        await db.Database.ExecuteSqlRawAsync("DROP TABLE IF EXISTS EventCampaigns;");
+        var sqliteConnection = db.Database.GetDbConnection();
+        var openedHere = sqliteConnection.State != System.Data.ConnectionState.Open;
+        if (openedHere) await sqliteConnection.OpenAsync();
+        try
+        {
+            using var schemaCheck = sqliteConnection.CreateCommand();
+            schemaCheck.CommandText = """
+                SELECT CASE
+                    WHEN NOT EXISTS (SELECT 1 FROM sqlite_master WHERE type='table' AND name='SoftwareDownloads') THEN 1
+                    WHEN EXISTS (SELECT 1 FROM pragma_table_info('SoftwareDownloads') WHERE name='CreatedAt') THEN 1
+                    WHEN EXISTS (SELECT 1 FROM SoftwareDownloads) THEN 0
+                    ELSE 2
+                END
+                """;
+            var tableState = Convert.ToInt64(await schemaCheck.ExecuteScalarAsync() ?? 1L);
+            // tableState = 2: bảng tồn tại nhưng sai cột và đang rỗng -> tạo lại theo schema đúng
+            if (tableState == 2)
+            {
+                await db.Database.ExecuteSqlRawAsync("DROP TABLE SoftwareDownloads;");
+            }
+        }
+        finally
+        {
+            if (openedHere) await sqliteConnection.CloseAsync();
+        }
+
         await db.Database.ExecuteSqlRawAsync("""
             CREATE TABLE IF NOT EXISTS NewsletterSubscribers (
                 Id TEXT NOT NULL PRIMARY KEY,
@@ -254,7 +293,211 @@ using (var scope = app.Services.CreateScope())
             );
             CREATE INDEX IF NOT EXISTS IX_ProductReviews_ProductSlug
             ON ProductReviews (ProductSlug);
+            CREATE TABLE IF NOT EXISTS Campaigns (
+                Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                Badge TEXT NOT NULL,
+                Title TEXT NOT NULL,
+                Period TEXT NOT NULL,
+                Desc TEXT NOT NULL,
+                Img TEXT NOT NULL,
+                CtaText TEXT NOT NULL,
+                CtaLink TEXT NOT NULL,
+                IsActive INTEGER NOT NULL DEFAULT 1,
+                SortOrder INTEGER NOT NULL DEFAULT 0,
+                CreatedAt TEXT NOT NULL,
+                UpdatedAt TEXT
+            );
+            CREATE TABLE IF NOT EXISTS SoftwareDownloads (
+                Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                Name TEXT NOT NULL,
+                Version TEXT NOT NULL,
+                Size TEXT NOT NULL,
+                Desc TEXT NOT NULL,
+                FeaturesJson TEXT NOT NULL,
+                Os TEXT NOT NULL,
+                Badge TEXT NOT NULL,
+                DownloadUrl TEXT NOT NULL,
+                IsActive INTEGER NOT NULL DEFAULT 1,
+                SortOrder INTEGER NOT NULL DEFAULT 0,
+                CreatedAt TEXT NOT NULL,
+                UpdatedAt TEXT
+            );
+            CREATE TABLE IF NOT EXISTS Orders (
+                Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                OrderCode TEXT NOT NULL,
+                CustomerId INTEGER NULL,
+                CustomerName TEXT NOT NULL,
+                Email TEXT NOT NULL,
+                Phone TEXT NOT NULL,
+                Address TEXT NOT NULL,
+                Note TEXT NOT NULL,
+                Subtotal INTEGER NOT NULL,
+                ShippingFee INTEGER NOT NULL,
+                Total INTEGER NOT NULL,
+                Status INTEGER NOT NULL DEFAULT 0,
+                CreatedAt TEXT NOT NULL,
+                UpdatedAt TEXT NULL
+            );
+            CREATE UNIQUE INDEX IF NOT EXISTS IX_Orders_OrderCode ON Orders (OrderCode);
+            CREATE INDEX IF NOT EXISTS IX_Orders_CustomerId ON Orders (CustomerId);
+            CREATE TABLE IF NOT EXISTS OrderItems (
+                Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                OrderId INTEGER NOT NULL,
+                ProductId INTEGER NULL,
+                ProductSlug TEXT NOT NULL,
+                ProductName TEXT NOT NULL,
+                SelectedSpecs TEXT NOT NULL,
+                UnitPrice INTEGER NOT NULL,
+                Quantity INTEGER NOT NULL,
+                LineTotal INTEGER NOT NULL,
+                CreatedAt TEXT NOT NULL,
+                UpdatedAt TEXT NULL
+            );
+            CREATE INDEX IF NOT EXISTS IX_OrderItems_OrderId ON OrderItems (OrderId);
+
+            CREATE TABLE IF NOT EXISTS ServiceCenters (
+                Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                Name TEXT NOT NULL,
+                City TEXT NOT NULL,
+                Address TEXT NOT NULL,
+                Phone TEXT NOT NULL,
+                OperatingHours TEXT NOT NULL,
+                SortOrder INTEGER NOT NULL DEFAULT 0,
+                IsActive INTEGER NOT NULL DEFAULT 1,
+                CreatedAt TEXT NOT NULL,
+                UpdatedAt TEXT NULL
+            );
+            CREATE INDEX IF NOT EXISTS IX_ServiceCenters_SortOrder ON ServiceCenters (SortOrder);
+
+            CREATE TABLE IF NOT EXISTS WarrantyPolicies (
+                Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                Title TEXT NOT NULL,
+                Description TEXT NOT NULL,
+                SortOrder INTEGER NOT NULL DEFAULT 0,
+                IsActive INTEGER NOT NULL DEFAULT 1,
+                CreatedAt TEXT NOT NULL,
+                UpdatedAt TEXT NULL
+            );
+            CREATE INDEX IF NOT EXISTS IX_WarrantyPolicies_SortOrder ON WarrantyPolicies (SortOrder);
+
+            CREATE TABLE IF NOT EXISTS SocialChannels (
+                Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                Name TEXT NOT NULL,
+                MembersCount TEXT NOT NULL,
+                Description TEXT NOT NULL,
+                Link TEXT NOT NULL,
+                ButtonText TEXT NOT NULL,
+                SortOrder INTEGER NOT NULL DEFAULT 0,
+                IsActive INTEGER NOT NULL DEFAULT 1,
+                CreatedAt TEXT NOT NULL,
+                UpdatedAt TEXT NULL
+            );
+            CREATE INDEX IF NOT EXISTS IX_SocialChannels_SortOrder ON SocialChannels (SortOrder);
+
+            CREATE TABLE IF NOT EXISTS EliteTierPerks (
+                Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                Tier TEXT NOT NULL,
+                PointsRange TEXT NOT NULL,
+                Perk TEXT NOT NULL,
+                SortOrder INTEGER NOT NULL DEFAULT 0,
+                IsActive INTEGER NOT NULL DEFAULT 1,
+                CreatedAt TEXT NOT NULL,
+                UpdatedAt TEXT NULL
+            );
+            CREATE INDEX IF NOT EXISTS IX_EliteTierPerks_SortOrder ON EliteTierPerks (SortOrder);
+
+            CREATE TABLE IF NOT EXISTS AuditLogs (
+                Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                Username TEXT NOT NULL,
+                Action TEXT NOT NULL,
+                EntityName TEXT NOT NULL,
+                EntityId TEXT NULL,
+                Details TEXT NOT NULL,
+                IpAddress TEXT NULL,
+                CreatedAt TEXT NOT NULL,
+                UpdatedAt TEXT NULL
+            );
+            CREATE INDEX IF NOT EXISTS IX_AuditLogs_CreatedAt ON AuditLogs (CreatedAt);
+            CREATE INDEX IF NOT EXISTS IX_AuditLogs_Action ON AuditLogs (Action);
+            CREATE INDEX IF NOT EXISTS IX_AuditLogs_Username ON AuditLogs (Username);
+
+            CREATE TABLE IF NOT EXISTS Innovations (
+                Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                Tag TEXT NOT NULL,
+                Title TEXT NOT NULL,
+                Description TEXT NOT NULL,
+                HighlightsJson TEXT NOT NULL,
+                ImageUrl TEXT NOT NULL,
+                SortOrder INTEGER NOT NULL DEFAULT 0,
+                IsActive INTEGER NOT NULL DEFAULT 1,
+                CreatedAt TEXT NOT NULL,
+                UpdatedAt TEXT NULL
+            );
+            CREATE INDEX IF NOT EXISTS IX_Innovations_SortOrder ON Innovations (SortOrder);
+
+            CREATE TABLE IF NOT EXISTS Wallpapers (
+                Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                Title TEXT NOT NULL,
+                Resolution TEXT NOT NULL,
+                ImageUrl TEXT NOT NULL,
+                DownloadUrl TEXT NOT NULL,
+                SortOrder INTEGER NOT NULL DEFAULT 0,
+                IsActive INTEGER NOT NULL DEFAULT 1,
+                CreatedAt TEXT NOT NULL,
+                UpdatedAt TEXT NULL
+            );
+            CREATE INDEX IF NOT EXISTS IX_Wallpapers_SortOrder ON Wallpapers (SortOrder);
+
+            CREATE TABLE IF NOT EXISTS AboutStories (
+                Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                YearTag TEXT NOT NULL,
+                Heading TEXT NOT NULL,
+                Content TEXT NOT NULL,
+                ImageUrl TEXT NULL,
+                SortOrder INTEGER NOT NULL DEFAULT 0,
+                IsActive INTEGER NOT NULL DEFAULT 1,
+                CreatedAt TEXT NOT NULL,
+                UpdatedAt TEXT NULL
+            );
+            CREATE INDEX IF NOT EXISTS IX_AboutStories_SortOrder ON AboutStories (SortOrder);
+
+            CREATE TABLE IF NOT EXISTS FeaturedVideos (
+                Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                Title TEXT NOT NULL,
+                VideoUrl TEXT NOT NULL,
+                ThumbnailUrl TEXT NOT NULL,
+                IsBig INTEGER NOT NULL DEFAULT 0,
+                SortOrder INTEGER NOT NULL DEFAULT 0,
+                IsActive INTEGER NOT NULL DEFAULT 1,
+                CreatedAt TEXT NOT NULL,
+                UpdatedAt TEXT NULL
+            );
+            CREATE INDEX IF NOT EXISTS IX_FeaturedVideos_SortOrder ON FeaturedVideos (SortOrder);
+
+            CREATE TABLE IF NOT EXISTS ProductImages (
+                Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                ProductId INTEGER NOT NULL,
+                ImageUrl TEXT NOT NULL,
+                Caption TEXT NULL,
+                SortOrder INTEGER NOT NULL DEFAULT 0,
+                CreatedAt TEXT NOT NULL,
+                UpdatedAt TEXT NULL,
+                FOREIGN KEY (ProductId) REFERENCES Products (Id) ON DELETE CASCADE
+            );
+            CREATE INDEX IF NOT EXISTS IX_ProductImages_ProductId ON ProductImages (ProductId);
             """);
+
+        try
+        {
+            await db.Database.ExecuteSqlRawAsync("ALTER TABLE Articles ADD COLUMN ContentHtml TEXT NULL;");
+        }
+        catch { /* Column already exists */ }
+
+        try
+        {
+            await db.Database.ExecuteSqlRawAsync("ALTER TABLE Articles ADD COLUMN Author TEXT NULL DEFAULT 'ROG Editor';");
+        }
+        catch { /* Column already exists */ }
     }
     else
     {

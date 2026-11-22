@@ -90,6 +90,8 @@ public class ArticleService(
             Section = request.Section,
             IsBig = request.IsBig,
             OverlayText = request.OverlayText?.Trim(),
+            ContentHtml = request.ContentHtml?.Trim(),
+            Author = string.IsNullOrWhiteSpace(request.Author) ? "ROG Editor" : request.Author.Trim(),
             SortOrder = request.SortOrder,
             IsActive = request.IsActive,
         };
@@ -117,6 +119,8 @@ public class ArticleService(
         article.Section = request.Section;
         article.IsBig = request.IsBig;
         article.OverlayText = request.OverlayText?.Trim();
+        article.ContentHtml = request.ContentHtml?.Trim();
+        if (!string.IsNullOrWhiteSpace(request.Author)) article.Author = request.Author.Trim();
         article.SortOrder = request.SortOrder;
         article.IsActive = request.IsActive;
         article.UpdatedAt = DateTime.UtcNow;
@@ -178,6 +182,8 @@ public class ArticleService(
         Section = a.Section,
         IsBig = a.IsBig,
         OverlayText = a.OverlayText,
+        ContentHtml = a.ContentHtml,
+        Author = a.Author,
         SortOrder = a.SortOrder,
         IsActive = a.IsActive,
         CreatedAt = a.CreatedAt,

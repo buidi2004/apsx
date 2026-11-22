@@ -16,6 +16,8 @@ public class ArticleDto
     public ArticleSection Section { get; set; }
     public bool IsBig { get; set; }
     public string? OverlayText { get; set; }
+    public string? ContentHtml { get; set; }
+    public string? Author { get; set; }
     public int SortOrder { get; set; }
     public bool IsActive { get; set; }
     public DateTime CreatedAt { get; set; }
@@ -51,6 +53,9 @@ public class CreateArticleRequest
     [MaxLength(300, ErrorMessage = "Overlay tối đa 300 ký tự.")]
     public string? OverlayText { get; set; }
 
+    public string? ContentHtml { get; set; }
+    public string? Author { get; set; } = "ROG Editor";
+
     public int SortOrder { get; set; }
     public bool IsActive { get; set; } = true;
 }
@@ -83,6 +88,9 @@ public class UpdateArticleRequest
 
     [MaxLength(300, ErrorMessage = "Overlay tối đa 300 ký tự.")]
     public string? OverlayText { get; set; }
+
+    public string? ContentHtml { get; set; }
+    public string? Author { get; set; } = "ROG Editor";
 
     public int SortOrder { get; set; }
     public bool IsActive { get; set; } = true;

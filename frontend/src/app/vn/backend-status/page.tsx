@@ -13,6 +13,14 @@ import {
   fetchWarrantyProbe,
   fetchPricingProbe,
   fetchCompareProbe,
+  fetchInnovationsProbe,
+  fetchWallpapersProbe,
+  fetchAboutRogProbe,
+  fetchSupportInfoProbe,
+  fetchCommunityInfoProbe,
+  fetchDownloadsProbe,
+  fetchCampaignsProbe,
+  fetchVideosProbe,
 } from "@/lib/rogBackend";
 
 export const dynamic = "force-dynamic";
@@ -70,6 +78,38 @@ async function loadStatusData(): Promise<{ items: StatusItem[]; allOk: boolean }
   const t9 = Date.now();
   const comparison = await fetchCompareProbe();
   const comparisonLatency = Date.now() - t9;
+
+  const t10 = Date.now();
+  const innovations = await fetchInnovationsProbe();
+  const innovationsLatency = Date.now() - t10;
+
+  const t11 = Date.now();
+  const wallpapers = await fetchWallpapersProbe();
+  const wallpapersLatency = Date.now() - t11;
+
+  const t12 = Date.now();
+  const aboutRog = await fetchAboutRogProbe();
+  const aboutRogLatency = Date.now() - t12;
+
+  const t13 = Date.now();
+  const supportInfo = await fetchSupportInfoProbe();
+  const supportInfoLatency = Date.now() - t13;
+
+  const t14 = Date.now();
+  const communityInfo = await fetchCommunityInfoProbe();
+  const communityInfoLatency = Date.now() - t14;
+
+  const t15 = Date.now();
+  const downloads = await fetchDownloadsProbe();
+  const downloadsLatency = Date.now() - t15;
+
+  const t16 = Date.now();
+  const campaigns = await fetchCampaignsProbe();
+  const campaignsLatency = Date.now() - t16;
+
+  const t17 = Date.now();
+  const videos = await fetchVideosProbe();
+  const videosLatency = Date.now() - t17;
 
   const items: StatusItem[] = [
     {
@@ -150,6 +190,62 @@ async function loadStatusData(): Promise<{ items: StatusItem[]; allOk: boolean }
       ok: Boolean(comparison),
       latency: `${comparisonLatency}ms`,
       detail: comparison ? "Ma trận thông số mẫu trả về hợp lệ" : "Không tạo được ma trận mẫu",
+    },
+    {
+      name: "Sáng tạo & Công nghệ (/api/public/innovations)",
+      status: innovations.length > 0 ? "ĐỒNG BỘ" : "OFFLINE",
+      ok: innovations.length > 0,
+      latency: `${innovationsLatency}ms`,
+      detail: `${innovations.length} công nghệ đột phá đang đồng bộ`,
+    },
+    {
+      name: "Hình nền 4K (/api/public/wallpapers)",
+      status: wallpapers.length > 0 ? "ĐỒNG BỘ" : "OFFLINE",
+      ok: wallpapers.length > 0,
+      latency: `${wallpapersLatency}ms`,
+      detail: `${wallpapers.length} hình nền 4K đang đồng bộ`,
+    },
+    {
+      name: "Giới thiệu ROG (/api/public/about-rog)",
+      status: aboutRog ? "ĐỒNG BỘ" : "OFFLINE",
+      ok: Boolean(aboutRog),
+      latency: `${aboutRogLatency}ms`,
+      detail: aboutRog ? "Hero banner & cột mốc lịch sử đang đồng bộ" : "Không nhận được dữ liệu",
+    },
+    {
+      name: "Trung tâm & CS Bảo hành (/api/public/support-info)",
+      status: supportInfo ? "ĐỒNG BỘ" : "OFFLINE",
+      ok: Boolean(supportInfo),
+      latency: `${supportInfoLatency}ms`,
+      detail: supportInfo ? "Trung tâm tiếp nhận & chính sách hậu mãi đang đồng bộ" : "Không nhận được dữ liệu",
+    },
+    {
+      name: "Kênh MXH & ROG Elite (/api/public/community-info)",
+      status: communityInfo ? "ĐỒNG BỘ" : "OFFLINE",
+      ok: Boolean(communityInfo),
+      latency: `${communityInfoLatency}ms`,
+      detail: communityInfo ? "Kênh cộng đồng & hạng thành viên đang đồng bộ" : "Không nhận được dữ liệu",
+    },
+    {
+      name: "Kho Phần mềm (/api/public/downloads)",
+      status: downloads.length > 0 ? "ĐỒNG BỘ" : "OFFLINE",
+      ok: downloads.length > 0,
+      latency: `${downloadsLatency}ms`,
+      detail: `${downloads.length} tiện ích & driver đang đồng bộ`,
+    },
+    {
+      name: "Sự kiện & Khuyến mãi (/api/public/campaigns)",
+      status: campaigns.length > 0 ? "ĐỒNG BỘ" : "OFFLINE",
+      ok: campaigns.length > 0,
+      latency: `${campaignsLatency}ms`,
+      detail: `${campaigns.length} chiến dịch ưu đãi đang đồng bộ`,
+    },
+    {
+      name: "Video & Media (/api/public/videos)",
+      status: videos && videos.length > 0 ? "ĐỒNG BỘ" : "OFFLINE",
+      ok: Boolean(videos && videos.length > 0),
+      latency: `${videosLatency}ms`,
+      detail: videos ? `${videos.length} video sản phẩm đang đồng bộ` : "Không có video",
     },
   ];
 

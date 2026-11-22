@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import RogNavbar from "@/components/sites/rog-asus/RogNavbar";
 import RogFooter from "@/components/sites/rog-asus/RogFooter";
 import RogChatWidget from "@/components/sites/rog-asus/RogChatWidget";
+import { RogApi } from "@/lib/api-client";
+import RogCustomProductView from "./RogCustomProductView";
 
 interface Props {
   slug: string[];
@@ -158,7 +160,18 @@ export default async function RogUniversalProductOverview({ slug }: Props) {
   const data = await fetchRogPage(slugPath);
 
   if (!data) {
-    notFound();
+    let dbProduct = null;
+    try {
+      dbProduct = await RogApi.getProductItem(slugPath);
+    } catch {
+      // not in db
+    }
+
+    if (!dbProduct) {
+      notFound();
+    }
+
+    return <RogCustomProductView product={dbProduct} />;
   }
 
   return (

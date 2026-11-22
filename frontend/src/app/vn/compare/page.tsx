@@ -104,7 +104,87 @@ export default function ComparePage() {
   const [slot2, setSlot2] = useState<string>("g16");
   const [slot3, setSlot3] = useState<string>("z13");
 
+  // Helper to enrich a product with live specs from backend
+  const enrichProductSpecs = (slug: string) => {
+    RogApi.getProductItem(slug)
+      .then((detail) => {
+        if (!detail) return;
+        const findSpec = (q: string) => {
+          const s = detail.specs?.find(
+            (sp) =>
+              sp.key.toLowerCase().includes(q) ||
+              sp.group.toLowerCase().includes(q)
+          );
+          return s ? s.value : null;
+        };
+
+        const cpu = findSpec("cpu") || findSpec("vi xử lý") || findSpec("processor");
+        const gpu = findSpec("gpu") || findSpec("đồ họa") || findSpec("graphics");
+        const display = findSpec("màn hình") || findSpec("display");
+        const ram = findSpec("ram") || findSpec("bộ nhớ") || findSpec("memory");
+        const storage = findSpec("ổ cứng") || findSpec("storage") || findSpec("ssd");
+        const weight = findSpec("trọng lượng") || findSpec("weight");
+        const battery = findSpec("pin") || findSpec("battery");
+        const cooling = findSpec("tản nhiệt") || findSpec("cooling");
+
+        setDb((prev) => {
+          const cur = prev[slug];
+          if (!cur) return prev;
+          return {
+            ...prev,
+            [slug]: {
+              ...cur,
+              name: detail.name || cur.name,
+              segment: detail.tagline || cur.segment,
+              price: detail.price > 0 ? `${detail.price.toLocaleString("vi-VN")} ₫` : cur.price,
+              cpu: cpu || cur.cpu,
+              gpu: gpu || cur.gpu,
+              display: display || cur.display,
+              ram: ram || cur.ram,
+              storage: storage || cur.storage,
+              weight: weight || cur.weight,
+              battery: battery || cur.battery,
+              cooling: cooling || cur.cooling,
+            },
+          };
+        });
+      })
+      .catch(() => {});
+  };
+
   useEffect(() => {
+    // 1. Fetch live products from BE Catalog
+    RogApi.getProducts({ pageSize: 100 })
+      .then((res) => {
+        if (res && res.items && res.items.length > 0) {
+          const newEntries: Record<string, CompareProduct> = {};
+          for (const p of res.items) {
+            const key = p.slug;
+            newEntries[key] = {
+              id: key,
+              name: p.name,
+              img: p.thumbnailUrl || "/sites/rog-asus/img/detail/scar18-kv.webp",
+              segment: p.tagline || "Laptop Gaming ROG",
+              cpu: "Intel® / AMD Ryzen™ Thế hệ mới",
+              gpu: "NVIDIA® GeForce RTX™ Series",
+              display: "Màn hình ROG Nebula chuyên nghiệp",
+              ram: "DDR5 Tốc độ cao",
+              storage: "PCIe® NVMe™ SSD Tốc độ cao",
+              weight: "Tiêu chuẩn ROG",
+              thickness: "Thiết kế mỏng nhẹ khí động học",
+              cooling: "Hệ thống làm mát ROG Intelligent Cooling",
+              battery: "Pin dung lượng cao hỗ trợ sạc nhanh",
+              price:
+                p.price > 0 ? `${p.price.toLocaleString("vi-VN")} ₫` : "Liên hệ",
+              href: p.basePath.startsWith("/vn/") ? p.basePath : `/vn/${p.basePath}`,
+            };
+          }
+          setDb((prev) => ({ ...newEntries, ...prev }));
+        }
+      })
+      .catch(() => {});
+
+    // 2. Fetch live batch pricing
     const slugs = Object.values(COMPARE_DATABASE).map((p) => p.href.replace("/vn/", ""));
     RogApi.getBatchPricing(slugs).then((prices) => {
       if (prices && prices.length > 0) {
@@ -126,6 +206,18 @@ export default function ComparePage() {
       }
     });
   }, []);
+
+  useEffect(() => {
+    enrichProductSpecs(slot1);
+  }, [slot1]);
+
+  useEffect(() => {
+    enrichProductSpecs(slot2);
+  }, [slot2]);
+
+  useEffect(() => {
+    enrichProductSpecs(slot3);
+  }, [slot3]);
 
   const p1 = db[slot1] || COMPARE_DATABASE[slot1];
   const p2 = db[slot2] || COMPARE_DATABASE[slot2];

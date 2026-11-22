@@ -5,6 +5,7 @@ import RogNavbar from "@/components/sites/rog-asus/RogNavbar";
 import RogPromoBar from "@/components/sites/rog-asus/RogPromoBar";
 import RogFooter from "@/components/sites/rog-asus/RogFooter";
 import RogChatWidget from "@/components/sites/rog-asus/RogChatWidget";
+import { RogApi } from "@/lib/api-client";
 
 export const metadata: Metadata = {
   title: "Tải Xuống & Phần Mềm｜ROG - Republic of Gamers｜Việt Nam",
@@ -74,14 +75,52 @@ const SOFTWARES = [
   },
 ];
 
-const WALLPAPERS = [
+const WALLPAPERS: { title: string; res: string; img: string; downloadUrl?: string }[] = [
   { title: "ROG Zephyrus G16 Neon Cyber", res: "3840 x 2160 (4K)", img: "/sites/rog-asus/img/hero/gamescom.webp" },
   { title: "ROG SAGA — Omni Awakening", res: "3840 x 2160 (4K)", img: "/sites/rog-asus/img/hero/control-resonant.webp" },
   { title: "For Those Who Dare — Strix Edition", res: "3840 x 2160 (4K)", img: "/sites/rog-asus/img/hero/strix-scar-18.webp" },
   { title: "ROG Kojima Alliance — Z13", res: "3840 x 2160 (4K)", img: "/sites/rog-asus/img/flow/hero-kjp.webp" },
 ];
 
-export default function DownloadsPage() {
+export default async function DownloadsPage() {
+  let softwares = SOFTWARES;
+  try {
+    const live = await RogApi.getDownloads();
+    if (live && live.length > 0) {
+      softwares = live.map((d) => {
+        let features: string[] = [];
+        try {
+          features = JSON.parse(d.featuresJson);
+        } catch {
+          features = [];
+        }
+        return {
+          name: d.name,
+          version: d.version,
+          size: d.size,
+          desc: d.desc,
+          features: Array.isArray(features) ? features : [],
+          os: d.os,
+          badge: d.badge,
+          downloadUrl: d.downloadUrl,
+        };
+      });
+    }
+  } catch {}
+
+  let wallpapers = WALLPAPERS;
+  try {
+    const liveWp = await RogApi.getWallpapers();
+    if (liveWp && liveWp.length > 0) {
+      wallpapers = liveWp.map((w) => ({
+        title: w.title,
+        res: w.res,
+        img: w.img,
+        downloadUrl: w.downloadUrl || w.img,
+      }));
+    }
+  } catch {}
+
   return (
     <div className="rog-page">
       <RogNavbar />
@@ -164,7 +203,7 @@ export default function DownloadsPage() {
               marginBottom: "80px",
             }}
           >
-            {SOFTWARES.map((sw) => (
+            {softwares.map((sw) => (
               <div
                 key={sw.name}
                 style={{
@@ -287,7 +326,7 @@ export default function DownloadsPage() {
               gap: "24px",
             }}
           >
-            {WALLPAPERS.map((wp) => (
+            {wallpapers.map((wp) => (
               <div
                 key={wp.title}
                 style={{
@@ -306,7 +345,7 @@ export default function DownloadsPage() {
                   <h4 style={{ fontSize: "14px", fontWeight: 700, margin: "0 0 6px" }}>{wp.title}</h4>
                   <p style={{ fontSize: "12px", color: "#888", margin: "0 0 12px" }}>Độ phân giải: {wp.res}</p>
                   <a
-                    href={wp.img}
+                    href={wp.downloadUrl || wp.img}
                     download
                     target="_blank"
                     rel="noreferrer"

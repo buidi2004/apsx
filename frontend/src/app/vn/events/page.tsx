@@ -5,6 +5,7 @@ import RogNavbar from "@/components/sites/rog-asus/RogNavbar";
 import RogPromoBar from "@/components/sites/rog-asus/RogPromoBar";
 import RogFooter from "@/components/sites/rog-asus/RogFooter";
 import RogChatWidget from "@/components/sites/rog-asus/RogChatWidget";
+import { RogApi } from "@/lib/api-client";
 
 export const metadata: Metadata = {
   title: "Sự Kiện & Khuyến Mãi Nổi Bật｜ROG - Republic of Gamers｜Việt Nam",
@@ -42,7 +43,15 @@ const CAMPAIGNS = [
   },
 ];
 
-export default function EventsPage() {
+export default async function EventsPage() {
+  let campaigns = CAMPAIGNS;
+  try {
+    const live = await RogApi.getCampaigns();
+    if (live && live.length > 0) {
+      campaigns = live;
+    }
+  } catch {}
+
   return (
     <div className="rog-page">
       <RogNavbar />
@@ -104,7 +113,7 @@ export default function EventsPage() {
         {/* Campaign List */}
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "60px 24px 0" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: "48px" }}>
-            {CAMPAIGNS.map((c) => (
+            {campaigns.map((c) => (
               <div
                 key={c.title}
                 style={{
