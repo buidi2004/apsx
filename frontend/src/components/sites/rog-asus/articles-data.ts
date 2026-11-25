@@ -350,3 +350,8 @@ export const ARTICLES_DATABASE: Record<string, ArticleData> = {
     ],
   },
 };
+
+export const ROG_ARTICLES = Object.values(ARTICLES_DATABASE).map((a) => ({
+  ...a,
+  excerpt: a.lead,
+}));

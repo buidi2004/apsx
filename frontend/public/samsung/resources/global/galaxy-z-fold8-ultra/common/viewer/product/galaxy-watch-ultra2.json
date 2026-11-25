@@ -1,0 +1,64 @@
+{
+  "modelName": "galaxy-z-fold8-ultra",
+  "output-rendering": "sRGB",
+  "scale": 100,
+  "color": [
+    {
+      "key": "techno-violet",
+      "default": true,
+      "name": "Techno Violet",
+      "code": "#4d3852",
+      "toneMappingExposure": 1.2
+    },
+    {
+      "key": "titanium-black",
+      "name": "Titanium Black",
+      "code": "#1a1a1a",
+      "toneMappingExposure": 1.2
+    },
+    {
+      "key": "silver-shadow",
+      "name": "Silver Shadow",
+      "code": "#8c8c8c",
+      "toneMappingExposure": 1.2
+    },
+    {
+      "key": "craft-titanium",
+      "name": "Craft Titanium",
+      "code": "#595959",
+      "toneMappingExposure": 1.2
+    }
+  ],
+  "galaxy-z-fold8-ultra": {
+    "modelName": "galaxy-z-fold8-ultra",
+    "output-rendering": "sRGB",
+    "scale": 100,
+    "color": [
+      {
+        "key": "techno-violet",
+        "default": true,
+        "name": "Techno Violet",
+        "code": "#4d3852",
+        "toneMappingExposure": 1.2
+      },
+      {
+        "key": "titanium-black",
+        "name": "Titanium Black",
+        "code": "#1a1a1a",
+        "toneMappingExposure": 1.2
+      },
+      {
+        "key": "silver-shadow",
+        "name": "Silver Shadow",
+        "code": "#8c8c8c",
+        "toneMappingExposure": 1.2
+      },
+      {
+        "key": "craft-titanium",
+        "name": "Craft Titanium",
+        "code": "#595959",
+        "toneMappingExposure": 1.2
+      }
+    ]
+  }
+}

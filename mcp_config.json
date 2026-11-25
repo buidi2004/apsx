@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json.schemastore.org/mcp-server-config.json",
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"],
+      "description": "Microsoft Playwright MCP: Cross-viewport responsive testing, HAR recording, trace & video capture, getComputedStyle measurement."
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest"],
+      "description": "Chrome DevTools MCP: Direct CDP connection, Network waterfall, Coverage analysis, and CSS variables."
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "description": "Context7 MCP: Up-to-date official docs and API references for GSAP, Framer Motion, Lenis, Next.js, and Tailwind CSS."
+    },
+    "firecrawl": {
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "${FIRECRAWL_API_KEY}"
+      },
+      "description": "Firecrawl MCP: Deep JS-rendered crawl and structured JSON extraction for product specs and catalog tables."
+    },
+    "magic": {
+      "command": "npx",
+      "args": ["-y", "@21st-dev/magic@latest"],
+      "description": "21st.dev Magic MCP: Framer Motion component library, Bento Grids, Spotlight cards, and glowing borders."
+    },
+    "figma": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-figma"],
+      "env": {
+        "FIGMA_PERSONAL_ACCESS_TOKEN": "${FIGMA_PERSONAL_ACCESS_TOKEN}"
+      },
+      "description": "Figma MCP: Decodes complex DOM into clean Figma design tokens, spacing, and typography."
+    },
+    "browserbase": {
+      "command": "npx",
+      "args": ["-y", "@browserbasehq/mcp-server-browserbase"],
+      "env": {
+        "BROWSERBASE_API_KEY": "${BROWSERBASE_API_KEY}",
+        "BROWSERBASE_PROJECT_ID": "${BROWSERBASE_PROJECT_ID}"
+      },
+      "description": "Browserbase / Stagehand MCP: AI Vision + DOM automation for hover-triggered Aura lights, 360 sliders, tab switching."
+    }
+  }
+}

@@ -39,16 +39,58 @@ html.samsung-page-active {
   display: block;
 }
 
-/* Floating Navigation subbar sticks directly underneath 50px RogNavbar */
-.pd-g-floating-nav,
-.floating-navigation,
+/* Floating Navigation subbar - permanently docked directly under 50px RogNavbar */
+.pd-g-floating-nav {
+  position: relative;
+  width: 100%;
+  height: 96px;
+  display: block;
+}
+
+.floating-navigation {
+  position: relative;
+  width: 100%;
+  height: 96px;
+}
+
 .floating-navigation__wrap {
-  position: sticky !important;
+  position: fixed !important;
   top: 50px !important;
-  z-index: 40 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  height: 96px !important;
+  background-color: #000 !important;
+  color: #fff !important;
+  z-index: 100 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.floating-navigation--theme-white .floating-navigation__wrap {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  color: #000 !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.floating-navigation--theme-black .floating-navigation__wrap {
+  background-color: rgba(18, 18, 18, 0.95) !important;
+  color: #fff !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Fix any SVG collapse */
 .galaxy-z-fold8-ultra-container svg {
   display: inline-block;
+}
+
+/* Smooth scrolling for anchor jumps */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Ensure color selector buttons show pointer and active state */
+.features-colors__tab button,
+.features-colors__selector-wrap button {
+  cursor: pointer;
 }

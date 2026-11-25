@@ -40,6 +40,7 @@ public class RogAdminDbContext(DbContextOptions<RogAdminDbContext> options)
     public DbSet<AboutStory> AboutStories => Set<AboutStory>();
     public DbSet<FeaturedVideo> FeaturedVideos => Set<FeaturedVideo>();
     public DbSet<ProductImage> ProductImages => Set<ProductImage>();
+    public DbSet<Coupon> Coupons => Set<Coupon>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -59,16 +60,24 @@ public class RogAdminDbContext(DbContextOptions<RogAdminDbContext> options)
         modelBuilder.Entity<ProductReview>(e =>
         {
             e.ToTable("ProductReviews");
+            e.Property(r => r.Id).HasConversion(
+                v => v.ToString().ToLower(),
+                v => Guid.Parse(v));
             e.Property(r => r.ProductSlug).HasMaxLength(500).IsRequired();
             e.Property(r => r.AuthorName).HasMaxLength(150).IsRequired();
             e.Property(r => r.Title).HasMaxLength(300);
             e.Property(r => r.Content).IsRequired();
             e.HasIndex(r => r.ProductSlug);
+            e.HasIndex(r => new { r.ProductSlug, r.IsApproved });
+            e.HasIndex(r => new { r.IsApproved, r.CreatedAtUtc });
         });
 
         modelBuilder.Entity<NewsletterSubscriber>(e =>
         {
             e.ToTable("NewsletterSubscribers");
+            e.Property(s => s.Id).HasConversion(
+                v => v.ToString().ToLower(),
+                v => Guid.Parse(v));
             e.Property(s => s.Email).HasMaxLength(320).IsRequired();
             e.HasIndex(s => s.Email).IsUnique();
         });
@@ -164,6 +173,7 @@ public class RogAdminDbContext(DbContextOptions<RogAdminDbContext> options)
             e.Property(p => p.DiscountLabel).HasMaxLength(100);
             e.Property(p => p.StoreUrl).HasMaxLength(500);
             e.Property(p => p.StockStatus).HasConversion<int>();
+            e.HasIndex(p => p.StockStatus);
         });
 
         modelBuilder.Entity<Dealer>(e =>
@@ -214,12 +224,17 @@ public class RogAdminDbContext(DbContextOptions<RogAdminDbContext> options)
             e.ToTable("Orders");
             e.HasIndex(o => o.OrderCode).IsUnique();
             e.HasIndex(o => o.CustomerId);
+            e.HasIndex(o => new { o.Status, o.CreatedAt });
             e.Property(o => o.OrderCode).HasMaxLength(40).IsRequired();
             e.Property(o => o.CustomerName).HasMaxLength(150).IsRequired();
             e.Property(o => o.Email).HasMaxLength(150).IsRequired();
             e.Property(o => o.Phone).HasMaxLength(30).IsRequired();
             e.Property(o => o.Address).HasMaxLength(500).IsRequired();
             e.Property(o => o.Note).HasMaxLength(1000);
+            e.Property(o => o.ShippingCarrier).HasMaxLength(100);
+            e.Property(o => o.TrackingNumber).HasMaxLength(100);
+            e.Property(o => o.InternalNotes).HasMaxLength(2000);
+            e.Property(o => o.CouponCode).HasMaxLength(50);
             e.Property(o => o.Status).HasConversion<int>();
             e.HasMany(o => o.Items)
              .WithOne(i => i.Order)
@@ -338,6 +353,17 @@ public class RogAdminDbContext(DbContextOptions<RogAdminDbContext> options)
             e.Property(i => i.ImageUrl).HasMaxLength(500).IsRequired();
             e.Property(i => i.Caption).HasMaxLength(200);
             e.HasIndex(i => new { i.ProductId, i.SortOrder });
+        });
+
+        modelBuilder.Entity<Coupon>(e =>
+        {
+            e.ToTable("Coupons");
+            e.Property(c => c.Code).HasMaxLength(50).IsRequired();
+            e.Property(c => c.Title).HasMaxLength(200).IsRequired();
+            e.Property(c => c.Description).HasMaxLength(1000);
+            e.Property(c => c.DiscountType).HasConversion<int>();
+            e.HasIndex(c => c.Code).IsUnique();
+            e.HasIndex(c => c.IsActive);
         });
     }
 }

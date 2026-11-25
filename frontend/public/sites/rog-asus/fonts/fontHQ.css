@@ -1,82 +1,480 @@
+@font-face {
+  font-family: "Roboto Condensed";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/sites/rog-asus/fonts/robotocondensed-regular.ttf") format("truetype");
+}
 
 @font-face {
   font-family: "Roboto Condensed";
   font-style: normal;
-  font-weight: normal;
-  font-display: fallback;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/sites/rog-asus/fonts/robotocondensed-bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "robotocondensed";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
   src: url("/sites/rog-asus/fonts/robotocondensed-regular.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "robotocondensed";
   font-style: normal;
-  font-weight: normal;
-  font-display: fallback;
-  src: url("/sites/rog-asus/fonts/robotocondensed-regular.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+  src: url("/sites/rog-asus/fonts/robotocondensed-bold.ttf") format("truetype");
 }
-/* 
 
-/sites/rog-asus/fonts/tradegothicltpro.ttf
-/sites/rog-asus/fonts/robotocondensed-bold.ttf
-
-*/
 @font-face {
   font-family: "roboto";
   font-style: normal;
-  font-weight: normal;
-  font-display: fallback;
+  font-weight: 400;
+  font-display: swap;
   src: url("/sites/rog-asus/fonts/robotocondensed-regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/sites/rog-asus/fonts/robotocondensed-bold.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "condensed";
   font-style: normal;
-  font-weight: bold;
-  font-display: fallback;
+  font-weight: 700;
+  font-display: swap;
   src: url("/sites/rog-asus/fonts/robotocondensed-bold.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "tradegothicltpro";
   font-style: normal;
-  font-weight: normal;
-  font-display: fallback;
+  font-weight: 400;
+  font-display: swap;
   src: url("/sites/rog-asus/fonts/tradegothicltpro.ttf") format("truetype");
 }
 
+@font-face {
+  font-family: "tradegothicltpro";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/sites/rog-asus/fonts/tradegothicltpro-bold.ttf") format("truetype");
+}
 
 @font-face {
   font-family: "tradegothicltprobold";
   font-style: normal;
-  font-weight: normal;
-  font-display: fallback;
+  font-weight: 700;
+  font-display: swap;
   src: url("/sites/rog-asus/fonts/tradegothicltpro-bold.ttf") format("truetype");
 }
 
-
+@font-face {
+  font-family: "Trade Gothic LT Pro";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/sites/rog-asus/fonts/tradegothicltpro-bold.ttf") format("truetype");
+}
 
 @font-face {
   font-family: "ROGFonts-Regular";
   font-style: normal;
-  font-weight: normal;
-  font-display: fallback;
+  font-weight: 400;
+  font-display: swap;
   src: url("/sites/rog-asus/fonts/rogfonts-regular.otf") format("opentype");
 }
 
 @font-face {
-  font-family: "segoeui";
+  font-family: "SnasmW05-Regular";
   font-style: normal;
-  font-weight: normal;
-  font-display: fallback;
-  src: url("/sites/rog-asus/fonts/segoeui.woff") format("woff");
+  font-weight: 400;
+  font-display: swap;
+  src: url("/sites/rog-asus/fonts/SnasmW05-Regular.woff2") format("woff2");
 }
 
-@font-face {
-  font-family: "segoeui-bold";
-  font-style: normal;
-  font-weight: normal;
-  font-display: fallback;
-  src: url("/sites/rog-asus/fonts/Segoe-UI-Bold.woff") format("woff"),
-  url("~assets/fonts/Segoe-UI-Bold.woff") format("woff");
+/* ==========================================================================
+   AUTHENTIC ASUS ROG CARD & FILTER STYLES
+   ========================================================================== */
+
+/* 1. Card Image Hover Swap (picture 1 to picture 2) */
+.ProductResultItem__productItemImageWrapper__eeMJe {
+  position: relative !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  overflow: hidden !important;
+  width: 100% !important;
+  min-height: 236px !important;
 }
 
+.ProductResultItem__productItemImageWrapper__eeMJe picture {
+  transition: opacity 0.35s ease-in-out !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+.ProductResultItem__productItemImageWrapper__eeMJe picture:first-child {
+  opacity: 1;
+}
+
+.ProductResultItem__productItemImageWrapper__eeMJe picture:nth-child(2) {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ProductResultItem__productItemImageWrapper__eeMJe:hover picture:first-child {
+  opacity: 0 !important;
+}
+
+.ProductResultItem__productItemImageWrapper__eeMJe:hover picture:nth-child(2) {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* 2. Custom Filter Checkboxes (Authentic ASUS ROG Light Catalog Theme) */
+.FilterCheckBox__filterCheckBox__Pn\+X4 {
+  margin-bottom: 6px !important;
+  list-style: none !important;
+}
+
+.filterCheckBoxName {
+  display: flex !important;
+  align-items: center !important;
+  position: relative !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  min-height: 32px !important;
+}
+
+.filterCheckBoxName label {
+  color: #181818 !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  order: 2 !important;
+  margin-left: 10px !important;
+  line-height: 1.4 !important;
+  transition: color 0.15s ease !important;
+}
+
+.FilterCheckBox__chkBoxDisable__-t4gB .filterCheckBoxName label,
+.FilterCheckBox__chkBoxDisable__-t4gB .filterCheckBoxName p {
+  color: #999999 !important;
+  cursor: not-allowed !important;
+}
+
+.filterCheckBoxName:hover label {
+  color: #cc000e !important;
+}
+
+.FilterCheckBox__chkBoxDisable__-t4gB .filterCheckBoxName:hover label {
+  color: #999999 !important;
+}
+
+.filterCheckBoxName input[type="checkbox"] {
+  position: absolute !important;
+  opacity: 0 !important;
+  cursor: pointer !important;
+  height: 20px !important;
+  width: 20px !important;
+  left: 0 !important;
+  z-index: 2 !important;
+  margin: 0 !important;
+}
+
+.FilterCheckBox__chkBox__t1vpH {
+  width: 20px !important;
+  height: 20px !important;
+  border: 1px solid #737373 !important;
+  background: #ffffff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  order: 1 !important;
+  flex-shrink: 0 !important;
+  transition: all 0.15s ease !important;
+}
+
+.filterCheckBoxName input[type="checkbox"]:checked ~ .FilterCheckBox__chkBox__t1vpH,
+.FilterCheckBox__chkBox__t1vpH.active,
+.FilterCheckBox__chkBox__t1vpH.FilterCheckBox__active__qE00Y,
+.FilterCheckBox__chkBox__t1vpH.FilterCheckBox__chkBoxActived__n36yT {
+  background: #cc000e !important;
+  border-color: #cc000e !important;
+}
+
+.FilterCheckBox__checkIcon__-H9hv {
+  opacity: 0 !important;
+  width: 13px !important;
+  height: 11px !important;
+  transition: opacity 0.15s ease !important;
+}
+
+.filterCheckBoxName input[type="checkbox"]:checked ~ .FilterCheckBox__chkBox__t1vpH .FilterCheckBox__checkIcon__-H9hv,
+.FilterCheckBox__chkBox__t1vpH.active .FilterCheckBox__checkIcon__-H9hv,
+.FilterCheckBox__chkBox__t1vpH.FilterCheckBox__active__qE00Y .FilterCheckBox__checkIcon__-H9hv,
+.FilterCheckBox__chkBox__t1vpH.FilterCheckBox__chkBoxActived__n36yT .FilterCheckBox__checkIcon__-H9hv {
+  opacity: 1 !important;
+  fill: #ffffff !important;
+}
+
+.filterCheckBoxName p {
+  color: #666666 !important;
+  font-size: 13px !important;
+  order: 3 !important;
+  margin: 0 0 0 6px !important;
+}
+
+.FilterCheckBox__subGroupHeaderRog {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 8px 0 4px !important;
+  color: #181818 !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  text-align: left !important;
+  cursor: pointer !important;
+}
+
+.FilterCheckBox__subListRog {
+  list-style: none !important;
+  padding: 4px 0 6px 12px !important;
+  margin: 0 !important;
+}
+
+/* 2b. Active Filter Pills (TabList) & Clear All */
+.filterTabList__filterListContainer__0zk85 {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 8px !important;
+  height: auto !important;
+  min-height: 28px !important;
+}
+
+.filterTabList__filterTabRog {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: #f5f5f5 !important;
+  border: 1px solid #d4d4d4 !important;
+  color: #181818 !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+  padding: 6px 28px 6px 12px !important;
+  position: relative !important;
+  cursor: pointer !important;
+  border-radius: 2px !important;
+}
+
+.filterTabList__filterTabRog:hover {
+  border-color: #cc000e !important;
+}
+
+.filterTabList__clearAllBtnRog {
+  display: inline-flex !important;
+  align-items: center !important;
+  background: transparent !important;
+  border: 0 !important;
+  color: #cc000e !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  padding: 6px 10px !important;
+  text-decoration: underline !important;
+}
+
+.filterTabList__clearAllBtnRog:hover {
+  color: #ff0036 !important;
+}
+
+/* 2c. Card Compare Checkbox Active Highlight */
+.ProductResultItem__productCheckBox__yqNsf input:checked ~ .ProductResultItem__checkBoxIcon__zArFs,
+.ProductResultItem__productCheckBox__yqNsf label.ProductResultItem__isCheck__YYlKd ~ .ProductResultItem__checkBoxIcon__zArFs {
+  background-color: #cc000e !important;
+  border-color: #cc000e !important;
+  opacity: 1 !important;
+}
+
+.ProductResultItem__productCheckBox__yqNsf label.ProductResultItem__isCheck__YYlKd:before {
+  background-color: #cc000e !important;
+  border-color: #cc000e !important;
+}
+
+/* 2d. Sort Dropdown Menu Surface on Light Canvas */
+.ProductResultSort__sortList__cBS6q {
+  background: #ffffff !important;
+  border: 1px solid #dcdcdc !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12) !important;
+  z-index: 60 !important;
+}
+
+.ProductResultSort__listSortItem__P2DMn button {
+  color: #181818 !important;
+}
+
+.ProductResultSort__listSortItem__P2DMn.ProductResultSort__active__AP-\+F button span {
+  color: #cc000e !important;
+  font-weight: 700 !important;
+}
+
+/* 3. Authentic ASUS ROG Load More Button Hover */
+.ProductResult__loadMoreButtonWrapper__W1KMM .ButtonBorderRed__btnBorderRed__zkcIA:hover,
+.SeriesHome__loadMoreButtonWrapper__ktKLE .ButtonBorderRed__btnBorderRed__zkcIA:hover,
+.ButtonBorderRed__btnBorderRed__zkcIA:hover {
+  background-color: #ff0036 !important;
+  color: #ffffff !important;
+}
+
+.ProductResult__loadMoreButtonWrapper__W1KMM .ButtonBorderRed__btnBorderRed__zkcIA:hover .buttonName,
+.ProductResult__loadMoreButtonWrapper__W1KMM .ButtonBorderRed__btnBorderRed__zkcIA:hover span,
+.SeriesHome__loadMoreButtonWrapper__ktKLE .ButtonBorderRed__btnBorderRed__zkcIA:hover span,
+.ButtonBorderRed__btnBorderRed__zkcIA:hover .buttonName {
+  color: #ffffff !important;
+}
+
+/* 4. Authentic ProductStatus Stock & Deal Badges on Catalog Cards */
+.ProductStatus__tagContainer__p294a.ProductStatus__isProductCard__D2l41 {
+  min-height: 40px;
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 0 16px;
+}
+
+.ProductStatus__tagBox__ImV8V {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  position: relative;
+  width: 100%;
+}
+
+.ProductStatus__stock__voZSe {
+  color: rgb(30, 100, 41) !important;
+  font-family: condensed, "Roboto Condensed", "Microsoft JhengHei", sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  position: relative !important;
+  text-transform: uppercase !important;
+  margin-bottom: 8px !important;
+  padding-left: 14px !important;
+}
+
+.ProductStatus__stock__voZSe span {
+  font-family: condensed, "Roboto Condensed", "Microsoft JhengHei", sans-serif !important;
+  color: rgb(30, 100, 41) !important;
+}
+
+.ProductStatus__stock__voZSe::before {
+  content: "" !important;
+  height: 0 !important;
+  position: absolute !important;
+  top: 2px !important;
+  left: 2px !important;
+  width: 0 !important;
+  border-color: rgb(30, 100, 41) transparent transparent !important;
+  border-style: solid !important;
+  border-width: 10px 10px 0 0 !important;
+}
+
+.ProductStatus__outStock__J0XeQ {
+  color: rgb(102, 102, 102) !important;
+  font-family: condensed, "Roboto Condensed", "Microsoft JhengHei", sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  position: relative !important;
+  text-transform: uppercase !important;
+  margin-bottom: 8px !important;
+  padding-left: 14px !important;
+}
+
+.ProductStatus__outStock__J0XeQ::before {
+  content: "" !important;
+  height: 0 !important;
+  position: absolute !important;
+  top: 2px !important;
+  left: 0 !important;
+  width: 0 !important;
+  border-color: rgb(102, 102, 102) transparent transparent !important;
+  border-style: solid !important;
+  border-width: 10px 10px 0 0 !important;
+}
+
+.ProductStatus__tagName__aGXQy {
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.ProductStatus__tagName__aGXQy span {
+  color: rgb(51, 51, 51) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+}
+
+.ProductStatus__tagNameBorder__Ljm-m {
+  font-size: 12px !important;
+  height: 23px !important;
+  line-height: 9px !important;
+  position: relative !important;
+  border: 1px solid rgb(51, 51, 51) !important;
+  margin-bottom: 4px !important;
+  margin-right: 4px !important;
+  padding: 6.5px 6px !important;
+  text-align: center !important;
+}
+
+.ProductStatus__tagNameBorder__Ljm-m span {
+  position: relative !important;
+}
+
+.ProductStatus__tagNameBorder__Ljm-m::before {
+  bottom: 0 !important;
+  right: 0 !important;
+  content: "" !important;
+  height: 0 !important;
+  position: absolute !important;
+  width: 0 !important;
+  border-color: transparent transparent rgb(51, 51, 51) !important;
+  border-style: solid !important;
+  border-width: 0 0 6px 6px !important;
+}
+
+.ProductStatus__tagNameBorder__Ljm-m::after {
+  bottom: -3px !important;
+  right: -3px !important;
+  content: "" !important;
+  height: 0 !important;
+  position: absolute !important;
+  width: 0 !important;
+  z-index: 2 !important;
+  border-color: transparent transparent rgb(255, 255, 255) !important;
+  border-style: solid !important;
+  border-width: 0 0 11px 11px !important;
+}

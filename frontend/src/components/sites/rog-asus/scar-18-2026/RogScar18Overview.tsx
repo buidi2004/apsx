@@ -23,6 +23,7 @@ export default function RogScar18Overview({
   const router = useRouter();
   const { addLine } = useCart();
   const slug = basePath.replace(/^\/vn\//, "");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [currentVideoTitle, setCurrentVideoTitle] = useState("ROG Strix Flagship Review");
@@ -134,6 +135,14 @@ export default function RogScar18Overview({
     faqButtons.forEach((btn) => {
       btn.addEventListener("click", handleFaqClick);
     });
+
+    // 2.5 Ensure official awards container has id="awards" for smooth scrolling
+    const awardsEl = document.querySelector<HTMLElement>(
+      ".scar18-overview-container .awardClone, .scar18-overview-container .Product__specialOverviewAward__St9uq"
+    );
+    if (awardsEl && !awardsEl.id) {
+      awardsEl.id = "awards";
+    }
 
     // 3. Smooth Anchor Menu Clicking
     const anchorLinks = document.querySelectorAll<HTMLAnchorElement>(
@@ -294,7 +303,11 @@ export default function RogScar18Overview({
       </div>
 
       {/* Sticky Subbar with 6 tabs & official price */}
-      <div className="rog-pd-subbar" style={{ position: "sticky", top: 50, zIndex: 900 }}>
+      <div
+        id="productTabBarContainer"
+        className="rog-pd-subbar productTabBarContainer ProductTabBar__productTabBarContainer__O9P3C"
+        style={{ position: "sticky", top: 50, zIndex: 999, fontSize: "16px", lineHeight: "18.4px" }}
+      >
         <div className="rog-pd-subbar-inner">
           <div className="rog-pd-subbar-left">
             <img
@@ -310,24 +323,27 @@ export default function RogScar18Overview({
               href={basePath}
               className="rog-pd-tab-link is-active"
             >
-              Tính năng (Xem thêm)
+              Tính năng
             </Link>
             <Link
               href={`${basePath}/spec`}
               className="rog-pd-tab-link"
             >
-              Chi tiết / Thông số kỹ thuật
+              Thông số kỹ thuật
             </Link>
-            <a href="#awardClone" className="rog-pd-tab-link">
+            <Link
+              href={`${basePath}/award`}
+              className="rog-pd-tab-link"
+            >
               Giải thưởng
-            </a>
-            <a href="#performance" className="rog-pd-tab-link">
+            </Link>
+            <Link href={`${basePath}/gallery`} className="rog-pd-tab-link">
               Thư viện
-            </a>
-            <Link href="/vn/store" className="rog-pd-tab-link">
+            </Link>
+            <Link href={`${basePath}/wtb`} className="rog-pd-tab-link">
               Nơi mua
             </Link>
-            <Link href="/vn/support" className="rog-pd-tab-link">
+            <Link href={`${basePath}/helpdesk`} className="rog-pd-tab-link">
               Hỗ trợ
             </Link>
           </nav>
@@ -337,16 +353,74 @@ export default function RogScar18Overview({
               <span className="rog-pd-subbar-price-label">Giá khởi điểm ASUS estore</span>
               <span className="rog-pd-subbar-price">{currentPrice}</span>
             </div>
+            <Link
+              href={`${basePath}/spec`}
+              className="rog-pd-buy-btn"
+              style={{ background: "#ff0036", color: "#fff", textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
+            >
+              LỰA CHỌN
+            </Link>
             <button
               type="button"
-              onClick={handleBuyNow}
-              className="rog-pd-buy-btn"
-              style={{ cursor: "pointer", border: "none" }}
+              aria-label="Toggle mobile menu"
+              className="rog-pd-subbar-burger"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              MUA NGAY
+              <span>{mobileMenuOpen ? "ĐÓNG" : "MENU"}</span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ transform: mobileMenuOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s ease" }}>
+                <path d="M1 4l5 6 5-6H1z" fill="#fff" />
+              </svg>
             </button>
           </div>
         </div>
+
+        {/* Mobile dropdown drawer */}
+        {mobileMenuOpen && (
+          <div className="rog-pd-subbar-mobile-menu">
+            <Link
+              href={basePath}
+              className="rog-pd-subbar-mobile-link is-active"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Tính năng
+            </Link>
+            <Link
+              href={`${basePath}/spec`}
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Thông số kỹ thuật
+            </Link>
+            <Link
+              href={`${basePath}/award`}
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Giải thưởng
+            </Link>
+            <Link
+              href={`${basePath}/gallery`}
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Thư viện
+            </Link>
+            <Link
+              href={`${basePath}/wtb`}
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Nơi mua
+            </Link>
+            <Link
+              href={`${basePath}/helpdesk`}
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Hỗ trợ
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* 1:1 Bespoke SCAR 18 Experience Container */}

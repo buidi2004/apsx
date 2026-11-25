@@ -135,9 +135,9 @@ const GROUPS: Record<string, GroupData> = {
       },
     ],
     rel: [
-      { img: "/sites/rog-asus/img/kb/rel-1.webp", name: "ROG Gaming Keyboard", href: "/vn/external-graphics-docks/rog-xg-mobile-2025" },
-      { img: "/sites/rog-asus/img/kb/rel-2.webp", name: "ROG Gaming Keyboard", href: "/vn/keyboards/keyboards/pbt-keycaps/rog-falchion-ace-75-he" },
-      { img: "/sites/rog-asus/img/kb/rel-3.webp", name: "ROG Gaming Keyboard", href: "/vn/keyboards/keyboards/pbt-keycaps/rog-falchion-ace-75-he" },
+      { img: "/sites/rog-asus/img/kb/rel-1.webp", name: "ROG Azoth Extreme Edition 20", href: "/vn/keyboards/keyboards/pbt-keycaps/rog-azoth-extreme-edition-20" },
+      { img: "/sites/rog-asus/img/kb/rel-2.webp", name: "ROG Falchion Ace 75 HE", href: "/vn/keyboards/keyboards/pbt-keycaps/rog-falchion-ace-75-he" },
+      { img: "/sites/rog-asus/img/kb/rel-3.webp", name: "ROG Falchion Ace HFX", href: "/vn/keyboards/keyboards/compact/rog-falchion-ace-hfx" },
     ],
   },
   "monitors-group": {
@@ -205,9 +205,9 @@ const GROUPS: Record<string, GroupData> = {
         desc: "Socket AM5 cho AMD Ryzen™ 9000, dàn cấp nguồn 18+2+2 pha 110A, hai cổng USB4® 40Gbps, Wi-Fi 7, 5 khe M.2 PCIe 5.0 và PCIe Slot Q-Release Slim.",
         href: "/vn/motherboards/rog-crosshair/rog-crosshair-x870e-hero",
       },
-      { img: "/sites/rog-asus/img/mb/hot-strix-x870e-miku.webp", name: "ROG STRIX X870E-H GAMING WIFI7 HATSUNE MIKU EDITION", desc: "", href: "/vn/external-graphics-docks/rog-xg-mobile-2025" },
-      { img: "/sites/rog-asus/img/mb/hot-strix-b860i.webp", name: "ROG STRIX B860-I GAMING WIFI", desc: "", href: "/vn/motherboards/rog-maximus/rog-maximus-z890-extreme" },
-      { img: "/sites/rog-asus/img/mb/hot-strix-b860g.webp", name: "ROG STRIX B860-G GAMING WIFI", desc: "", href: "/vn/motherboards/rog-maximus/rog-maximus-z890-extreme" },
+      { img: "/sites/rog-asus/img/mb/hot-strix-x870e-miku.webp", name: "ROG STRIX X870E-H GAMING WIFI7 HATSUNE MIKU EDITION", desc: "", href: "/vn/motherboards/rog-strix/rog-strix-x870e-h-gaming-wifi7-hatsune-miku-edition" },
+      { img: "/sites/rog-asus/img/mb/hot-strix-b860i.webp", name: "ROG STRIX B860-I GAMING WIFI", desc: "", href: "/vn/motherboards/rog-strix/rog-strix-b860-i-gaming-wifi" },
+      { img: "/sites/rog-asus/img/mb/hot-strix-b860g.webp", name: "ROG STRIX B860-G GAMING WIFI", desc: "", href: "/vn/motherboards/rog-strix/rog-strix-b860-g-gaming-wifi" },
     ],
     rel: [
       { img: "/sites/rog-asus/img/relprod/xg-mobile.webp", name: "ROG XG Mobile (2025)", href: "/vn/external-graphics-docks/rog-xg-mobile-2025/" },
@@ -231,10 +231,10 @@ const GROUPS: Record<string, GroupData> = {
       { img: "/sites/rog-asus/img/vga/big-3.webp" },
     ],
     hot: [
-      { img: "/sites/rog-asus/img/vga/hot-strix-5070.webp", name: "ROG Strix GeForce RTX™ 5070 12GB GDDR7 OC Edition", desc: "ROG Strix GeForce RTX™ 5070 OC Edition phiên bản ép xung 12GB GDDR7 với hệ thống tản nhiệt tiên tiến mang lại khả năng cấp nguồn cao cấp cho bạn.", href: "/vn/external-graphics-docks/rog-xg-mobile-2025" },
-      { img: "/sites/rog-asus/img/vga/hot-astral-5090-btf.webp", name: "ROG Astral GeForce RTX™ 5090 32GB GDDR7 BTF Edition", desc: "Card đồ họa ROG Astral GeForce RTX™ 5090 32GB GDDR7 BTF bốn quạt, với một bộ chuyển đổi GC-HPWR có thể tháo rời để tương thích với các bo mạch chủ tiêu chuẩn lẫn BTF.", href: "/vn/graphics-cards/rog-astral/rog-astral-rtx5090-o32g-gaming" },
+      { img: "/sites/rog-asus/img/vga/hot-strix-5070.webp", name: "ROG Strix GeForce RTX™ 5070 12GB GDDR7 OC Edition", desc: "ROG Strix GeForce RTX™ 5070 OC Edition phiên bản ép xung 12GB GDDR7 với hệ thống tản nhiệt tiên tiến mang lại khả năng cấp nguồn cao cấp cho bạn.", href: "/vn/graphics-cards/graphics-cards/rog-strix/rog-strix-rtx5070-o12g-gaming" },
+      { img: "/sites/rog-asus/img/vga/hot-astral-5090-btf.webp", name: "ROG Astral GeForce RTX™ 5090 32GB GDDR7 BTF Edition", desc: "Card đồ họa ROG Astral GeForce RTX™ 5090 32GB GDDR7 BTF bốn quạt, với một bộ chuyển đổi GC-HPWR có thể tháo rời để tương thích với các bo mạch chủ tiêu chuẩn lẫn BTF.", href: "/vn/graphics-cards/graphics-cards/rog-astral/rog-astral-rtx5090-32g-btf-gaming" },
       { img: "/sites/rog-asus/img/vga/hot-matrix-5090.webp", name: "ROG Matrix Platinum GeForce RTX™ 5090 - ASUS Graphics Cards 30th Anniversary Edition", desc: "Card đồ họa phiên bản kỷ niệm 30 năm ASUS: Song song BTF + 12V-2x6 cấp tới 800W, bốn quạt buồng hơi đồng, keo kim loại lỏng và Memory Defroster LN2.", href: "/vn/graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th" },
-      { img: "/sites/rog-asus/img/vga/hot-strix-5070ti.webp", name: "ROG Strix GeForce RTX™ 5070 Ti 16GB GDDR7 OC Edition", desc: "ROG Strix GeForce RTX™ 5070 Ti OC Edition 16GB GDDR7 với hệ thống tản nhiệt tiên tiến cung cấp cho bạn khả năng cấp nguồn cao cấp.", href: "/vn/graphics-cards/rog-astral/rog-astral-rtx5090-o32g-gaming" },
+      { img: "/sites/rog-asus/img/vga/hot-strix-5070ti.webp", name: "ROG Strix GeForce RTX™ 5070 Ti 16GB GDDR7 OC Edition", desc: "ROG Strix GeForce RTX™ 5070 Ti OC Edition 16GB GDDR7 với hệ thống tản nhiệt tiên tiến cung cấp cho bạn khả năng cấp nguồn cao cấp.", href: "/vn/graphics-cards/graphics-cards/rog-strix/rog-strix-rtx5070ti-o16g-gaming" },
     ],
     rel: [
       { img: "/sites/rog-asus/img/relprod/xg-mobile.webp", name: "ROG XG Mobile (2025)", href: "/vn/external-graphics-docks/rog-xg-mobile-2025/" },
@@ -250,10 +250,10 @@ const GROUPS: Record<string, GroupData> = {
       xemHref: "/vn/power-supply-units-group/allmodels",
     },
     hot: [
-      { img: "/sites/rog-asus/img/psu/hot-thor-1200.webp", name: "ROG Thor 1200W Platinum III (ROG Equalizer)", desc: "", href: "/vn/external-graphics-docks/rog-xg-mobile-2025" },
-      { img: "/sites/rog-asus/img/psu/hot-thor-1200-white.webp", name: "ROG Thor 1200W Platinum III White Edition (ROG Equalizer)", desc: "", href: "/vn/power-supply-units/rog-thor/rog-thor-1600t3-gaming" },
-      { img: "/sites/rog-asus/img/psu/hot-thor-1600-evo.webp", name: "ROG Thor 1600W Titanium III EVO (ROG Equalizer)", desc: "", href: "/vn/power-supply-units/rog-thor/rog-thor-1600t3-gaming" },
-      { img: "/sites/rog-asus/img/psu/hot-thor-3000.webp", name: "ROG Thor 3000W Titanium III Edition 20 (ROG Equalizer)", desc: "Delivers heavy-duty power, dual-voltage adaptability, along with GPU-First intelligent voltage stabilizer and a magnetic OLED display & extender for high-performance builds.", href: "/vn/power-supply-units/rog-thor/rog-thor-1600t3-gaming" },
+      { img: "/sites/rog-asus/img/psu/hot-thor-1200.webp", name: "ROG Thor 1200W Platinum III (ROG Equalizer)", desc: "", href: "/vn/power-supply-units/rog-thor/rog-thor-1200p3-gaming-e" },
+      { img: "/sites/rog-asus/img/psu/hot-thor-1200-white.webp", name: "ROG Thor 1200W Platinum III White Edition (ROG Equalizer)", desc: "", href: "/vn/power-supply-units/rog-thor/rog-thor-1200p3-white-gaming-e" },
+      { img: "/sites/rog-asus/img/psu/hot-thor-1600-evo.webp", name: "ROG Thor 1600W Titanium III EVO (ROG Equalizer)", desc: "", href: "/vn/power-supply-units/rog-thor/rog-thor-1600t3-gaming-evo" },
+      { img: "/sites/rog-asus/img/psu/hot-thor-3000.webp", name: "ROG Thor 3000W Titanium III Edition 20 (ROG Equalizer)", desc: "Delivers heavy-duty power, dual-voltage adaptability, along with GPU-First intelligent voltage stabilizer and a magnetic OLED display & extender for high-performance builds.", href: "/vn/power-supply-units/rog-thor/rog-thor-3000t3-gaming-edition-20" },
     ],
     rel: [
       { img: "/sites/rog-asus/img/relprod/xg-mobile.webp", name: "ROG XG Mobile (2025)", href: "/vn/external-graphics-docks/rog-xg-mobile-2025/" },
@@ -270,9 +270,9 @@ const GROUPS: Record<string, GroupData> = {
     },
     hot: [
       { img: "/sites/rog-asus/img/audio/hot-kithara.webp", name: "ROG Kithara Gaming Headset", desc: "Tai nghe gaming ROG Kithara với driver từ phẳng (planar magnetic) 100mm do HIFIMAN sản xuất và ROG tinh chỉnh, cấu trúc mở, micrô boom MEMS toàn dải, đầu vào kép 3,5mm.", href: "/vn/headsets-audio/headsets/3-5mm-headsets/rog-kithara/" },
-      { img: "/sites/rog-asus/img/audio/hot-delta-2-kjp.webp", name: "ROG Delta II-KJP Gaming Headset", desc: "Tai nghe gaming không dây ba chế độ kết nối với công nghệ ROG SpeedNova, màng loa 50 mm phủ titanium với cấu hình âm thanh không dây tinh chỉnh, micrô dạng boom với dải siêu rộng.", href: "/vn/external-graphics-docks/rog-xg-mobile-2025" },
-      { img: "/sites/rog-asus/img/audio/hot-pelta.webp", name: "ROG Pelta Gaming Headset", desc: "Tai nghe gaming RGB ba chế độ với công nghệ không dây ROG SpeedNova, màng loa mạ titan ROG 50 mm, chất âm không dây tinh tế, micro boom siêu rộng 10 mm, thiết kế nhẹ chỉ 309 g.", href: "/vn/headsets-audio/headsets/wireless-headsets/rog-delta-ii-kjp" },
-      { img: "/sites/rog-asus/img/audio/hot-delta-2.webp", name: "ROG Delta II", desc: "Tai nghe gaming kết nối không dây ba chế độ với công nghệ ROG SpeedNova, màng loa diaphragm phủ titanium 50 mm và âm thanh không dây được tinh chỉnh, microphone dạng boom siêu băng.", href: "/vn/headsets-audio/headsets/wireless-headsets/rog-delta-ii-kjp" },
+      { img: "/sites/rog-asus/img/audio/hot-delta-2-kjp.webp", name: "ROG Delta II-KJP Gaming Headset", desc: "Tai nghe gaming không dây ba chế độ kết nối với công nghệ ROG SpeedNova, màng loa 50 mm phủ titanium với cấu hình âm thanh không dây tinh chỉnh, micrô dạng boom với dải siêu rộng.", href: "/vn/headsets-audio/headsets/wireless-headsets/rog-delta-ii-kjp/" },
+      { img: "/sites/rog-asus/img/audio/hot-pelta.webp", name: "ROG Pelta Gaming Headset", desc: "Tai nghe gaming RGB ba chế độ với công nghệ không dây ROG SpeedNova, màng loa mạ titan ROG 50 mm, chất âm không dây tinh tế, micro boom siêu rộng 10 mm, thiết kế nhẹ chỉ 309 g.", href: "/vn/headsets-audio/headsets/usb-headsets/rog-pelta/" },
+      { img: "/sites/rog-asus/img/audio/hot-delta-2.webp", name: "ROG Delta II", desc: "Tai nghe gaming kết nối không dây ba chế độ với công nghệ ROG SpeedNova, màng loa diaphragm phủ titanium 50 mm và âm thanh không dây được tinh chỉnh, microphone dạng boom siêu băng.", href: "/vn/headsets-audio/headsets/3-5mm-headsets/rog-delta-ii/" },
     ],
     rel: [
       { img: "/sites/rog-asus/img/relprod/xg-mobile.webp", name: "ROG XG Mobile (2025)", href: "/vn/external-graphics-docks/rog-xg-mobile-2025/" },
@@ -500,7 +500,7 @@ const GROUPS: Record<string, GroupData> = {
         img: "/sites/rog-asus/img/products/may-bo-pc-gaming.webp",
         name: "ROG Strix G22CH (2025)",
         desc: "PC gaming kích thước nhỏ gọn 10L, trang bị Intel® Core™ i9-14900KF, NVIDIA® GeForce RTX™ 4070 Ti Super, tản nhiệt chất lỏng tùy chọn, thiết kế mở nắp không cần dụng cụ.",
-        href: "/vn/external-graphics-docks/rog-xg-mobile-2025",
+        href: "/vn/desktops/mini-pc/rog-nuc-2025",
       },
       {
         img: "/sites/rog-asus/img/products/may-bo-pc-gaming.webp",
@@ -740,13 +740,13 @@ const GROUPS: Record<string, GroupData> = {
         img: "/sites/rog-asus/img/products/apparel-bags-gear.webp",
         name: "Balo ROG Archer Backpack 15.6 / 17",
         desc: "Chất liệu vải Cordura 610D chống rách và chống nước, khóa kéo YKK bền bỉ, 3 ngăn đa năng chứa laptop 17 inch và máy ảnh chuyên nghiệp.",
-        href: "/vn/storage/rog-strix-arion-eva-edition-model",
+        href: "/vn/apparel-bags-gear/bags/rog-archer-backpack-17-model",
       },
       {
         img: "/sites/rog-asus/img/products/apparel-bags-gear.webp",
         name: "Balo ROG Ranger BP2701 Gaming",
         desc: "Thể tích chứa 22 lít, lớp đệm lưng êm ái thoáng khí, phản quang phản chiếu ban đêm phong cách stealth đậm chất ROG.",
-        href: "/vn/external-graphics-docks/rog-xg-mobile-2025",
+        href: "/vn/apparel-bags-gear/bags/rog-ranger-bp2701-gaming-backpack-model",
       },
       {
         img: "/sites/rog-asus/img/products/apparel-bags-gear.webp",
@@ -860,7 +860,7 @@ const GROUPS: Record<string, GroupData> = {
         img: "/sites/rog-asus/img/products/docks-chargers-cables.webp",
         name: "Củ sạc ROG 140W GaN Charger",
         desc: "Công nghệ bán dẫn GaN nhỏ hơn 30%, 3 cổng USB-C và 1 cổng USB-A, sạc cùng lúc laptop gaming ROG Zephyrus, điện thoại và máy chơi game.",
-        href: "/vn/external-graphics-docks/rog-xg-mobile-2025",
+        href: "/vn/docks-chargers-and-cables/chargers/rog-140w-usb-c-gan-charger",
       },
       {
         img: "/sites/rog-asus/img/products/docks-chargers-cables.webp",
@@ -1102,8 +1102,8 @@ export default function RogProductHome({ group }: { group: string }) {
           </a>
         </div>
         <div className="rog-ph-hot-grid">
-          {hotProducts.map((p) => (
-            <div className="rog-ph-hot-card" key={p.name}>
+          {hotProducts.map((p, idx) => (
+            <div className="rog-ph-hot-card" key={`${p.href}-${p.name}-${idx}`}>
               {p.href.startsWith("/") ? (
                 <Link href={p.href}>
                   <div className="rog-ph-hot-img">

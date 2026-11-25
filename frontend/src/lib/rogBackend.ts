@@ -156,29 +156,39 @@ export async function fetchArticles(
   }
 }
 
-async function fetchBackendJson<T>(path: string): Promise<T> {
+async function fetchBackendJson<T>(path: string): Promise<T | null> {
   try {
     const res = await fetch(`${BE_INTERNAL_URL}${path}`, {
       cache: "no-store",
       signal: AbortSignal.timeout(2000),
     });
-    if (!res.ok) throw new Error(`Backend HTTP ${res.status}`);
-    return await res.json() as T;
+    if (!res.ok) return null;
+    return (await res.json()) as T;
   } catch {
-    throw new Error(`Không thể kết nối backend: ${path}`);
+    return null;
   }
 }
 
 export async function fetchArticleDetail(slugPath: string) {
-  const slug = slugPath.replace(/^\/+|\/+$/g, "").split("/").map(encodeURIComponent).join("/");
-  return fetchBackendJson<{
-    title: string;
-    lead: string;
-    date: string;
-    image: string;
-    category: string;
-    contentHtml: string;
-  } | null>(`/api/public/articles/${slug}`);
+  try {
+    const slug = slugPath.replace(/^\/+|\/+$/g, "").split("/").map(encodeURIComponent).join("/");
+    const res = await fetch(`${BE_INTERNAL_URL}/api/public/articles/${slug}`, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(2000),
+    });
+    if (!res.ok) return null;
+    return await res.json() as {
+      title: string;
+      lead: string;
+      date: string;
+      image: string;
+      category: string;
+      contentHtml: string;
+      author?: string;
+    };
+  } catch {
+    return null;
+  }
 }
 
 export async function fetchProducts() {

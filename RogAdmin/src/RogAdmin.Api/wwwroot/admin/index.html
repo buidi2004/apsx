@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RogAdmin — Quản trị nội dung</title>
-  <link rel="stylesheet" href="admin.css?v=2" />
+  <link rel="stylesheet" href="admin.css?v=3" />
 </head>
 <body>
   <!-- ============ MÀN HÌNH ĐĂNG NHẬP ============ -->
@@ -29,6 +29,7 @@
         <a href="#dashboard" data-page="dashboard">📊 Dashboard</a>
         <a href="#reports" data-page="reports">📈 Báo cáo Thống kê</a>
         <a href="#orders" data-page="orders">📦 Quản lý Đơn hàng</a>
+        <a href="#coupons" data-page="coupons">🏷️ Mã giảm giá / Voucher</a>
         <a href="#products" data-page="products">💰 Sản phẩm & Giá</a>
         <a href="#dealers" data-page="dealers">🏪 Hệ thống Đại lý</a>
         <a href="#warranty" data-page="warranty">🛡️ Hồ sơ Bảo hành</a>
@@ -54,8 +55,10 @@
       </nav>
       <div class="sidebar-footer">
         <div id="current-user" class="current-user"></div>
+        <a href="http://localhost:3000" target="_blank" class="btn btn-ghost" style="border:1px solid #00f0ff;color:#00f0ff;text-align:center;display:block;margin-bottom:8px;text-decoration:none;">🌐 Web Storefront (:3000)</a>
         <div class="sidebar-actions">
-          <button id="backup-db-btn" class="btn btn-ghost" style="border:1px solid #ff0036;color:#ff0036">💾 Sao lưu CSDL</button>
+          <button id="backup-db-btn" class="btn btn-ghost" style="border:1px solid #ff0036;color:#ff0036" data-admin-only>💾 Sao lưu CSDL</button>
+          <button id="restore-db-btn" class="btn btn-ghost" style="border:1px solid #00f0ff;color:#00f0ff">🔄 Phục hồi CSDL</button>
           <button id="change-password-btn" class="btn btn-ghost">🔑 Đổi mật khẩu</button>
           <button id="logout-btn" class="btn btn-ghost">Đăng xuất</button>
         </div>
@@ -65,7 +68,16 @@
     <main class="main">
       <!-- Dashboard -->
       <section id="page-dashboard" class="page hidden">
-        <h1>Dashboard</h1>
+        <div class="page-head" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <div>
+            <h1 style="margin:0;">Dashboard</h1>
+            <p style="color:#888;font-size:13px;margin:4px 0 0">Trung tâm điều hành và theo dõi hoạt động kinh doanh trực tiếp ROG ASUS.</p>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <a href="http://localhost:3000" target="_blank" class="btn btn-ghost" style="border:1px solid #00f0ff;color:#00f0ff;text-decoration:none;">🌐 Xem Web Storefront</a>
+            <button id="dashboard-refresh-btn" class="btn btn-primary">🔄 Làm mới số liệu</button>
+          </div>
+        </div>
         <div id="dashboard-alerts"></div>
         <div id="dashboard-stats" class="stats-grid"></div>
       </section>
@@ -169,12 +181,34 @@
         <div id="orders-pager" class="pager"></div>
       </section>
 
+      <!-- Quản lý Mã giảm giá (Coupons / Vouchers) -->
+      <section id="page-coupons" class="page hidden">
+        <div class="page-head">
+          <div>
+            <h1>Quản lý Mã giảm giá &amp; Voucher</h1>
+            <p style="color:#888;font-size:13px;margin:4px 0 0">Tạo mã khuyến mãi, thiết lập chiết khấu %, giảm tiền cố định và giới hạn sử dụng.</p>
+          </div>
+          <button id="new-coupon-btn" class="btn btn-primary">➕ Thêm mã mới</button>
+        </div>
+        <div class="filters">
+          <input id="coupon-search" type="search" placeholder="Tìm theo mã voucher (ROG2026...), tiêu đề, mô tả..." />
+          <select id="coupon-status-filter">
+            <option value="">Tất cả trạng thái</option>
+            <option value="true">Đang kích hoạt (Bật)</option>
+            <option value="false">Tạm dừng (Tắt)</option>
+          </select>
+        </div>
+        <div class="table-wrap"><table id="coupons-table"></table></div>
+        <div id="coupons-pager" class="pager"></div>
+      </section>
+
       <!-- Sản phẩm & Giá cả -->
       <section id="page-products" class="page hidden">
         <div class="page-head">
           <h1>Sản phẩm & Giá cả</h1>
           <div style="display:flex;gap:8px">
-            <button id="product-scrape-btn" class="btn btn-ghost" style="border:1px solid #ff0033;color:#ff0033">⚡ Cào máy từ ASUS</button>
+            <button id="product-scrape-btn" class="btn btn-ghost" style="border:1px solid #ff0033;color:#ff0033" data-admin-only>⚡ Cào máy từ ASUS</button>
+            <button id="product-batch-sync-btn" class="btn btn-ghost" style="border:1px solid #00f0ff;color:#00f0ff" data-admin-only>🔄 Đồng bộ hàng loạt</button>
             <button class="btn btn-primary" data-create="product">+ Thêm sản phẩm</button>
           </div>
         </div>

@@ -17,7 +17,8 @@ public record ProductListItemDto(
     StockStatus StockStatus,
     bool IsHot,
     bool IsFeatured,
-    bool IsActive
+    bool IsActive,
+    int StockQuantity = 15
 );
 
 public record ProductSpecDto(
@@ -43,7 +44,8 @@ public record ProductDetailDto(
     StockStatus StockStatus,
     string StoreUrl,
     List<ProductSpecDto> Specs,
-    List<string>? GalleryImages = null
+    List<string>? GalleryImages = null,
+    int StockQuantity = 15
 );
 
 public record ProductPriceDto(
@@ -54,7 +56,8 @@ public record ProductPriceDto(
     string DiscountLabel,
     StockStatus StockStatus,
     string FormattedPrice,
-    string? FormattedOldPrice
+    string? FormattedOldPrice,
+    int StockQuantity = 15
 );
 
 public record DealerDto(
@@ -88,7 +91,8 @@ public record UpdateProductPriceRequest(
     decimal Price,
     decimal? OldPrice = null,
     string? DiscountLabel = null,
-    StockStatus? StockStatus = null
+    StockStatus? StockStatus = null,
+    int? StockQuantity = null
 );
 
 public record CreateProductRequest(
@@ -105,7 +109,8 @@ public record CreateProductRequest(
     string? DiscountLabel = null,
     StockStatus StockStatus = StockStatus.InStock,
     bool IsHot = false,
-    bool IsFeatured = false
+    bool IsFeatured = false,
+    int StockQuantity = 15
 );
 
 public record UpdateProductRequest(

@@ -64,6 +64,7 @@ body {
   overflow: visible !important;
   overflow-x: visible !important;
   overflow-y: visible !important;
+  font-family: var(--rog-body-font);
   background: #000;
   color: #fff;
 }

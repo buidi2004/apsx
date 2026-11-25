@@ -42,6 +42,7 @@ public class PublicArticleDetailDto
     public string Image { get; set; } = string.Empty;
     public string Category { get; set; } = string.Empty;
     public string ContentHtml { get; set; } = string.Empty;
+    public string Author { get; set; } = "ROG Editor";
 }
 
 public class PublicLinkDto

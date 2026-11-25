@@ -8,5 +8,8 @@ public record ProductReviewDto(
     string Content,
     int Rating,
     bool IsApproved,
-    DateTime CreatedAtUtc
+    DateTime CreatedAtUtc,
+    string? AdminReply = null,
+    DateTime? RepliedAt = null,
+    string? RepliedBy = null
 );

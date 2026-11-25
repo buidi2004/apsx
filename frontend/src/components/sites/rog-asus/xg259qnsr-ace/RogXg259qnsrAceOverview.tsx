@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { RogApi } from "@/lib/api-client";
 import { useCart } from "@/lib/cart";
+import RogProductAwards from "@/components/sites/rog-asus/universal/RogProductAwards";
 import "./xg259-style.css";
 import { XG259_FEATURES_HTML } from "./xg259-html";
 import { initXg259Runtime } from "./xg259-runtime";
@@ -59,7 +60,11 @@ export default function RogXg259qnsrAceOverview({
       </div>
 
       {/* 1:1 Sticky Subbar */}
-      <div className="rog-xg259-subbar">
+      <div
+        id="productTabBarContainer"
+        className="rog-xg259-subbar productTabBarContainer ProductTabBar__productTabBarContainer__O9P3C"
+        style={{ position: "sticky", top: 50, zIndex: 999, fontSize: "16px", lineHeight: "18.4px" }}
+      >
         <div className="rog-xg259-subbar-inner">
           <div className="rog-xg259-subbar-left">
             <img
@@ -72,13 +77,19 @@ export default function RogXg259qnsrAceOverview({
 
           <div className="rog-xg259-subbar-center">
             <Link href={basePath} className="rog-xg259-tab active">
-              Tính năng (Xem thêm)
+              Tính năng
             </Link>
             <Link href={`${basePath}/spec`} className="rog-xg259-tab">
-              Chi tiết / Thông số kỹ thuật
+              Thông số kỹ thuật
+            </Link>
+            <Link href={`${basePath}/award`} className="rog-xg259-tab">
+              Giải thưởng
             </Link>
             <Link href={`${basePath}/gallery`} className="rog-xg259-tab">
               Thư viện
+            </Link>
+            <Link href={`${basePath}/wtb`} className="rog-xg259-tab">
+              Nơi mua
             </Link>
             <Link href={`${basePath}/helpdesk`} className="rog-xg259-tab">
               Hỗ trợ
@@ -92,7 +103,7 @@ export default function RogXg259qnsrAceOverview({
               className="rog-xg259-buy-btn"
               onClick={() => setBuyModalOpen(true)}
             >
-              MUA NGAY
+              LỰA CHỌN
             </button>
           </div>
         </div>
@@ -103,6 +114,9 @@ export default function RogXg259qnsrAceOverview({
         className="rog-xg259-content-root"
         dangerouslySetInnerHTML={{ __html: XG259_FEATURES_HTML }}
       />
+
+      {/* Official Awards & Media Reviews */}
+      <RogProductAwards productName={productName} />
 
       {/* 1:1 Purchase Options Modal */}
       {buyModalOpen && (

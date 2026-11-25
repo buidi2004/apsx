@@ -424,3 +424,144 @@
     font-size: 28px;
   }
 }
+
+/* Floating Compare Dock */
+.rog-series-compare-dock {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(14, 14, 18, 0.96);
+  border-top: 2px solid var(--rog-red);
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  backdrop-filter: blur(12px);
+  padding: 14px 24px;
+  animation: slideUpDock 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpDock {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.rog-compare-dock-inner {
+  max-width: 1330px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.rog-compare-dock-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.rog-compare-dock-count {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.rog-compare-dock-count strong {
+  color: var(--rog-red);
+  font-weight: 700;
+}
+
+.rog-compare-dock-clear {
+  background: transparent;
+  border: 1px solid #444;
+  color: #bbb;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rog-compare-dock-clear:hover {
+  border-color: #ff0036;
+  color: #ff0036;
+}
+
+.rog-compare-dock-items {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.rog-compare-dock-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #1c1c24;
+  border: 1px solid #333340;
+  border-radius: 6px;
+  padding: 6px 12px 6px 8px;
+}
+
+.rog-compare-dock-item img {
+  width: 36px;
+  height: 28px;
+  object-fit: contain;
+  background: #111;
+  border-radius: 4px;
+}
+
+.rog-compare-dock-item-name {
+  color: #eee;
+  font-size: 12.5px;
+  font-weight: 600;
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rog-compare-dock-remove {
+  background: transparent;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px 4px;
+  transition: color 0.2s ease;
+}
+
+.rog-compare-dock-remove:hover {
+  color: #ff0036;
+}
+
+.rog-compare-dock-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rog-compare-dock-btn {
+  background: var(--rog-red);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 22px;
+  border-radius: 4px;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+}
+
+.rog-compare-dock-btn:hover {
+  background: #d8002e;
+}

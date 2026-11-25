@@ -41,7 +41,10 @@ public class PublicContentController(IPublicContentService service, RogAdminDbCo
                 r.Content,
                 r.Rating,
                 r.IsApproved,
-                r.CreatedAtUtc
+                r.CreatedAtUtc,
+                r.AdminReply,
+                r.RepliedAt,
+                r.RepliedBy
             ))
             .ToListAsync(ct);
 

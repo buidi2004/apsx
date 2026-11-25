@@ -22,6 +22,8 @@ const state = {
   newsletterPageSize: 20,
   ordersPage: 1,
   ordersPageSize: 15,
+  couponsPage: 1,
+  couponsPageSize: 15,
   auditLogsPage: 1,
   auditLogsPageSize: 20,
 };
@@ -42,6 +44,34 @@ function getUser() {
   }
 }
 
+function isAdminUser() {
+  const user = getUser();
+  return !!user && user.role === "Admin";
+}
+
+// Các nút/thao tác chỉ Admin được phép (server trả 403 với Editor).
+// Danh sách selector này áp dụng cho cả phần tử render động (bảng, modal...).
+const ADMIN_ONLY_ACTION_SELECTORS = [
+  "#backup-db-btn", "#restore-db-btn", "#product-scrape-btn", "#product-batch-sync-btn",
+  '[data-create="product"]',
+  "[data-delete-product]", "[data-delete-article]", "[data-delete-hero]",
+  "[data-delete-category]", "[data-delete-flink]", "[data-delete-dealer]",
+  "[data-delete-warranty]", "[data-delete-review]", "[data-delete-campaign]",
+  "[data-delete-download]", "[data-delete-innovation]", "[data-delete-wallpaper]",
+  "[data-delete-about-story]", "[data-delete-video]", "[data-delete-customer]",
+  "[data-delete-newsletter]", "[data-delete-order]", "[data-delete-center]",
+  "[data-delete-policy]", "[data-delete-channel]", "[data-delete-tier]",
+  "[data-delete-user]", "[data-delete-coupon]", "[data-reset-pwd]", "[data-reset-user]",
+];
+
+function applyRoleVisibility(root = document) {
+  const isAdmin = isAdminUser();
+  root.querySelectorAll("[data-admin-only]").forEach((el) =>
+    el.classList.toggle("hidden", !isAdmin));
+  root.querySelectorAll(ADMIN_ONLY_ACTION_SELECTORS.join(",")).forEach((el) =>
+    el.classList.toggle("hidden", !isAdmin));
+}
+
 async function api(path, options = {}) {
   const headers = { ...(options.headers || {}) };
   if (!(options.body instanceof FormData)) {
@@ -57,6 +87,15 @@ async function api(path, options = {}) {
   if (res.status === 401 && path !== "/api/auth/login") {
     logout(true);
     throw new Error("Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.");
+  }
+
+  if (res.status === 403) {
+    let message = "Bạn không có quyền thực hiện thao tác này (chỉ Admin được phép).";
+    try {
+      const body = await res.json();
+      if (body && body.message) message = body.message;
+    } catch { /* bỏ qua */ }
+    throw new Error(message);
   }
 
   if (!res.ok) {
@@ -136,15 +175,19 @@ function showApp() {
   const user = getUser();
   $("#login-screen").classList.add("hidden");
   $("#app").classList.remove("hidden");
-  // Phân quyền UI: mục [data-admin-only] chỉ hiện với Admin
-  const isAdmin = !!user && user.role === "Admin";
-  document.querySelectorAll("[data-admin-only]").forEach((el) =>
-    el.classList.toggle("hidden", !isAdmin));
+  // Phân quyền UI: ẩn mọi thao tác chỉ Admin được phép với tài khoản Editor.
+  applyRoleVisibility(document);
   if (user) {
     $("#current-user").textContent = `${user.fullName} (${user.role})`;
   }
   navigate(location.hash.replace("#", "") || "dashboard");
 }
+
+// Bảng/modal render động liên tục → theo dõi DOM để ẩn nút Admin-only ngay khi xuất hiện.
+new MutationObserver(() => applyRoleVisibility()).observe(document.body, {
+  childList: true,
+  subtree: true,
+});
 
 function logout(expired = false) {
   localStorage.removeItem(TOKEN_KEY);
@@ -184,7 +227,7 @@ $("#logout-btn").addEventListener("click", () => logout());
 /* ---------- routing ---------- */
 
 const PAGES = [
-  "dashboard", "reports", "orders", "products", "dealers", "warranty", "reviews",
+  "dashboard", "reports", "orders", "coupons", "products", "dealers", "warranty", "reviews",
   "support-centers", "community", "campaigns", "downloads", "innovations",
   "wallpapers", "about-stories", "videos", "customers", "newsletter",
   "media", "articles", "hero-slides", "product-categories",
@@ -210,6 +253,7 @@ function navigate(page) {
     dashboard: loadDashboard,
     reports: loadReports,
     orders: loadOrders,
+    coupons: loadCoupons,
     products: loadProducts,
     dealers: loadDealers,
     warranty: loadWarranty,
@@ -274,6 +318,7 @@ async function loadDashboard() {
   const cards = [
     [stats.productsTotal ?? 0, "Sản phẩm & Máy", `${stats.productsInStock ?? 0} máy đang kinh doanh`],
     [stats.ordersTotal ?? 0, "Đơn hàng", `${stats.ordersPending ?? 0} đơn chờ xác nhận`],
+    [stats.couponsTotal ?? 0, "Mã giảm giá & Voucher", "Đang lưu hành"],
     [stats.customersTotal ?? 0, "Khách hàng & Elite", "Hội viên toàn hệ thống"],
     [stats.dealersTotal ?? 0, "Đại lý phân phối", "Hệ thống toàn quốc"],
     [stats.warrantyRecordsTotal ?? 0, "Hồ sơ bảo hành", "Serial máy chính hãng"],
@@ -291,6 +336,31 @@ async function loadDashboard() {
       <div class="label">${label}</div>
       <div class="sub">${sub}</div>
     </div>`).join("");
+
+  const refreshBtn = $("#dashboard-refresh-btn");
+  if (refreshBtn && !refreshBtn.dataset.bound) {
+    refreshBtn.dataset.bound = "true";
+    refreshBtn.onclick = async () => {
+      refreshBtn.disabled = true;
+      refreshBtn.textContent = "⏳ Đang tải...";
+      try {
+        await loadDashboard();
+        toast("Đã cập nhật số liệu mới nhất!");
+      } finally {
+        refreshBtn.disabled = false;
+        refreshBtn.textContent = "🔄 Làm mới số liệu";
+      }
+    };
+  }
+
+  if (!window._dashboardPollingStarted) {
+    window._dashboardPollingStarted = true;
+    setInterval(() => {
+      if ((location.hash === "#dashboard" || !location.hash) && state.token) {
+        loadDashboard().catch(() => {});
+      }
+    }, 25000);
+  }
 }
 
 /* ---------- reports & analytics ---------- */
@@ -676,15 +746,21 @@ async function exportWarrantyReportCsv() {
 
 let modalSubmit = null;
 
-function openModal(title, fieldsHtml, onSubmit) {
+function openModal(title, fieldsHtml, onSubmit, options = {}) {
   $("#modal-title").textContent = title;
   $("#modal-form").innerHTML = fieldsHtml;
   modalSubmit = onSubmit;
+  const saveBtn = $("#modal-save");
+  saveBtn.textContent = options.saveLabel || "Lưu";
+  saveBtn.classList.toggle("hidden", !!options.hideSave);
   $("#modal").classList.remove("hidden");
 }
 
 function closeModal() {
   $("#modal").classList.add("hidden");
+  const saveBtn = $("#modal-save");
+  saveBtn.textContent = "Lưu";
+  saveBtn.classList.remove("hidden");
   modalSubmit = null;
 }
 
@@ -799,6 +875,7 @@ async function loadProducts() {
         <td><span style="font-size:11px;background:#331111;color:#ff4444;padding:2px 6px;border-radius:4px;">${escapeHtml(p.discountLabel || "—")}</span></td>
         <td>${stockBadge}</td>
         <td><div class="row-actions">
+          <a href="http://localhost:3000/vn/${encodeURIComponent(p.slug)}" target="_blank" class="btn btn-sm btn-ghost" style="border:1px solid #00f0ff;color:#00f0ff;text-decoration:none;" title="Xem sản phẩm trực tiếp trên Storefront người dùng">👁️ Web</a>
           <button class="btn btn-sm btn-primary" data-edit-product-price="${p.id}">💰 Sửa giá</button>
           <button class="btn btn-sm" data-edit-product="${p.id}">✏️ Chi tiết</button>
           <button class="btn btn-sm btn-ghost" style="border:1px solid #4a5568" data-manage-product-specs="${p.id}">⚙️ Specs</button>
@@ -852,6 +929,7 @@ function openProductPriceForm(p) {
     ${field("Giá niêm yết cũ (VNĐ)", `<input name="oldPrice" type="number" step="1000" min="0" value="${p.oldPrice || ''}" placeholder="Bỏ trống nếu không có giá cũ" />`)}
     ${field("Nhãn giảm giá / Khuyến mãi", textField("discountLabel", p.discountLabel || "", false))}
     ${field("Trạng thái kho *", selectField("stockStatus", p.stockStatus || "InStock", [["InStock", "Còn hàng"], ["OutOfStock", "Hết hàng"], ["PreOrder", "Đặt trước"]]))}
+    ${field("Số lượng tồn kho", `<input name="stockQuantity" type="number" min="0" step="1" value="${p.stockQuantity ?? 15}" />`)}
   `, async () => {
     const fd = new FormData($("#modal-form"));
     const price = Number(fd.get("price") || 0);
@@ -859,18 +937,29 @@ function openProductPriceForm(p) {
     const oldPrice = oldPriceStr ? Number(oldPriceStr) : null;
     const discountLabel = String(fd.get("discountLabel") || "").trim();
     const stockStatus = String(fd.get("stockStatus") || "InStock");
+    const stockQuantity = Number(fd.get("stockQuantity") ?? 15);
 
     await api(`/api/admin/products/${p.id}/price`, {
       method: "PUT",
-      body: JSON.stringify({ price, oldPrice, discountLabel, stockStatus }),
+      body: JSON.stringify({ price, oldPrice, discountLabel, stockStatus, stockQuantity }),
     });
     loadProducts();
     return `Đã cập nhật giá sản phẩm ${p.name} thành công.`;
   });
 }
 
-function openProductForm(prod = null) {
-  const p = prod || {};
+async function openProductForm(prod = null) {
+  let p = prod || {};
+  if (prod) {
+    try {
+      // DTO danh sách không có keyVisualUrl → lấy chi tiết để tránh lưu đè thành chuỗi rỗng.
+      const detail = await api(`/api/admin/products/${prod.id}`);
+      p = { ...prod, ...detail };
+    } catch (ex) {
+      toast(ex.message, true);
+      return;
+    }
+  }
   openModal(prod ? `Chi tiết sản phẩm #${p.id}` : "Thêm sản phẩm mới", `
     ${field("Tên sản phẩm *", textField("name", p.name || ""))}
     ${field("Đường dẫn (Slug) *", textField("slug", p.slug || "", !prod))}
@@ -964,6 +1053,7 @@ async function loadArticles() {
         <td>${a.sortOrder}</td>
         <td>${a.isActive ? '<span class="badge-on">Bật</span>' : '<span class="badge-off">Ẩn</span>'}</td>
         <td><div class="row-actions">
+          <a href="http://localhost:3000${a.href.startsWith('/') ? a.href : '/' + a.href}" target="_blank" class="btn btn-sm btn-ghost" style="border:1px solid #00f0ff;color:#00f0ff;text-decoration:none;" title="Xem bài viết trên Web Storefront">👁️ Web</a>
           <button class="btn btn-sm" data-edit-article="${a.id}">Sửa</button>
           <button class="btn btn-sm btn-danger" data-delete-article="${a.id}">Xóa</button>
         </div></td>
@@ -1562,22 +1652,78 @@ async function openGalleryModal(product) {
 
 function openScraperModal() {
   openModal("Cào sản phẩm tự động từ ASUS ROG", `
-    <p style="font-size:13px;color:#aaa;margin:0 0 12px;">Nhập đường dẫn trang sản phẩm chính thức trên ASUS ROG để tự động cào thông tin, hình ảnh và cấu hình máy vào hệ thống:</p>
-    ${field("URL trang web ASUS *", `<input name="scrapeUrl" type="url" placeholder="https://rog.asus.com/vn/laptops/..." required />`)}
+    <div style="display:flex;gap:8px;border-bottom:1px solid #282830;margin-bottom:14px;padding-bottom:8px;">
+      <button type="button" id="tab-scrape-single" class="btn btn-sm btn-primary">🔗 Cào từng URL</button>
+      <button type="button" id="tab-scrape-batch" class="btn btn-sm btn-ghost">⚡ Đồng bộ hàng loạt Flagship</button>
+    </div>
+    <div id="scrape-single-panel">
+      <p style="font-size:13px;color:#aaa;margin:0 0 12px;">Nhập đường dẫn trang sản phẩm chính thức trên ASUS ROG để tự động cào thông tin, hình ảnh và cấu hình máy vào hệ thống:</p>
+      ${field("URL trang web ASUS *", `<input name="scrapeUrl" id="scrape-url-input" type="url" placeholder="https://rog.asus.com/vn/laptops/..." />`)}
+    </div>
+    <div id="scrape-batch-panel" class="hidden">
+      <p style="font-size:13px;color:#aaa;margin:0 0 12px;">Hệ thống sẽ đồng bộ tự động cấu hình và giá các mẫu flagship ROG nổi bật từ ASUS catalog:</p>
+      <div style="background:#14161a;padding:10px 14px;border-radius:6px;border:1px solid #282830;font-size:12px;color:#cbd5e1;line-height:1.8;">
+        • ROG Zephyrus G14 / G16 / Duo 16<br/>
+        • ROG Strix SCAR 16 / SCAR 18<br/>
+        • ROG Flow Z13 / X13<br/>
+        • ROG Ally / ROG Ally X<br/>
+        • ROG Matrix GeForce RTX 5090 Platinum
+      </div>
+    </div>
   `, async () => {
-    const fd = new FormData($("#modal-form"));
-    const url = String(fd.get("scrapeUrl") || "").trim();
-    if (!url) throw new Error("Vui lòng nhập URL hợp lệ.");
+    const isBatch = !$("#scrape-batch-panel").classList.contains("hidden");
+    if (isBatch) {
+      toast("Đang đồng bộ hàng loạt Flagship ROG từ catalog ASUS...");
+      const popularSlugs = [
+        "rog-zephyrus-g16-2024",
+        "rog-zephyrus-g14-2024",
+        "rog-strix-scar-18-2024",
+        "rog-strix-scar-16-2024",
+        "rog-ally-x-2024",
+        "rog-flow-z13-2025",
+        "rog-matrix-rtx5090-p24g-gaming"
+      ];
+      const res = await api("/api/admin/scraper/batch-sync", {
+        method: "POST",
+        body: JSON.stringify({ slugs: popularSlugs })
+      });
+      loadProducts();
+      return res.message || "Đã đồng bộ hàng loạt thành công!";
+    } else {
+      const url = String($("#scrape-url-input")?.value || "").trim();
+      if (!url) throw new Error("Vui lòng nhập URL hợp lệ.");
 
-    toast("Đang tiến hành cào dữ liệu từ ASUS ROG (có thể mất 5-15 giây)...");
-    const result = await api("/api/admin/scraper/trigger", {
-      method: "POST",
-      body: JSON.stringify({ url })
-    });
+      toast("Đang tiến hành cào dữ liệu từ ASUS ROG (có thể mất 5-15 giây)...");
+      const result = await api("/api/admin/scraper/trigger", {
+        method: "POST",
+        body: JSON.stringify({ url })
+      });
 
-    loadProducts();
-    return `Cào dữ liệu thành công: Đã nhập sản phẩm "${result.productName || 'mới'}"!`;
+      loadProducts();
+      return `Cào dữ liệu thành công: Đã nhập sản phẩm "${result.productName || 'mới'}"!`;
+    }
   });
+
+  setTimeout(() => {
+    const singleBtn = $("#tab-scrape-single");
+    const batchBtn = $("#tab-scrape-batch");
+    const singlePanel = $("#scrape-single-panel");
+    const batchPanel = $("#scrape-batch-panel");
+    if (singleBtn && batchBtn) {
+      singleBtn.onclick = () => {
+        singlePanel.classList.remove("hidden");
+        batchPanel.classList.add("hidden");
+        singleBtn.className = "btn btn-sm btn-primary";
+        batchBtn.className = "btn btn-sm btn-ghost";
+      };
+      batchBtn.onclick = () => {
+        singlePanel.classList.add("hidden");
+        batchPanel.classList.remove("hidden");
+        singleBtn.className = "btn btn-sm btn-ghost";
+        batchBtn.className = "btn btn-sm btn-primary";
+      };
+    }
+  }, 50);
 }
 
 /* ---------- 1. Dealers (Đại lý) ---------- */
@@ -1767,13 +1913,19 @@ async function loadReviews() {
         <td><code>${escapeHtml(r.productSlug)}</code></td>
         <td><strong>${escapeHtml(r.authorName || 'Khách ROG')}</strong></td>
         <td>${stars}</td>
-        <td style="max-width:320px;">
+        <td style="max-width:340px;">
           ${r.title ? `<strong style="display:block;margin-bottom:2px;">${escapeHtml(r.title)}</strong>` : ''}
           <span style="font-size:12px;color:#ccc;">${escapeHtml(r.content)}</span>
+          ${r.adminReply ? `
+            <div class="admin-reply-box">
+              <strong>ASUS ROG:</strong> ${escapeHtml(r.adminReply)}
+              <br/><small style="color:#888;">${formatDateTime(r.repliedAt)} · ${escapeHtml(r.repliedBy || 'Admin')}</small>
+            </div>` : ''}
         </td>
         <td>${formatDate(r.createdAtUtc)}</td>
         <td>${r.isApproved ? '<span class="badge-approved">Đã duyệt</span>' : '<span class="badge-pending">Chờ duyệt</span>'}</td>
         <td><div class="row-actions">
+          <button class="btn btn-sm btn-ghost" style="border:1px solid #00f0ff;color:#00f0ff" data-reply-review="${r.id}">💬 ${r.adminReply ? 'Sửa đáp' : 'Phản hồi'}</button>
           ${!r.isApproved ? `<button class="btn btn-sm btn-primary" data-approve-review="${r.id}">✅ Duyệt</button>` : `<button class="btn btn-sm btn-ghost" data-reject-review="${r.id}">❌ Hạ</button>`}
           <button class="btn btn-sm btn-danger" data-delete-review="${r.id}">Xóa</button>
         </div></td>
@@ -1787,6 +1939,12 @@ async function loadReviews() {
     <button class="btn btn-sm" id="reviews-next" ${result.page >= result.totalPages ? "disabled" : ""}>Sau ›</button>`;
   $("#reviews-prev").onclick = () => { state.reviewsPage--; loadReviews(); };
   $("#reviews-next").onclick = () => { state.reviewsPage++; loadReviews(); };
+
+  document.querySelectorAll("[data-reply-review]").forEach((btn) => {
+    const id = btn.dataset.replyReview;
+    const item = result.items.find((r) => r.id === id);
+    btn.onclick = () => openReviewReplyModal(item);
+  });
 
   document.querySelectorAll("[data-approve-review]").forEach((btn) => {
     btn.onclick = async () => {
@@ -1814,6 +1972,27 @@ async function loadReviews() {
 
   document.querySelectorAll("[data-delete-review]").forEach((btn) => {
     btn.onclick = () => deleteEntity(`/api/admin/reviews/${btn.dataset.deleteReview}`, "đánh giá", loadReviews);
+  });
+}
+
+function openReviewReplyModal(r) {
+  openModal(`Phản hồi đánh giá của "${escapeHtml(r.authorName || 'Khách ROG')}"`, `
+    <div style="background:#14161a;border:1px solid #232730;border-radius:8px;padding:12px;margin-bottom:14px;font-size:13px;">
+      <div style="color:#aaa;margin-bottom:4px;">Sản phẩm: <code>${escapeHtml(r.productSlug)}</code> · Đánh giá: ${"⭐".repeat(r.rating || 5)}</div>
+      ${r.title ? `<strong style="display:block;color:#fff;">${escapeHtml(r.title)}</strong>` : ''}
+      <p style="margin:4px 0 0;color:#cbd5e1;">${escapeHtml(r.content)}</p>
+    </div>
+    ${field("Phản hồi chính thức từ ASUS ROG *", `<textarea name="reply" rows="4" placeholder="Nhập câu trả lời hoặc hỗ trợ kỹ thuật từ ASUS ROG..." required>${escapeHtml(r.adminReply || "")}</textarea>`)}
+  `, async () => {
+    const fd = new FormData($("#modal-form"));
+    const reply = String(fd.get("reply") || "").trim();
+    if (!reply) throw new Error("Vui lòng nhập nội dung phản hồi.");
+    await api(`/api/admin/reviews/${r.id}/reply`, {
+      method: "POST",
+      body: JSON.stringify({ reply })
+    });
+    loadReviews();
+    return "Đã lưu phản hồi đánh giá thành công!";
   });
 }
 
@@ -2295,6 +2474,7 @@ async function loadCustomers() {
         <td>${c.isActive ? '<span class="badge-on">Hoạt động</span>' : '<span class="badge-off">Khóa</span>'}</td>
         <td><div class="row-actions">
           <button class="btn btn-sm" data-edit-customer="${c.id}">✏️ Sửa</button>
+          <button class="btn btn-sm btn-ghost" style="border:1px solid #a855f7;color:#c084fc" data-customer-orders="${c.id}" data-name="${escapeHtml(c.fullName || c.email)}">📦 Đơn hàng</button>
           <button class="btn btn-sm" style="border:1px solid #eab308;color:#fde047" data-adjust-points="${c.id}" data-email="${escapeHtml(c.email)}" data-points="${c.points}">⭐ Điểm</button>
           <button class="btn btn-sm" style="border:1px solid #3b82f6;color:#93c5fd" data-reset-pwd="${c.id}" data-email="${escapeHtml(c.email)}">🔑 Reset MK</button>
           <button class="btn btn-sm btn-danger" data-delete-customer="${c.id}">Xóa</button>
@@ -2360,9 +2540,64 @@ async function loadCustomers() {
     };
   });
 
+  document.querySelectorAll("[data-customer-orders]").forEach((btn) => {
+    const id = Number(btn.dataset.customerOrders);
+    const item = result.items.find((c) => c.id === id);
+    btn.onclick = () => openCustomerOrdersModal(item);
+  });
+
   document.querySelectorAll("[data-delete-customer]").forEach((btn) => {
     btn.onclick = () => deleteEntity(`/api/admin/customers/${btn.dataset.deleteCustomer}`, "khách hàng", loadCustomers);
   });
+}
+
+async function openCustomerOrdersModal(customer) {
+  try {
+    toast("Đang tải danh sách đơn hàng của khách...");
+    const res = await api(`/api/admin/customers/${customer.id}/orders`);
+    const orders = Array.isArray(res) ? res : (res?.orders || []);
+    let contentHtml = "";
+    if (!orders || orders.length === 0) {
+      contentHtml = `<p style="text-align:center;color:#888;padding:24px 0;">Khách hàng chưa phát sinh đơn hàng nào trên hệ thống.</p>`;
+    } else {
+      contentHtml = `
+        <table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;">
+          <thead>
+            <tr style="border-bottom:1px solid #333;color:#888;">
+              <th style="padding:6px;text-align:left;">Mã đơn</th>
+              <th style="padding:6px;text-align:left;">Ngày đặt</th>
+              <th style="padding:6px;text-align:center;">Số SP</th>
+              <th style="padding:6px;text-align:right;">Tổng tiền</th>
+              <th style="padding:6px;text-align:center;">Trạng thái</th>
+              <th style="padding:6px;text-align:right;">Chi tiết</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${orders.map(o => `
+              <tr style="border-bottom:1px solid #222;">
+                <td style="padding:8px 6px;"><code><strong>${escapeHtml(o.orderCode)}</strong></code></td>
+                <td style="padding:8px 6px;">${formatDateTime(o.createdAt)}</td>
+                <td style="padding:8px 6px;text-align:center;">${o.itemsCount}</td>
+                <td style="padding:8px 6px;text-align:right;color:#ff0036;font-weight:700;">${formatVnd(o.total)}</td>
+                <td style="padding:8px 6px;text-align:center;">${getOrderStatusBadge(o.status)}</td>
+                <td style="padding:8px 6px;text-align:right;">
+                  <button type="button" class="btn btn-sm btn-ghost" style="border:1px solid #4a5568;" onclick="closeModal();openOrderDetailModal(${o.id});">👁️ Mở</button>
+                </td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      `;
+    }
+    openModal(`Lịch sử đơn hàng: ${escapeHtml(customer.fullName || customer.email)}`, `
+      <div style="font-size:13px;color:#aaa;margin-bottom:8px;">
+        Email: <strong>${escapeHtml(customer.email)}</strong> · Tổng chi tiêu: <strong style="color:#ff0036;">${formatVnd(res?.totalSpent || 0)}</strong> · Tổng số: <strong>${orders.length}</strong> đơn hàng
+      </div>
+      ${contentHtml}
+    `, async () => true);
+  } catch (ex) {
+    toast(ex.message, true);
+  }
 }
 
 function openCustomerForm(customer) {
@@ -2553,6 +2788,7 @@ async function loadOrders() {
         <td>
           <div class="row-actions">
             <button class="btn btn-sm btn-ghost" style="border:1px solid #4a5568;" data-view-order="${o.id}">👁️ Chi tiết</button>
+            <a href="http://localhost:3000/vn/orders/${encodeURIComponent(o.orderCode)}" target="_blank" class="btn btn-sm btn-ghost" style="border:1px solid #00f0ff;color:#00f0ff;text-decoration:none;" title="Xem trang đơn hàng trên Web người dùng">🔗 Khách xem</a>
             <button class="btn btn-sm btn-danger" data-delete-order="${o.id}">Xóa</button>
           </div>
         </td>
@@ -2630,8 +2866,32 @@ async function openOrderDetailModal(id) {
           </table>
         </div>
 
-        <div style="text-align:right;font-size:14px;border-top:1px solid #333;padding-top:8px;">
-          Tổng thanh toán: <strong style="color:#ff0033;font-size:16px;">${formatVnd(o.total)}</strong>
+        <div style="text-align:right;font-size:13px;border-top:1px solid #333;padding-top:8px;line-height:1.6;">
+          <div>Tạm tính: <strong>${formatVnd(o.subtotal || o.total)}</strong></div>
+          ${o.shippingFee ? `<div>Phí vận chuyển: <strong>${formatVnd(o.shippingFee)}</strong></div>` : ''}
+          ${o.discountAmount ? `<div style="color:#10b981;">Giảm giá Voucher: <strong>-${formatVnd(o.discountAmount)}</strong> ${o.couponCode ? `(Mã: <code>${escapeHtml(o.couponCode)}</code>)` : ''}</div>` : ''}
+          <div style="font-size:15px;margin-top:4px;">Tổng thanh toán: <strong style="color:#ff0033;font-size:17px;">${formatVnd(o.total)}</strong></div>
+        </div>
+
+        <div style="background:#14161a;padding:12px;border-radius:6px;border:1px solid #282830;margin-top:4px;">
+          <div style="font-weight:600;margin-bottom:8px;color:#00f0ff;display:flex;align-items:center;gap:6px;">🚚 Thông tin Vận chuyển &amp; Ghi chú nội bộ</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div>
+              <label style="font-size:11px;color:#aaa;display:block;margin-bottom:3px;">Hãng vận chuyển</label>
+              <input id="order-carrier" type="text" value="${escapeHtml(o.shippingCarrier || '')}" placeholder="VNPost, ViettelPost, GHN, GHTK..." style="width:100%;box-sizing:border-box;background:#0d0f12;border:1px solid #333;padding:6px 8px;border-radius:4px;color:#fff;font-size:12px;" />
+            </div>
+            <div>
+              <label style="font-size:11px;color:#aaa;display:block;margin-bottom:3px;">Mã vận đơn (Tracking No.)</label>
+              <input id="order-tracking" type="text" value="${escapeHtml(o.trackingNumber || '')}" placeholder="VN123456789..." style="width:100%;box-sizing:border-box;background:#0d0f12;border:1px solid #333;padding:6px 8px;border-radius:4px;color:#fff;font-size:12px;" />
+            </div>
+          </div>
+          <div style="margin-top:8px;">
+            <label style="font-size:11px;color:#aaa;display:block;margin-bottom:3px;">Ghi chú nội bộ (chỉ Admin xem)</label>
+            <input id="order-internal-notes" type="text" value="${escapeHtml(o.internalNotes || '')}" placeholder="VD: Đã đóng gói cẩn thận kèm quà tặng..." style="width:100%;box-sizing:border-box;background:#0d0f12;border:1px solid #333;padding:6px 8px;border-radius:4px;color:#fff;font-size:12px;" />
+          </div>
+          <div style="margin-top:10px;text-align:right;">
+            <button type="button" class="btn btn-sm btn-ghost" style="border:1px solid #00f0ff;color:#00f0ff" onclick="updateOrderShipping(${o.id})">💾 Lưu vận đơn &amp; Ghi chú</button>
+          </div>
         </div>
 
         <div style="background:#111;padding:12px;border-radius:6px;border:1px solid #333;margin-top:4px;">
@@ -2654,9 +2914,17 @@ async function openOrderDetailModal(id) {
 
 window.changeOrderStatus = async function (id, newStatus) {
   try {
+    const carrier = ($("#order-carrier")?.value || "").trim();
+    const tracking = ($("#order-tracking")?.value || "").trim();
+    const notes = ($("#order-internal-notes")?.value || "").trim();
     await api(`/api/admin/orders/${id}/status`, {
       method: "PUT",
-      body: JSON.stringify({ status: newStatus }),
+      body: JSON.stringify({
+        status: newStatus,
+        shippingCarrier: carrier,
+        trackingNumber: tracking,
+        internalNotes: notes
+      }),
     });
     closeModal();
     toast(`Đã cập nhật trạng thái đơn sang: ${newStatus}`);
@@ -2665,6 +2933,214 @@ window.changeOrderStatus = async function (id, newStatus) {
     toast(ex.message, true);
   }
 };
+
+window.updateOrderShipping = async function (id) {
+  try {
+    const carrier = ($("#order-carrier")?.value || "").trim();
+    const tracking = ($("#order-tracking")?.value || "").trim();
+    const notes = ($("#order-internal-notes")?.value || "").trim();
+    await api(`/api/admin/orders/${id}/shipping`, {
+      method: "PUT",
+      body: JSON.stringify({ shippingCarrier: carrier, trackingNumber: tracking, internalNotes: notes }),
+    });
+    toast("Đã cập nhật thông tin vận chuyển thành công!");
+    loadOrders();
+  } catch (ex) {
+    toast(ex.message, true);
+  }
+};
+
+/* ---------- Coupons (Mã giảm giá & Voucher) ---------- */
+
+async function loadCoupons() {
+  const search = ($("#coupon-search")?.value || "").trim();
+  const active = ($("#coupon-status-filter")?.value || "").trim();
+  let url = `/api/admin/coupons?page=${state.couponsPage}&pageSize=${state.couponsPageSize}&search=${encodeURIComponent(search)}`;
+  if (active !== "") url += `&active=${active}`;
+
+  const result = await api(url);
+
+  const table = $("#coupons-table");
+  if (!result.items.length) {
+    table.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:32px;color:#888;">Không tìm thấy mã giảm giá nào.</td></tr>`;
+    $("#coupons-pager").innerHTML = "";
+    return;
+  }
+
+  table.innerHTML = `
+    <thead>
+      <tr>
+        <th>Mã Voucher</th>
+        <th>Tiêu đề &amp; Mô tả</th>
+        <th>Loại chiết khấu</th>
+        <th>Mức giảm</th>
+        <th>Đơn tối thiểu</th>
+        <th>Giảm tối đa</th>
+        <th>Đã dùng / Giới hạn</th>
+        <th>Thời hạn</th>
+        <th>Trạng thái</th>
+        <th>Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>${result.items.map((c) => {
+      const typeBadge = c.discountType === 0 
+        ? '<span class="badge-coupon-pct">% Phần trăm</span>' 
+        : '<span class="badge-coupon-fixed">VNĐ Cố định</span>';
+      const valText = c.discountType === 0 
+        ? `<strong style="color:#c084fc;font-size:14px;">${c.discountValue}%</strong>` 
+        : `<strong style="color:#34d399;font-size:14px;">${formatVnd(c.discountValue)}</strong>`;
+      const minText = c.minOrderValue > 0 ? formatVnd(c.minOrderValue) : '<span style="color:#888;">Không giới hạn</span>';
+      const maxText = c.maxDiscountAmount ? formatVnd(c.maxDiscountAmount) : '—';
+      const periodText = c.validFrom || c.validTo 
+        ? `${formatDate(c.validFrom)} → ${formatDate(c.validTo)}` 
+        : '<span style="color:#888;">Vô thời hạn</span>';
+
+      return `
+      <tr>
+        <td><code style="font-size:13px;font-weight:700;color:#00f0ff;background:#0d1a24;padding:3px 8px;border-radius:4px;border:1px solid #164e63;">${escapeHtml(c.code)}</code></td>
+        <td class="cell-title">
+          <strong>${escapeHtml(c.title)}</strong>
+          ${c.description ? `<div style="font-size:11px;color:#888;margin-top:2px;">${escapeHtml(c.description)}</div>` : ''}
+        </td>
+        <td>${typeBadge}</td>
+        <td>${valText}</td>
+        <td>${minText}</td>
+        <td>${maxText}</td>
+        <td><strong>${c.usedCount}</strong> / ${c.usageLimit}</td>
+        <td style="font-size:11px;color:#aaa;">${periodText}</td>
+        <td>
+          <button class="btn btn-sm btn-ghost" style="${c.isActive ? 'border:1px solid #10b981;color:#34d399;' : 'border:1px solid #6b7280;color:#9ca3af;'}" data-toggle-coupon="${c.id}">
+            ${c.isActive ? '✅ Đang bật' : '⏸️ Tạm tắt'}
+          </button>
+        </td>
+        <td>
+          <div class="row-actions">
+            <button class="btn btn-sm" data-edit-coupon="${c.id}">✏️ Sửa</button>
+            <button class="btn btn-sm btn-danger" data-delete-coupon="${c.id}">Xóa</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join("")}</tbody>`;
+
+  const pager = $("#coupons-pager");
+  pager.innerHTML = `
+    <button class="btn btn-sm" id="coupons-prev" ${result.page <= 1 ? "disabled" : ""}>‹ Trước</button>
+    <span>Trang ${result.page}/${result.totalPages || 1} · ${result.totalCount} mã giảm giá</span>
+    <button class="btn btn-sm" id="coupons-next" ${result.page >= result.totalPages ? "disabled" : ""}>Sau ›</button>`;
+  $("#coupons-prev").onclick = () => { state.couponsPage--; loadCoupons(); };
+  $("#coupons-next").onclick = () => { state.couponsPage++; loadCoupons(); };
+
+  document.querySelectorAll("[data-edit-coupon]").forEach((btn) => {
+    const id = Number(btn.dataset.editCoupon);
+    const item = result.items.find((c) => c.id === id);
+    btn.onclick = () => openCouponForm(item);
+  });
+
+  document.querySelectorAll("[data-toggle-coupon]").forEach((btn) => {
+    const id = Number(btn.dataset.toggleCoupon);
+    btn.onclick = async () => {
+      try {
+        const res = await api(`/api/admin/coupons/${id}/toggle-active`, { method: "PUT" });
+        toast(res.isActive ? "Đã bật kích hoạt mã giảm giá." : "Đã tạm dừng mã giảm giá.");
+        loadCoupons();
+      } catch (ex) {
+        toast(ex.message, true);
+      }
+    };
+  });
+
+  document.querySelectorAll("[data-delete-coupon]").forEach((btn) => {
+    btn.onclick = () => deleteEntity(`/api/admin/coupons/${btn.dataset.deleteCoupon}`, "mã giảm giá", loadCoupons);
+  });
+}
+
+function openCouponForm(c = null) {
+  const isEdit = Boolean(c);
+  const title = isEdit ? `Chỉnh sửa mã #${c.code}` : "Tạo mã giảm giá mới";
+
+  const toInputDate = (d) => d ? new Date(d).toISOString().slice(0, 16) : "";
+
+  openModal(title, `
+    <div class="grid-2">
+      ${field("Mã Voucher (Code) *", `<input name="code" type="text" value="${escapeHtml(c?.code || '')}" placeholder="VD: ROG2026" required oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9_-]/g, '')" />`)}
+      ${field("Tiêu đề ưu đãi *", textField("title", c?.title || "", true))}
+    </div>
+    ${field("Mô tả chi tiết", `<textarea name="description" rows="2" placeholder="VD: Giảm ngay 500k cho đơn từ 10 triệu...">${escapeHtml(c?.description || '')}</textarea>`)}
+    
+    <div class="grid-2">
+      ${field("Loại chiết khấu *", selectField("discountType", c ? String(c.discountType) : "0", [
+        ["0", "Phần trăm (%)"],
+        ["1", "Số tiền cố định (VNĐ)"]
+      ]))}
+      ${field("Giá trị giảm *", `<input name="discountValue" type="number" min="0" step="any" value="${c?.discountValue ?? 10}" required placeholder="VD: 10 (nếu %) hoặc 500000 (nếu VNĐ)" />`)}
+    </div>
+
+    <div class="grid-2">
+      ${field("Giá trị đơn hàng tối thiểu (VNĐ)", `<input name="minOrderValue" type="number" min="0" step="1000" value="${c?.minOrderValue ?? 0}" />`)}
+      ${field("Mức giảm tối đa (VNĐ, cho loại %)", `<input name="maxDiscountAmount" type="number" min="0" step="1000" value="${c?.maxDiscountAmount ?? ''}" placeholder="Bỏ trống nếu không giới hạn" />`)}
+    </div>
+
+    <div class="grid-2">
+      ${field("Giới hạn lượt dùng (Usage Limit)", `<input name="usageLimit" type="number" min="1" value="${c?.usageLimit ?? 100}" required />`)}
+      ${field("Trạng thái kích hoạt", checkboxField("isActive", c ? c.isActive : true))}
+    </div>
+
+    <div class="grid-2">
+      ${field("Thời gian bắt đầu (tùy chọn)", `<input name="validFrom" type="datetime-local" value="${toInputDate(c?.validFrom)}" />`)}
+      ${field("Thời gian kết thúc (tùy chọn)", `<input name="validTo" type="datetime-local" value="${toInputDate(c?.validTo)}" />`)}
+    </div>
+  `, async () => {
+    const fd = new FormData($("#modal-form"));
+    const code = String(fd.get("code") || "").trim().toUpperCase();
+    const title = String(fd.get("title") || "").trim();
+    const description = String(fd.get("description") || "").trim();
+    const discountType = parseInt(fd.get("discountType"), 10) || 0;
+    const discountValue = parseFloat(fd.get("discountValue")) || 0;
+    const minOrderValue = parseFloat(fd.get("minOrderValue")) || 0;
+    const maxDiscountAmountStr = fd.get("maxDiscountAmount");
+    const maxDiscountAmount = maxDiscountAmountStr ? parseFloat(maxDiscountAmountStr) : null;
+    const usageLimit = parseInt(fd.get("usageLimit"), 10) || 100;
+    const isActive = checkboxValue(fd, "isActive");
+    const validFromStr = fd.get("validFrom");
+    const validToStr = fd.get("validTo");
+    const validFrom = validFromStr ? new Date(validFromStr).toISOString() : null;
+    const validTo = validToStr ? new Date(validToStr).toISOString() : null;
+
+    if (!code) throw new Error("Vui lòng nhập mã Voucher.");
+    if (!title) throw new Error("Vui lòng nhập tiêu đề khuyến mãi.");
+    if (discountValue <= 0) throw new Error("Giá trị giảm phải lớn hơn 0.");
+    if (discountType === 0 && discountValue > 100) throw new Error("Chiết khấu phần trăm không được vượt quá 100%.");
+
+    const payload = {
+      code,
+      title,
+      description,
+      discountType,
+      discountValue,
+      minOrderValue,
+      maxDiscountAmount,
+      usageLimit,
+      isActive,
+      validFrom,
+      validTo
+    };
+
+    if (isEdit) {
+      await api(`/api/admin/coupons/${c.id}`, {
+        method: "PUT",
+        body: JSON.stringify(payload)
+      });
+    } else {
+      await api("/api/admin/coupons", {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+    }
+
+    loadCoupons();
+    return isEdit ? `Đã cập nhật mã ${code} thành công.` : `Đã tạo mã ${code} thành công.`;
+  });
+}
 
 /* ---------- support centers & policies ---------- */
 
@@ -3106,6 +3582,107 @@ async function backupDatabase() {
   }
 }
 
+async function restoreDatabase() {
+  try {
+    toast("Đang lấy thông tin tổng quan CSDL...");
+    const summary = await api("/api/admin/backup/summary");
+
+    const summaryCards = [
+      ["Sản phẩm", summary.products],
+      ["Đơn hàng", summary.orders],
+      ["Mã giảm giá", summary.coupons],
+      ["Khách hàng", summary.customers],
+      ["Đánh giá", summary.reviews],
+      ["Hồ sơ bảo hành", summary.warrantyRecords],
+      ["Đại lý", summary.dealers],
+      ["Bài viết", summary.articles],
+      ["Slide Hero", summary.heroSlides],
+      ["Danh mục SP", summary.categories],
+      ["Kênh MXH", summary.socialChannels],
+      ["Công nghệ", summary.innovations],
+      ["Hình nền", summary.wallpapers],
+      ["Video", summary.featuredVideos],
+      ["Audit Logs", summary.auditLogs]
+    ];
+
+    const gridHtml = summaryCards.map(([label, count]) => `
+      <div class="restore-stat-item">
+        <div class="num">${count ?? 0}</div>
+        <div class="label">${label}</div>
+      </div>
+    `).join("");
+
+    const bodyHtml = `
+      <p style="font-size:13px;color:#aaa;margin:0 0 12px;">
+        Hệ thống hỗ trợ phục hồi dữ liệu từ bản sao lưu JSON đầy đủ được xuất từ tính năng <em>"Sao lưu CSDL"</em>.
+      </p>
+      <div style="font-size:12px;color:#9aa0a8;margin-bottom:6px;font-weight:600;">📊 Dữ liệu hiện tại trong hệ thống:</div>
+      <div class="restore-stats-grid">${gridHtml}</div>
+
+      <div style="margin-top:16px;background:#14161a;border:1px dashed #3a4250;padding:16px;border-radius:8px;text-align:center;">
+        <label for="restore-file-input" style="cursor:pointer;display:block;">
+          <div style="font-size:24px;margin-bottom:6px;">📁</div>
+          <div style="color:#00f0ff;font-weight:600;font-size:13px;">Nhấp vào đây để chọn tệp sao lưu JSON (*.json)</div>
+          <div style="font-size:11px;color:#888;margin-top:4px;">Chỉ hỗ trợ file JSON định dạng chuẩn của RogAdmin Enterprise</div>
+        </label>
+        <input type="file" id="restore-file-input" accept=".json,application/json" style="display:none;" />
+      </div>
+      <div id="restore-preview" style="margin-top:12px;font-size:12px;color:#34d399;" class="hidden"></div>
+    `;
+
+    openModal("Phục hồi Cơ sở Dữ liệu từ Sao lưu", bodyHtml, async () => {
+      const fileInput = $("#restore-file-input");
+      if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+        throw new Error("Vui lòng chọn một tệp JSON sao lưu trước khi tiến hành phục hồi.");
+      }
+      const file = fileInput.files[0];
+      const text = await file.text();
+      let parsed;
+      try {
+        parsed = JSON.parse(text);
+      } catch {
+        throw new Error("Tệp sao lưu không phải là JSON hợp lệ.");
+      }
+
+      toast("Đang phục hồi CSDL... Quá trình có thể mất vài giây.");
+      const res = await api("/api/admin/backup/restore", {
+        method: "POST",
+        body: JSON.stringify(parsed)
+      });
+
+      navigate("dashboard");
+      return res.message || "Đã khôi phục dữ liệu CSDL thành công!";
+    });
+
+    setTimeout(() => {
+      const fileInput = $("#restore-file-input");
+      const preview = $("#restore-preview");
+      if (fileInput) {
+        fileInput.onchange = async () => {
+          if (fileInput.files.length > 0) {
+            const f = fileInput.files[0];
+            try {
+              const content = await f.text();
+              const json = JSON.parse(content);
+              const data = json.data || json;
+              const keys = Object.keys(data).filter(k => Array.isArray(data[k]));
+              preview.innerHTML = `✅ Đã nhận tệp: <strong>${escapeHtml(f.name)}</strong> (${(f.size/1024).toFixed(1)} KB)<br/><span style="color:#aaa;">Chứa ${keys.length} danh mục dữ liệu: ${keys.join(", ")}</span>`;
+              preview.style.color = "#34d399";
+              preview.classList.remove("hidden");
+            } catch (err) {
+              preview.innerHTML = `❌ Lỗi đọc file JSON: ${err.message}`;
+              preview.style.color = "#ef4444";
+              preview.classList.remove("hidden");
+            }
+          }
+        };
+      }
+    }, 50);
+  } catch (ex) {
+    toast(ex.message, true);
+  }
+}
+
 /* ---------- Global Handlers for New Features ---------- */
 
 setTimeout(() => {
@@ -3130,9 +3707,19 @@ setTimeout(() => {
     else if (type === "video") btn.onclick = () => openVideoForm();
   });
 
-  // Backup button
+  // Backup & Restore buttons
   const backupBtn = $("#backup-db-btn");
   if (backupBtn) backupBtn.onclick = backupDatabase;
+  const restoreBtn = $("#restore-db-btn");
+  if (restoreBtn) restoreBtn.onclick = restoreDatabase;
+
+  // Coupon controls
+  const newCouponBtn = $("#new-coupon-btn");
+  if (newCouponBtn) newCouponBtn.onclick = () => openCouponForm();
+  const couponSearch = $("#coupon-search");
+  if (couponSearch) couponSearch.oninput = () => { state.couponsPage = 1; loadCoupons(); };
+  const couponStatus = $("#coupon-status-filter");
+  if (couponStatus) couponStatus.onchange = () => { state.couponsPage = 1; loadCoupons(); };
 
   // Order filters
   const orderStatus = $("#order-status-filter");

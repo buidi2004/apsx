@@ -9,6 +9,8 @@ using RogAdmin.Infrastructure.Persistence;
 
 namespace RogAdmin.Api.Controllers.Admin;
 
+public record AdminReplyRequest(string Reply);
+
 [ApiController]
 [Route("api/admin/reviews")]
 [Authorize(Roles = "Admin,Editor")]
@@ -54,7 +56,10 @@ public class ProductReviewsAdminController(
                 r.Content,
                 r.Rating,
                 r.IsApproved,
-                r.CreatedAtUtc
+                r.CreatedAtUtc,
+                r.AdminReply,
+                r.RepliedAt,
+                r.RepliedBy
             ))
             .ToListAsync(ct);
 
@@ -65,6 +70,25 @@ public class ProductReviewsAdminController(
             PageSize = pageSize,
             TotalCount = total
         });
+    }
+
+    [HttpPost("{id:guid}/reply")]
+    public async Task<IActionResult> Reply(Guid id, [FromBody] AdminReplyRequest req, CancellationToken ct = default)
+    {
+        var review = await db.ProductReviews.FirstOrDefaultAsync(r => r.Id == id, ct);
+        if (review == null) return NotFound(new { message = $"Không tìm thấy đánh giá {id}" });
+
+        review.AdminReply = req.Reply.Trim();
+        review.RepliedAt = DateTime.UtcNow;
+        review.RepliedBy = User.Identity?.Name ?? "ASUS ROG Admin";
+        await db.SaveChangesAsync(ct);
+        await cacheStore.EvictByTagAsync("public-content", ct);
+
+        var username = User.Identity?.Name ?? "Admin";
+        var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+        await auditLog.LogAsync(username, "REPLY_REVIEW", "ProductReview", id.ToString(), $"Phản hồi đánh giá của '{review.AuthorName}' cho sản phẩm '{review.ProductSlug}'", ip, ct);
+
+        return Ok(new { success = true, reply = review.AdminReply, repliedAt = review.RepliedAt, repliedBy = review.RepliedBy });
     }
 
     [HttpPut("{id:guid}/approve")]

@@ -43,6 +43,14 @@ export default function CheckoutPage() {
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [couponCode, setCouponCode] = useState("");
+  const [validatingCoupon, setValidatingCoupon] = useState(false);
+  const [couponError, setCouponError] = useState<string | null>(null);
+  const [appliedCoupon, setAppliedCoupon] = useState<{
+    code: string;
+    title: string;
+    discountAmount: number;
+  } | null>(null);
 
   useEffect(() => {
     const user = getCustomerUser();
@@ -58,6 +66,39 @@ export default function CheckoutPage() {
 
   const update = (field: keyof typeof form, value: string) =>
     setForm((prev) => ({ ...prev, [field]: value }));
+
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) return;
+    setValidatingCoupon(true);
+    setCouponError(null);
+    try {
+      const res = await RogApi.validateCoupon(couponCode.trim(), subtotal);
+      if (res.valid) {
+        setAppliedCoupon({
+          code: res.code,
+          title: res.title,
+          discountAmount: res.discountAmount,
+        });
+        setCouponError(null);
+      } else {
+        setAppliedCoupon(null);
+        setCouponError(res.message || "Mã giảm giá không hợp lệ");
+      }
+    } catch (err) {
+      setAppliedCoupon(null);
+      setCouponError(err instanceof Error ? err.message : "Lỗi kiểm tra mã giảm giá.");
+    } finally {
+      setValidatingCoupon(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponCode("");
+    setCouponError(null);
+  };
+
+  const finalTotal = Math.max(0, subtotal - (appliedCoupon?.discountAmount ?? 0));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,6 +116,7 @@ export default function CheckoutPage() {
         phone: form.phone.trim(),
         address: form.address.trim(),
         note: form.note.trim() || undefined,
+        couponCode: appliedCoupon?.code,
         items: lines.map((line) => ({
           slug: line.slug,
           quantity: line.quantity,
@@ -173,14 +215,94 @@ export default function CheckoutPage() {
                     </div>
                   ))}
                 </div>
+                <div style={{ borderTop: "1px solid #26262e", marginTop: "16px", paddingTop: "14px" }}>
+                  <label style={{ display: "block", fontSize: "11px", fontWeight: 700, color: "#888", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                    Mã ưu đãi / Voucher
+                  </label>
+                  <div style={{ display: "flex", gap: "8px" }}>
+                    <input
+                      type="text"
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                      placeholder="VD: ROGVIP10, ROGMEGA"
+                      disabled={!!appliedCoupon || validatingCoupon}
+                      style={{
+                        flex: 1,
+                        background: "#0a0a0c",
+                        border: "1px solid #333",
+                        color: "#fff",
+                        padding: "8px 10px",
+                        fontSize: "12px",
+                        borderRadius: "2px",
+                        outline: "none",
+                        letterSpacing: "1px",
+                        textTransform: "uppercase",
+                      }}
+                    />
+                    {appliedCoupon ? (
+                      <button
+                        type="button"
+                        onClick={handleRemoveCoupon}
+                        style={{
+                          background: "#333",
+                          color: "#fff",
+                          border: "none",
+                          padding: "8px 12px",
+                          fontSize: "11px",
+                          fontWeight: 700,
+                          borderRadius: "2px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Hủy
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleApplyCoupon}
+                        disabled={validatingCoupon || !couponCode.trim()}
+                        style={{
+                          background: "#ff0036",
+                          color: "#fff",
+                          border: "none",
+                          padding: "8px 14px",
+                          fontSize: "11px",
+                          fontWeight: 800,
+                          borderRadius: "2px",
+                          cursor: validatingCoupon || !couponCode.trim() ? "not-allowed" : "pointer",
+                          opacity: !couponCode.trim() ? 0.6 : 1,
+                        }}
+                      >
+                        {validatingCoupon ? "…" : "Áp dụng"}
+                      </button>
+                    )}
+                  </div>
+                  {couponError && (
+                    <div style={{ color: "#ff809b", fontSize: "11px", marginTop: "6px" }}>
+                      {couponError}
+                    </div>
+                  )}
+                  {appliedCoupon && (
+                    <div style={{ color: "#5ddb8a", fontSize: "11px", marginTop: "6px" }}>
+                      ✓ Đã áp dụng: {appliedCoupon.title}
+                    </div>
+                  )}
+                </div>
+
                 <div style={{ borderTop: "1px solid #26262e", marginTop: "16px", paddingTop: "14px", display: "flex", justifyContent: "space-between", color: "#aaa", fontSize: "13px" }}>
                   <span>Tạm tính</span><span>{formatVnd(subtotal)}</span>
                 </div>
+                {appliedCoupon && (
+                  <div style={{ display: "flex", justifyContent: "space-between", color: "#5ddb8a", fontSize: "13px", marginTop: "8px" }}>
+                    <span>Giảm giá ({appliedCoupon.code})</span>
+                    <span>-{formatVnd(appliedCoupon.discountAmount)}</span>
+                  </div>
+                )}
                 <div style={{ display: "flex", justifyContent: "space-between", color: "#aaa", fontSize: "13px", marginTop: "8px" }}>
                   <span>Vận chuyển</span><span style={{ color: "#5ddb8a" }}>Miễn phí</span>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 900, fontSize: "18px", marginTop: "14px" }}>
-                  <span>Tổng</span><span style={{ color: "#ff0036" }}>{formatVnd(subtotal)}</span>
+                  <span>Tổng</span><span style={{ color: "#ff0036" }}>{formatVnd(finalTotal)}</span>
                 </div>
                 <Link href="/vn/cart" style={{ display: "block", marginTop: "14px", color: "#888", fontSize: "12px", textDecoration: "none" }}>
                   ← Sửa giỏ hàng

@@ -11,6 +11,8 @@ node_modules/
 graphify-out/
 .playwright-mcp/
 .run/
+.cache/
+diff-reports/
 
 # Environment / secrets
 .env

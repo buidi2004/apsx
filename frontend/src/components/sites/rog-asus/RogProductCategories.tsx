@@ -48,9 +48,21 @@ export default function RogProductCategories() {
   useEffect(() => {
     RogApi.getCategories().then((data) => {
       if (data && data.length > 0) {
-        setCategories(data);
+        setCategories(
+          data.map((c) => {
+            const rawHref = c.href || "";
+            const cleanHref = rawHref
+              ? rawHref.replace(/^https?:\/\/rog\.asus\.com/, "").replace(/\/+$/, "")
+              : "/vn/laptops-group";
+            return {
+              image: c.image,
+              label: c.label,
+              href: cleanHref.startsWith("/") ? cleanHref : `/${cleanHref}`,
+            };
+          })
+        );
       }
-    });
+    }).catch(() => {});
   }, []);
 
   const totalItems = categories.length;

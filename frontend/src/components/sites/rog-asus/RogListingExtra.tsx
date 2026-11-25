@@ -426,7 +426,9 @@ function HotProducts() {
             img: a.img,
             title: a.title,
             excerpt: a.excerpt || "",
-            href: a.href,
+            href: a.href
+              ? a.href.replace(/^https?:\/\/rog\.asus\.com/, "").replace(/\/+$/, "")
+              : "",
           }))
         );
       }

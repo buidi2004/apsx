@@ -41,7 +41,14 @@ public class OrdersAdminController(IOrderService orderService, IAuditLogService 
             return BadRequest(new { message = "Trạng thái đơn hàng không hợp lệ. Cho phép: Pending, Confirmed, Shipping, Completed, Cancelled." });
         }
 
-        var success = await orderService.UpdateOrderStatusAsync(id, newStatus, ct);
+        var success = await orderService.UpdateOrderStatusAsync(
+            id,
+            newStatus,
+            request.ShippingCarrier,
+            request.TrackingNumber,
+            request.InternalNotes,
+            ct);
+
         if (!success)
         {
             return NotFound(new { message = $"Không tìm thấy đơn hàng #{id}" });
@@ -49,9 +56,28 @@ public class OrdersAdminController(IOrderService orderService, IAuditLogService 
 
         var username = User.Identity?.Name ?? "Admin";
         var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
-        await auditLog.LogAsync(username, "UPDATE_ORDER_STATUS", "Order", id.ToString(), $"Đổi trạng thái đơn hàng sang: {newStatus}", ip, ct);
+        await auditLog.LogAsync(username, "UPDATE_ORDER_STATUS", "Order", id.ToString(), $"Đổi trạng thái đơn hàng sang: {newStatus}. Vận chuyển: {request.ShippingCarrier} ({request.TrackingNumber})", ip, ct);
 
         return Ok(new { success = true, status = newStatus.ToString() });
+    }
+
+    [HttpPut("{id:int}/shipping")]
+    public async Task<IActionResult> UpdateShipping(
+        int id,
+        [FromBody] UpdateOrderShippingRequest request,
+        CancellationToken ct = default)
+    {
+        var success = await orderService.UpdateOrderShippingAsync(id, request.ShippingCarrier, request.TrackingNumber, request.InternalNotes, ct);
+        if (!success)
+        {
+            return NotFound(new { message = $"Không tìm thấy đơn hàng #{id}" });
+        }
+
+        var username = User.Identity?.Name ?? "Admin";
+        var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+        await auditLog.LogAsync(username, "UPDATE_ORDER_SHIPPING", "Order", id.ToString(), $"Cập nhật vận đơn: Hãng={request.ShippingCarrier}, Vận đơn={request.TrackingNumber}", ip, ct);
+
+        return Ok(new { success = true, carrier = request.ShippingCarrier, tracking = request.TrackingNumber });
     }
 
     [HttpDelete("{id:int}")]

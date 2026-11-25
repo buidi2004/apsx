@@ -11,6 +11,8 @@ namespace RogAdmin.Application.Services;
 public class OrderService(
     IRepository<Order> orderRepo,
     IRepository<Product> productRepo,
+    IRepository<ProductPrice> priceRepo,
+    IRepository<Coupon> couponRepo,
     IUnitOfWork unitOfWork) : IOrderService
 {
     public async Task<OrderDto> CreateAsync(CreateOrderRequest request, int? customerId, CancellationToken ct = default)
@@ -88,7 +90,67 @@ public class OrderService(
 
         order.Subtotal = order.Items.Sum(i => i.LineTotal);
         order.ShippingFee = 0;
-        order.Total = order.Subtotal + order.ShippingFee;
+
+        // Xử lý mã giảm giá (Coupon / Voucher) nếu có
+        long discountAmount = 0;
+        if (!string.IsNullOrWhiteSpace(request.CouponCode))
+        {
+            var code = request.CouponCode.Trim().ToUpperInvariant();
+            var coupon = await couponRepo.Query()
+                .FirstOrDefaultAsync(c => c.Code == code && c.IsActive, ct);
+
+            if (coupon != null)
+            {
+                var now = DateTime.UtcNow;
+                var validDates = (coupon.ValidFrom == null || coupon.ValidFrom <= now) &&
+                                 (coupon.ValidTo == null || coupon.ValidTo >= now);
+                var validLimit = coupon.UsageLimit <= 0 || coupon.UsedCount < coupon.UsageLimit;
+                var validMinOrder = order.Subtotal >= (long)coupon.MinOrderValue;
+
+                if (validDates && validLimit && validMinOrder)
+                {
+                    if (coupon.DiscountType == DiscountType.Percentage)
+                    {
+                        var calc = (long)Math.Round((decimal)order.Subtotal * coupon.DiscountValue / 100m);
+                        if (coupon.MaxDiscountAmount.HasValue && calc > (long)coupon.MaxDiscountAmount.Value)
+                        {
+                            calc = (long)coupon.MaxDiscountAmount.Value;
+                        }
+                        discountAmount = calc;
+                    }
+                    else
+                    {
+                        discountAmount = (long)coupon.DiscountValue;
+                    }
+
+                    discountAmount = Math.Min(discountAmount, order.Subtotal);
+                    order.DiscountAmount = discountAmount;
+                    order.CouponCode = coupon.Code;
+                    coupon.UsedCount += 1;
+                    couponRepo.Update(coupon);
+                }
+            }
+        }
+
+        order.Total = Math.Max(0, order.Subtotal + order.ShippingFee - order.DiscountAmount);
+
+        // Giảm số lượng tồn kho định lượng cho từng sản phẩm
+        foreach (var item in order.Items)
+        {
+            if (item.ProductId.HasValue)
+            {
+                var pr = await priceRepo.Query().FirstOrDefaultAsync(p => p.ProductId == item.ProductId.Value, ct);
+                if (pr != null)
+                {
+                    pr.StockQuantity = Math.Max(0, pr.StockQuantity - item.Quantity);
+                    if (pr.StockQuantity == 0)
+                    {
+                        pr.StockStatus = StockStatus.OutOfStock;
+                    }
+                    priceRepo.Update(pr);
+                }
+            }
+        }
 
         await orderRepo.AddAsync(order, ct);
         await unitOfWork.SaveChangesAsync(ct);
@@ -169,7 +231,9 @@ public class OrderService(
             o.Status.ToString(),
             StatusText(o.Status),
             o.Items.Count,
-            o.CreatedAt
+            o.CreatedAt,
+            o.ShippingCarrier ?? "",
+            o.TrackingNumber ?? ""
         )).ToList();
 
         return new PagedResult<AdminOrderSummaryDto>
@@ -215,16 +279,49 @@ public class OrderService(
                     i.UnitPrice,
                     i.Quantity,
                     i.LineTotal))
-                .ToList()
+                .ToList(),
+            order.ShippingCarrier ?? "",
+            order.TrackingNumber ?? "",
+            order.InternalNotes,
+            order.CouponCode,
+            order.DiscountAmount
         );
     }
 
-    public async Task<bool> UpdateOrderStatusAsync(int id, OrderStatus newStatus, CancellationToken ct = default)
+    public async Task<bool> UpdateOrderStatusAsync(
+        int id,
+        OrderStatus newStatus,
+        string? carrier = null,
+        string? trackingNumber = null,
+        string? internalNotes = null,
+        CancellationToken ct = default)
     {
         var order = await orderRepo.GetByIdAsync(id, ct);
         if (order is null) return false;
 
         order.Status = newStatus;
+        if (!string.IsNullOrWhiteSpace(carrier)) order.ShippingCarrier = carrier.Trim();
+        if (!string.IsNullOrWhiteSpace(trackingNumber)) order.TrackingNumber = trackingNumber.Trim();
+        if (internalNotes != null) order.InternalNotes = internalNotes.Trim();
+        order.UpdatedAt = DateTime.UtcNow;
+        orderRepo.Update(order);
+        await unitOfWork.SaveChangesAsync(ct);
+        return true;
+    }
+
+    public async Task<bool> UpdateOrderShippingAsync(
+        int id,
+        string? carrier,
+        string? trackingNumber,
+        string? internalNotes,
+        CancellationToken ct = default)
+    {
+        var order = await orderRepo.GetByIdAsync(id, ct);
+        if (order is null) return false;
+
+        if (carrier != null) order.ShippingCarrier = carrier.Trim();
+        if (trackingNumber != null) order.TrackingNumber = trackingNumber.Trim();
+        if (internalNotes != null) order.InternalNotes = internalNotes.Trim();
         order.UpdatedAt = DateTime.UtcNow;
         orderRepo.Update(order);
         await unitOfWork.SaveChangesAsync(ct);
@@ -304,7 +401,11 @@ public class OrderService(
                 i.UnitPrice,
                 i.Quantity,
                 i.LineTotal))
-            .ToList());
+            .ToList(),
+        order.ShippingCarrier ?? "",
+        order.TrackingNumber ?? "",
+        order.CouponCode,
+        order.DiscountAmount);
 
     private static string StatusText(OrderStatus status) => status switch
     {

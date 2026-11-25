@@ -147,8 +147,8 @@ export default function RogZephyrusG16Gu605Overview() {
       {/* 1:1 Official Sticky Subbar */}
       <div
         id="productTabBarContainer"
-        className="productTabBarContainer ProductTabBar__productTabBarContainer__O9P3C"
-        style={{ position: "sticky", top: 0, zIndex: 100 }}
+        className="productTabBarContainer ProductTabBar__productTabBarContainer__O9P3C ProductTabBar__showPrice__cUx1E"
+        style={{ position: "sticky", top: 50, zIndex: 999, fontSize: "16px", lineHeight: "18.4px", minHeight: "125px" }}
       >
         <div className="ProductTabBar__productTabBarWrapper__NkfAp">
           {/* Left info: Thumbnail + Title + Price */}
@@ -180,21 +180,13 @@ export default function RogZephyrusG16Gu605Overview() {
                   <span className="ProductTabBar__productStartingAt__GEQtS">Giá khởi điểm trên ASUS estore là</span>
                   <span className="ProductTabBar__productMoney__Y7npp">{livePrice}</span>
                 </div>
-                <div className="ButtonRed__redFullButton__0lMzl ButtonRed__isProductBarButton__qIAJB" style={{ display: "flex", gap: "8px" }}>
-                  <button
-                    type="button"
-                    onClick={handleBuyNow}
-                    className="btn ButtonRed__btnRed__SXGza ButtonRed__isFull__6Glcz"
-                    style={{ background: "#ff0036", color: "#fff", border: "none", cursor: "pointer", padding: "8px 16px", borderRadius: "2px", fontWeight: 700 }}
-                  >
-                    MUA NGAY
-                  </button>
+                <div className="ButtonRed__redFullButton__0lMzl ButtonRed__isProductBarButton__qIAJB">
                   <Link
                     href="/vn/laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605/spec/"
                     className="btn ButtonRed__btnRed__SXGza ButtonRed__isFull__6Glcz ButtonRed__isFilter__EzHBw ButtonRed__modelButton__tDIKt"
                   >
                     <div className="ButtonRed__inner__U++OE">
-                      <span className="buttonName">Cấu hình</span>
+                      <span className="buttonName">LỰA CHỌN</span>
                     </div>
                     <div className="ButtonRed__hoverColor__0DIt8" />
                   </Link>
@@ -207,39 +199,31 @@ export default function RogZephyrusG16Gu605Overview() {
                   <ul role="list" className="tabList">
                     <li className="tabItem ProductTabBar__active__N4qFo">
                       <Link href="/vn/laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605" id="rogContent">
-                        Tính năng (Xem thêm)
+                        Tính năng
                       </Link>
                     </li>
                     <li className="tabItem">
                       <Link href="/vn/laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605/spec" id="tabItemLink_1">
-                        Chi tiết / Thông số kỹ thuật
+                        Thông số kỹ thuật
                       </Link>
                     </li>
                     <li className="tabItem">
-                      <a
-                        href="#awards"
-                        id="tabItemLink_2"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          const el = document.getElementById("awards");
-                          if (el) el.scrollIntoView({ behavior: "smooth" });
-                        }}
-                      >
+                      <Link href="/vn/laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605/award" id="tabItemLink_2">
                         Giải thưởng
-                      </a>
+                      </Link>
                     </li>
                     <li className="tabItem">
-                      <Link href="/vn/laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605/gallery/" id="tabItemLink_3">
+                      <Link href="/vn/laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605/gallery" id="tabItemLink_3">
                         Thư viện
                       </Link>
                     </li>
                     <li className="tabItem">
-                      <Link href="/vn/where-to-buy" id="tabItemLink_4">
+                      <Link href="/vn/laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605/wtb" id="tabItemLink_4">
                         Nơi mua
                       </Link>
                     </li>
                     <li className="tabItem">
-                      <Link href="/vn/support" id="tabItemLink_5">
+                      <Link href="/vn/laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605/helpdesk" id="tabItemLink_5">
                         Hỗ trợ
                       </Link>
                     </li>
@@ -295,7 +279,7 @@ export default function RogZephyrusG16Gu605Overview() {
                 style={{ color: "#ff0036", textDecoration: "none", fontWeight: 700 }}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Tính năng (Xem thêm)
+                Tính năng
               </Link>
             </li>
             <li className="tabItem ProductTabBar__mobileTabItem__KF1TS" style={{ padding: "8px 0" }}>
@@ -304,26 +288,21 @@ export default function RogZephyrusG16Gu605Overview() {
                 style={{ color: "#fff", textDecoration: "none" }}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Chi tiết / Thông số kỹ thuật
+                Thông số kỹ thuật
               </Link>
             </li>
             <li className="tabItem ProductTabBar__mobileTabItem__KF1TS" style={{ padding: "8px 0" }}>
-              <a
-                href="#awards"
+              <Link
+                href="/vn/laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605/award"
                 style={{ color: "#fff", textDecoration: "none" }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setMobileMenuOpen(false);
-                  const el = document.getElementById("awards");
-                  if (el) el.scrollIntoView({ behavior: "smooth" });
-                }}
+                onClick={() => setMobileMenuOpen(false)}
               >
                 Giải thưởng
-              </a>
+              </Link>
             </li>
             <li className="tabItem ProductTabBar__mobileTabItem__KF1TS" style={{ padding: "8px 0" }}>
               <Link
-                href="/vn/laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605/gallery/"
+                href="/vn/laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605/gallery"
                 style={{ color: "#fff", textDecoration: "none" }}
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -332,7 +311,7 @@ export default function RogZephyrusG16Gu605Overview() {
             </li>
             <li className="tabItem ProductTabBar__mobileTabItem__KF1TS" style={{ padding: "8px 0" }}>
               <Link
-                href="/vn/where-to-buy"
+                href="/vn/laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605/wtb"
                 style={{ color: "#fff", textDecoration: "none" }}
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -341,7 +320,7 @@ export default function RogZephyrusG16Gu605Overview() {
             </li>
             <li className="tabItem ProductTabBar__mobileTabItem__KF1TS" style={{ padding: "8px 0" }}>
               <Link
-                href="/vn/support"
+                href="/vn/laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605/helpdesk"
                 style={{ color: "#fff", textDecoration: "none" }}
                 onClick={() => setMobileMenuOpen(false)}
               >

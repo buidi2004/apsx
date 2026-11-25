@@ -102,6 +102,12 @@ export default function OrderDetailPage() {
                 </div>
                 <div style={{ borderTop: "1px solid #26262e", marginTop: "18px", paddingTop: "14px", display: "flex", flexDirection: "column", gap: "8px", fontSize: "13px", color: "#aaa" }}>
                   <div style={{ display: "flex", justifyContent: "space-between" }}><span>Tạm tính</span><span>{formatVnd(order.subtotal)}</span></div>
+                  {order.discountAmount && order.discountAmount > 0 ? (
+                    <div style={{ display: "flex", justifyContent: "space-between", color: "#5ddb8a" }}>
+                      <span>Mã ưu đãi {order.couponCode ? `(${order.couponCode})` : ""}</span>
+                      <span>-{formatVnd(order.discountAmount)}</span>
+                    </div>
+                  ) : null}
                   <div style={{ display: "flex", justifyContent: "space-between" }}><span>Vận chuyển</span><span>{order.shippingFee === 0 ? "Miễn phí" : formatVnd(order.shippingFee)}</span></div>
                   <div style={{ display: "flex", justifyContent: "space-between", color: "#fff", fontWeight: 900, fontSize: "18px" }}><span>Tổng cộng</span><span style={{ color: "#ff0036" }}>{formatVnd(order.total)}</span></div>
                 </div>
@@ -113,6 +119,15 @@ export default function OrderDetailPage() {
                 <p style={{ margin: "0 0 6px", color: "#ccc" }}>{order.email}</p>
                 <p style={{ margin: 0, color: "#aaa", lineHeight: 1.6 }}>{order.address}</p>
                 {order.note && <p style={{ margin: "10px 0 0", color: "#888", fontStyle: "italic" }}>Ghi chú: {order.note}</p>}
+                {(order.shippingCarrier || order.trackingNumber) && (
+                  <div style={{ marginTop: "14px", padding: "12px", background: "#181824", border: "1px solid #333348", borderRadius: "4px" }}>
+                    <div style={{ fontSize: "11px", fontWeight: 700, color: "#aaa", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px" }}>
+                      📦 Thông tin vận chuyển
+                    </div>
+                    {order.shippingCarrier && <div style={{ color: "#fff", fontSize: "13px" }}>Đơn vị vận chuyển: <strong>{order.shippingCarrier}</strong></div>}
+                    {order.trackingNumber && <div style={{ color: "#ff809b", fontSize: "13px", marginTop: "2px" }}>Mã vận đơn: <strong>{order.trackingNumber}</strong></div>}
+                  </div>
+                )}
               </section>
 
               <div style={{ display: "flex", gap: "12px", marginTop: "20px", flexWrap: "wrap", alignItems: "center" }}>

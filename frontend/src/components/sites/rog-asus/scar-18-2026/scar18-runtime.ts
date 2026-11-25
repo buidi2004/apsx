@@ -38,6 +38,11 @@ function loadScript(src: string): Promise<void> {
 }
 
 export async function initScar18Runtime(): Promise<() => void> {
+  if (typeof window === "undefined") return () => {};
+  if ((window as any).__scar18Loaded) {
+    return () => {};
+  }
+  (window as any).__scar18Loaded = true;
   try {
     // 1. Load jQuery 3.7.1 first
     await loadScript("/sites/rog-asus/scar-18-2026/jquery-3.7.1.min.js");
@@ -205,7 +210,7 @@ export async function initScar18Runtime(): Promise<() => void> {
     bindToggle("ss-unknown-bg-video");
 
   } catch (err) {
-    console.error("[ROG Scar18 Runtime Error]:", err);
+    console.warn("[ROG Scar18 Runtime Notice]:", err);
   }
 
   // Cleanup handler

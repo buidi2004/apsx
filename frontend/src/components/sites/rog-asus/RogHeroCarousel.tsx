@@ -62,15 +62,22 @@ export default function RogHeroCarousel() {
   useEffect(() => {
     RogApi.getHeroSlides().then((data) => {
       if (data && data.length > 0) {
-        const mapped = data.map((d): HeroSlide | null => {
-          if (!d.src && !d.desktop && !d.mobile) return null;
-          return {
-            desktop: d.desktop || d.src || "",
-            mobile: d.mobile || d.src || "",
-            alt: d.alt || "",
-            href: d.href || "",
-          };
-        }).filter((item): item is HeroSlide => item !== null);
+        const mapped = data
+          .map((d, idx): HeroSlide | null => {
+            if (!d.src && !d.desktop && !d.mobile) return null;
+            const fallback = SLIDES[idx] || SLIDES[0];
+            const rawHref = d.href && d.href !== "#" ? d.href : fallback.href;
+            const cleanHref = rawHref.startsWith("https://rog.asus.com/vn/")
+              ? rawHref.replace("https://rog.asus.com", "").replace(/\/+$/, "")
+              : rawHref;
+            return {
+              desktop: d.desktop || d.src || fallback.desktop,
+              mobile: d.mobile || d.src || fallback.mobile,
+              alt: d.alt || fallback.alt,
+              href: cleanHref,
+            };
+          })
+          .filter((item): item is HeroSlide => item !== null);
         setSlides(mapped);
       }
     });

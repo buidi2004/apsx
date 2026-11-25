@@ -19,6 +19,7 @@ public class DashboardService(
     IRepository<WarrantyRecord> warrantyRecords,
     IRepository<Customer> customers,
     IRepository<Order> orders,
+    IRepository<Coupon> coupons,
     IReviewRepository reviews) : IDashboardService
 {
     public async Task<DashboardStatsDto> GetStatsAsync(CancellationToken ct = default)
@@ -50,6 +51,8 @@ public class DashboardService(
             OrdersTotal = await orders.Query().CountAsync(ct),
             OrdersPending = await orders.Query().CountAsync(o => o.Status == OrderStatus.Pending, ct),
             PendingReviewsTotal = await reviews.Query().CountAsync(r => !r.IsApproved, ct),
+            LowStockProductsTotal = await prices.Query().CountAsync(p => p.StockQuantity <= 3 && p.StockStatus == StockStatus.InStock, ct),
+            CouponsTotal = await coupons.Query().CountAsync(ct),
         };
     }
 }

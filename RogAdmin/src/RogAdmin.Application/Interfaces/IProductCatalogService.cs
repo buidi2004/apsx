@@ -12,6 +12,7 @@ public interface IProductCatalogService
         int page = 1,
         int pageSize = 20,
         bool includeInactive = false,
+        StockStatus? stockStatus = null,
         CancellationToken ct = default);
 
     Task<ProductDetailDto?> GetProductBySlugAsync(string slug, bool includeInactive = false, CancellationToken ct = default);
@@ -30,6 +31,7 @@ public interface IProductCatalogService
         decimal? oldPrice,
         string? discountLabel,
         StockStatus? stockStatus,
+        int? stockQuantity = null,
         CancellationToken ct = default);
 
     Task<ProductPriceDto?> UpdateProductPriceBySlugAsync(
@@ -38,6 +40,7 @@ public interface IProductCatalogService
         decimal? oldPrice,
         string? discountLabel,
         StockStatus? stockStatus,
+        int? stockQuantity = null,
         CancellationToken ct = default);
 
     Task<ProductDetailDto?> GetProductByIdAsync(int id, CancellationToken ct = default);

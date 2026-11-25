@@ -2,7 +2,9 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useCart } from "@/lib/cart";
 import { RogApi } from "@/lib/api-client";
 import "./RogSeriesPage.css";
 
@@ -81,7 +83,7 @@ const SERIES_DATA: Record<SeriesType, SeriesConfig> = {
         save: "Save 8.000.000 đ",
         oldPrice: "112.990.000 đ",
         cta: "MUA NGAY",
-        href: "/vn/store",
+        href: "/vn/laptops/rog-flow/rog-flow-z13-kjp",
       },
     ],
   },
@@ -298,7 +300,7 @@ const SERIES_DATA: Record<SeriesType, SeriesConfig> = {
         price: "84.990.000 đ",
         save: null,
         cta: "XEM CHI TIẾT",
-        href: "/vn/laptops/rog-strix/rog-strix-scar-18-2026",
+        href: "/vn/laptops/rog-strix/rog-strix-g16-2025",
       },
       {
         img: "/sites/rog-asus/img/series/strix-g614.webp",
@@ -317,7 +319,7 @@ const SERIES_DATA: Record<SeriesType, SeriesConfig> = {
         price: "68.990.000 đ",
         save: null,
         cta: "XEM CHI TIẾT",
-        href: "/vn/laptops/rog-strix/rog-strix-scar-18-2026",
+        href: "/vn/laptops/rog-strix/rog-strix-g16-2025",
       },
       {
         img: "/sites/rog-asus/img/series/strix-g614.webp",
@@ -336,7 +338,7 @@ const SERIES_DATA: Record<SeriesType, SeriesConfig> = {
         price: "49.990.000 đ",
         save: null,
         cta: "XEM CHI TIẾT",
-        href: "/vn/laptops/rog-strix/rog-strix-scar-18-2026",
+        href: "/vn/laptops/rog-strix/rog-strix-g16-2025",
       },
     ],
   },
@@ -352,19 +354,80 @@ type FilterGroup = {
 };
 
 export default function RogSeriesPage({ series = "flow" }: { series?: SeriesType }) {
+  const router = useRouter();
+  const { addLine } = useCart();
   const [compare, setCompare] = useState<Record<string, boolean>>({});
   const cfg = SERIES_DATA[series] ?? SERIES_DATA.flow;
   const [products, setProducts] = useState(cfg.products);
+  const selectedToCompare = products.filter((p) => compare[p.model]);
+
+  const handleBuyNow = (p: SeriesProduct) => {
+    const numericPrice = parseInt(p.price.replace(/\D/g, ""), 10) || 0;
+    const cleanSlug = p.href.replace(/^\/vn\//, "");
+    addLine({
+      slug: cleanSlug || p.model,
+      name: p.name,
+      image: p.img,
+      price: numericPrice,
+      href: p.href,
+    });
+    router.push("/vn/checkout");
+  };
 
   useEffect(() => {
-    setProducts(cfg.products);
+    let isCancelled = false;
+
+    // 1. Fetch dynamic products from backend matching category 'laptops'
+    RogApi.getProducts({ category: "laptops", pageSize: 50 })
+      .then((res) => {
+        if (isCancelled || !res?.items || res.items.length === 0) return;
+        const seriesPrefix = `laptops/rog-${series}`;
+        const matchingDb = res.items.filter(
+          (p) =>
+            p.slug.toLowerCase().startsWith(seriesPrefix) ||
+            p.basePath.toLowerCase().includes(`rog-${series}`)
+        );
+
+        setProducts((current) => {
+          const existingHrefs = new Set(
+            current.map((p) => p.href.replace(/^\/vn\//, "").toLowerCase())
+          );
+          const additions: SeriesProduct[] = [];
+          for (const dbItem of matchingDb) {
+            const cleanBasePath = dbItem.basePath.replace(/^\/vn\//, "").replace(/^\/+/, "");
+            if (
+              !existingHrefs.has(cleanBasePath.toLowerCase()) &&
+              !existingHrefs.has(dbItem.slug.toLowerCase())
+            ) {
+              additions.push({
+                img: dbItem.thumbnailUrl || "/sites/rog-asus/img/hot/strix-scar-18.webp",
+                status: dbItem.stockStatus === 1 ? "TEMPORARILY OUT OF STOCK" : "CÒN HÀNG",
+                deal: dbItem.isHot,
+                name: dbItem.name,
+                model: dbItem.modelCode,
+                specs: [dbItem.tagline || dbItem.name],
+                priceLabel: "Giá trên ASUS estore",
+                price: dbItem.price > 0 ? `${dbItem.price.toLocaleString("vi-VN")} ₫` : "Liên hệ",
+                oldPrice: dbItem.oldPrice ? `${dbItem.oldPrice.toLocaleString("vi-VN")} ₫` : undefined,
+                save: dbItem.discountLabel,
+                cta: "LỰA CHỌN",
+                href: `/vn/${cleanBasePath}`,
+              });
+            }
+          }
+          return additions.length > 0 ? [...current, ...additions] : current;
+        });
+      })
+      .catch(() => {});
+
+    // 2. Fetch live batch pricing
     const slugs = cfg.products
       .map((p) => p.href.replace(/^\/vn\//, ""))
       .filter((s) => s.startsWith("laptops/"));
     if (slugs.length === 0) return;
 
     RogApi.getBatchPricing(slugs).then((prices) => {
-      if (!prices || prices.length === 0) return;
+      if (isCancelled || !prices || prices.length === 0) return;
       const priceMap = new Map(prices.map((pr) => [pr.slug.toLowerCase(), pr]));
       setProducts((current) =>
         current.map((item) => {
@@ -383,6 +446,10 @@ export default function RogSeriesPage({ series = "flow" }: { series?: SeriesType
         })
       );
     }).catch(() => {});
+
+    return () => {
+      isCancelled = true;
+    };
   }, [series, cfg.products]);
 
   const filterGroups: FilterGroup[] = [
@@ -527,7 +594,7 @@ export default function RogSeriesPage({ series = "flow" }: { series?: SeriesType
         {/* product cards */}
         <div className="rog-series-cards">
           {products.map((p) => (
-            <div className="rog-series-card" key={p.model}>
+            <div className="rog-series-card productCard" data-product-id={p.model} key={p.model}>
               <span className="rog-series-status">
                 <span className={`rog-series-status-icon${p.status === "CÒN HÀNG" ? " rog-series-status-in" : " rog-series-status-out"}`} aria-hidden />
                 {p.status}
@@ -557,7 +624,16 @@ export default function RogSeriesPage({ series = "flow" }: { series?: SeriesType
                 )}
               </div>
               <div className="rog-series-ctas">
-                {p.href.startsWith("/") ? (
+                {p.cta === "MUA NGAY" ? (
+                  <button
+                    type="button"
+                    className="rog-series-cta-main"
+                    onClick={() => handleBuyNow(p)}
+                    style={{ cursor: "pointer", border: "none" }}
+                  >
+                    {p.cta}
+                  </button>
+                ) : p.href.startsWith("/") ? (
                   <Link className="rog-series-cta-main" href={p.href}>
                     {p.cta}
                   </Link>
@@ -616,6 +692,52 @@ export default function RogSeriesPage({ series = "flow" }: { series?: SeriesType
         <span>›</span>
         <span>{cfg.crumb}</span>
       </div>
+
+      {/* Floating Sticky Compare Dock */}
+      {selectedToCompare.length > 0 && (
+        <div className="rog-series-compare-dock">
+          <div className="rog-compare-dock-inner">
+            <div className="rog-compare-dock-info">
+              <span className="rog-compare-dock-count">
+                Đã chọn <strong>{selectedToCompare.length}</strong>/4 sản phẩm
+              </span>
+              <button
+                type="button"
+                className="rog-compare-dock-clear"
+                onClick={() => setCompare({})}
+              >
+                Xóa tất cả
+              </button>
+            </div>
+
+            <div className="rog-compare-dock-items">
+              {selectedToCompare.map((item) => (
+                <div className="rog-compare-dock-item" key={item.model}>
+                  <img src={item.img} alt={item.name} />
+                  <div className="rog-compare-dock-item-name">{item.name}</div>
+                  <button
+                    type="button"
+                    className="rog-compare-dock-remove"
+                    onClick={() => setCompare((c) => ({ ...c, [item.model]: false }))}
+                    aria-label={`Bỏ chọn ${item.name}`}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <div className="rog-compare-dock-actions">
+              <Link
+                href={`/vn/compare?m1=${encodeURIComponent(selectedToCompare[0]?.name || selectedToCompare[0]?.model || "")}&m2=${encodeURIComponent(selectedToCompare[1]?.name || selectedToCompare[1]?.model || "")}&m3=${encodeURIComponent(selectedToCompare[2]?.name || selectedToCompare[2]?.model || "")}`}
+                className="rog-compare-dock-btn"
+              >
+                SO SÁNH NGAY ({selectedToCompare.length})
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

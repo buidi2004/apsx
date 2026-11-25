@@ -1,0 +1,1 @@
+// Nuxt static overview stub

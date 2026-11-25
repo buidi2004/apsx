@@ -18,7 +18,13 @@ public class Order : BaseEntity
     /// <summary>Đơn vị: VND (số nguyên, không có phần thập phân).</summary>
     public long Subtotal { get; set; }
     public long ShippingFee { get; set; }
+    public long DiscountAmount { get; set; }
     public long Total { get; set; }
+
+    public string? CouponCode { get; set; }
+    public string ShippingCarrier { get; set; } = string.Empty;
+    public string TrackingNumber { get; set; } = string.Empty;
+    public string? InternalNotes { get; set; }
 
     public OrderStatus Status { get; set; } = OrderStatus.Pending;
 

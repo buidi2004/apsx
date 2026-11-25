@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RogAdmin.Application.Common;
+using RogAdmin.Application.Dtos.Commerce;
 using RogAdmin.Application.Interfaces;
 using RogAdmin.Domain.Entities;
 using RogAdmin.Domain.Enums;
@@ -105,6 +106,56 @@ public class CustomersAdminController(
             c.IsActive,
             c.CartItems.Count,
             c.CreatedAt
+        ));
+    }
+
+    [HttpGet("{id:int}/orders")]
+    public async Task<ActionResult<CustomerDetailWithOrdersDto>> GetCustomerOrders(int id, CancellationToken ct = default)
+    {
+        var c = await db.Customers.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id, ct);
+        if (c == null) return NotFound(new { message = $"Không tìm thấy khách hàng #{id}" });
+
+        var emailLower = c.Email.Trim().ToLowerInvariant();
+        var orders = await db.Orders
+            .AsNoTracking()
+            .Include(o => o.Items)
+            .Where(o => o.CustomerId == id || o.Email.ToLower() == emailLower)
+            .OrderByDescending(o => o.CreatedAt)
+            .ToListAsync(ct);
+
+        var totalSpent = orders.Where(o => o.Status != OrderStatus.Cancelled).Sum(o => o.Total);
+
+        var orderDtos = orders.Select(o => new CustomerOrderSummaryDto(
+            o.Id,
+            o.OrderCode,
+            o.CreatedAt,
+            o.Total,
+            o.Status.ToString(),
+            o.Status switch
+            {
+                OrderStatus.Pending => "Chờ xác nhận",
+                OrderStatus.Confirmed => "Đã xác nhận",
+                OrderStatus.Shipping => "Đang giao hàng",
+                OrderStatus.Completed => "Hoàn tất",
+                OrderStatus.Cancelled => "Đã hủy",
+                _ => "Không xác định"
+            },
+            o.Items.Count,
+            o.ShippingCarrier ?? "",
+            o.TrackingNumber ?? ""
+        )).ToList();
+
+        return Ok(new CustomerDetailWithOrdersDto(
+            c.Id,
+            c.Email,
+            c.FullName,
+            c.PhoneNumber,
+            c.Tier.ToString(),
+            c.Points,
+            c.IsActive,
+            totalSpent,
+            orderDtos.Count,
+            orderDtos
         ));
     }
 

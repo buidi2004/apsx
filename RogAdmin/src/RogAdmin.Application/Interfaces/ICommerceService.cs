@@ -11,7 +11,8 @@ public interface IOrderService
     Task<IReadOnlyList<OrderDto>> GetByCustomerAsync(int customerId, CancellationToken ct = default);
     Task<PagedResult<AdminOrderSummaryDto>> GetAdminOrdersAsync(string? search, OrderStatus? status, int page, int pageSize, CancellationToken ct = default);
     Task<AdminOrderDetailDto?> GetAdminOrderDetailAsync(int id, CancellationToken ct = default);
-    Task<bool> UpdateOrderStatusAsync(int id, OrderStatus newStatus, CancellationToken ct = default);
+    Task<bool> UpdateOrderStatusAsync(int id, OrderStatus newStatus, string? carrier = null, string? trackingNumber = null, string? internalNotes = null, CancellationToken ct = default);
+    Task<bool> UpdateOrderShippingAsync(int id, string? carrier, string? trackingNumber, string? internalNotes, CancellationToken ct = default);
     Task<bool> DeleteOrderAsync(int id, CancellationToken ct = default);
     Task<bool> CancelAsync(string orderCode, CancellationToken ct = default);
 }

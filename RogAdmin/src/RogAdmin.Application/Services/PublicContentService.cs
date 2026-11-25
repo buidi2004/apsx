@@ -129,6 +129,7 @@ public class PublicContentService(
             Image = article.ImageUrl,
             Category = article.Tag.TrimStart('/', ' ').Trim(),
             ContentHtml = article.ContentHtml ?? string.Empty,
+            Author = string.IsNullOrWhiteSpace(article.Author) ? "ROG Editor" : article.Author,
         };
     }
 

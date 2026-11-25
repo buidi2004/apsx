@@ -6,6 +6,7 @@ import "./RogUniversalArticle.css";
 
 interface Props {
   slug: string[];
+  initialArticle?: CachedArticle;
 }
 
 export interface CachedArticle {
@@ -15,6 +16,7 @@ export interface CachedArticle {
   image: string;
   category: string;
   contentHtml: string;
+  author?: string;
 }
 
 export async function fetchRogArticle(slugPath: string): Promise<CachedArticle | null> {
@@ -23,13 +25,14 @@ export async function fetchRogArticle(slugPath: string): Promise<CachedArticle |
   if (!backendArticle.contentHtml && !backendArticle.lead) return null;
   return {
     ...backendArticle,
+    author: backendArticle.author || "ROG Editor",
     contentHtml: backendArticle.contentHtml || (backendArticle.lead ? `<p class="rog-default-lead">${backendArticle.lead}</p>` : ""),
   };
 }
 
-export default async function RogUniversalArticle({ slug }: Props) {
+export default async function RogUniversalArticle({ slug, initialArticle }: Props) {
   const slugPath = slug.join("/");
-  const article = await fetchRogArticle(slugPath);
+  const article = initialArticle ?? (await fetchRogArticle(slugPath));
 
   if (!article) {
     redirect("/vn/articles");
@@ -50,7 +53,7 @@ export default async function RogUniversalArticle({ slug }: Props) {
           <div className="rog-art-tag">{"// "}{article.category}</div>
           <h1 className="rog-art-title">{article.title}</h1>
           <div className="rog-art-meta">
-            <span className="rog-art-author">Tác giả: ROG Editor</span>
+            <span className="rog-art-author">Tác giả: {article.author || "ROG Editor"}</span>
             <span>·</span>
             <span>{article.date}</span>
           </div>

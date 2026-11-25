@@ -20,8 +20,9 @@ export default function RogChatWidget({
   useEffect(() => {
     RogApi.getSiteConfig()
       .then((cfg) => {
-        if (cfg && (cfg as any).chatGreeting) {
-          setGreetingText((cfg as any).chatGreeting);
+        const configRecord = cfg as Record<string, unknown> | undefined;
+        if (configRecord && typeof configRecord.chatGreeting === "string") {
+          setGreetingText(configRecord.chatGreeting);
         }
       })
       .catch(() => {});

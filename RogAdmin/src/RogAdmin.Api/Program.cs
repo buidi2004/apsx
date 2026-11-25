@@ -85,7 +85,6 @@ builder.Services.Configure<GzipCompressionProviderOptions>(options =>
 // ---------- Tối ưu hóa: Output Caching cho API Công khai ----------
 builder.Services.AddOutputCache(options =>
 {
-    options.AddBasePolicy(p => p.Expire(TimeSpan.FromSeconds(60)));
     options.AddPolicy("PublicCache", p => p.Expire(TimeSpan.FromSeconds(60)).Tag("public-content"));
 });
 
@@ -128,6 +127,8 @@ builder.Services.AddCors(options => options.AddPolicy("Frontend", policy =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
+    options.CustomSchemaIds(type => type.FullName?.Replace('+', '.') ?? type.Name);
+    options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "RogAdmin API",
@@ -485,6 +486,26 @@ using (var scope = app.Services.CreateScope())
                 FOREIGN KEY (ProductId) REFERENCES Products (Id) ON DELETE CASCADE
             );
             CREATE INDEX IF NOT EXISTS IX_ProductImages_ProductId ON ProductImages (ProductId);
+
+            CREATE TABLE IF NOT EXISTS Coupons (
+                Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                Code TEXT NOT NULL,
+                Title TEXT NOT NULL,
+                Description TEXT NOT NULL,
+                DiscountType INTEGER NOT NULL DEFAULT 0,
+                DiscountValue REAL NOT NULL DEFAULT 0,
+                MinOrderValue REAL NOT NULL DEFAULT 0,
+                MaxDiscountAmount REAL NULL,
+                ValidFrom TEXT NULL,
+                ValidTo TEXT NULL,
+                UsageLimit INTEGER NOT NULL DEFAULT 100,
+                UsedCount INTEGER NOT NULL DEFAULT 0,
+                IsActive INTEGER NOT NULL DEFAULT 1,
+                CreatedAt TEXT NOT NULL,
+                UpdatedAt TEXT NULL
+            );
+            CREATE UNIQUE INDEX IF NOT EXISTS IX_Coupons_Code ON Coupons (Code);
+            CREATE INDEX IF NOT EXISTS IX_Coupons_IsActive ON Coupons (IsActive);
             """);
 
         try
@@ -498,6 +519,16 @@ using (var scope = app.Services.CreateScope())
             await db.Database.ExecuteSqlRawAsync("ALTER TABLE Articles ADD COLUMN Author TEXT NULL DEFAULT 'ROG Editor';");
         }
         catch { /* Column already exists */ }
+
+        try { await db.Database.ExecuteSqlRawAsync("ALTER TABLE Orders ADD COLUMN ShippingCarrier TEXT NOT NULL DEFAULT '';"); } catch { }
+        try { await db.Database.ExecuteSqlRawAsync("ALTER TABLE Orders ADD COLUMN TrackingNumber TEXT NOT NULL DEFAULT '';"); } catch { }
+        try { await db.Database.ExecuteSqlRawAsync("ALTER TABLE Orders ADD COLUMN InternalNotes TEXT NULL;"); } catch { }
+        try { await db.Database.ExecuteSqlRawAsync("ALTER TABLE Orders ADD COLUMN CouponCode TEXT NULL;"); } catch { }
+        try { await db.Database.ExecuteSqlRawAsync("ALTER TABLE Orders ADD COLUMN DiscountAmount INTEGER NOT NULL DEFAULT 0;"); } catch { }
+        try { await db.Database.ExecuteSqlRawAsync("ALTER TABLE ProductPrices ADD COLUMN StockQuantity INTEGER NOT NULL DEFAULT 15;"); } catch { }
+        try { await db.Database.ExecuteSqlRawAsync("ALTER TABLE ProductReviews ADD COLUMN AdminReply TEXT NULL;"); } catch { }
+        try { await db.Database.ExecuteSqlRawAsync("ALTER TABLE ProductReviews ADD COLUMN RepliedAt TEXT NULL;"); } catch { }
+        try { await db.Database.ExecuteSqlRawAsync("ALTER TABLE ProductReviews ADD COLUMN RepliedBy TEXT NULL;"); } catch { }
     }
     else
     {
@@ -514,3 +545,6 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Run();
+
+// Cho phép WebApplicationFactory<Program> trong project test (RogAdmin.Tests) khởi động app thật.
+public partial class Program { }

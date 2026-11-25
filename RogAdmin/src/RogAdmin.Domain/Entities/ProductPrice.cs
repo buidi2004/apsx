@@ -11,6 +11,7 @@ public class ProductPrice : BaseEntity
     public string Currency { get; set; } = "VND";
     public string DiscountLabel { get; set; } = string.Empty; // e.g. "-15%", "TIẾT KIỆM 5 TRIỆU"
     public StockStatus StockStatus { get; set; } = StockStatus.InStock;
+    public int StockQuantity { get; set; } = 15;
     public string StoreUrl { get; set; } = string.Empty;
     public DateTime LastCheckedAt { get; set; } = DateTime.UtcNow;
 

@@ -8,6 +8,7 @@ import RogPromoBar from "@/components/sites/rog-asus/RogPromoBar";
 import RogFooter from "@/components/sites/rog-asus/RogFooter";
 import RogChatWidget from "@/components/sites/rog-asus/RogChatWidget";
 import { ARTICLES_DATABASE } from "@/components/sites/rog-asus/articles-data";
+import productIndex from "@/components/sites/rog-asus/universal/all-products-search-index.json";
 import { RogApi } from "@/lib/api-client";
 
 type SearchEntry = {
@@ -223,7 +224,7 @@ export default function SearchPage() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
-      const q = params.get("q") ?? "";
+      const q = params.get("q") ?? params.get("searchKeywords") ?? "";
       if (q) {
         queueMicrotask(() => {
           setQuery(q);
@@ -232,7 +233,7 @@ export default function SearchPage() {
     }
     const onPopState = () => {
       const params = new URLSearchParams(window.location.search);
-      setQuery(params.get("q") ?? "");
+      setQuery(params.get("q") ?? params.get("searchKeywords") ?? "");
     };
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
@@ -273,14 +274,21 @@ export default function SearchPage() {
     RogApi.getArticles("listing")
       .then((items) => {
         if (items && items.length > 0) {
-          const mapped: SearchEntry[] = items.map((a) => ({
-            type: "article" as const,
-            typeLabel: "BÀI VIẾT",
-            title: a.title,
-            desc: a.excerpt || "Tin tức & bài viết ROG",
-            href: a.href || `/vn/articles/${a.id || ""}`,
-            img: a.img,
-          }));
+          const mapped: SearchEntry[] = items.map((a) => {
+            const rawHref = a.href || "";
+            const cleanHref = rawHref
+              ? rawHref.replace(/^https?:\/\/rog\.asus\.com/, "").replace(/\/+$/, "")
+              : `/vn/articles/${a.id || ""}`;
+            const href = cleanHref.startsWith("/") ? cleanHref : `/${cleanHref}`;
+            return {
+              type: "article" as const,
+              typeLabel: "BÀI VIẾT",
+              title: a.title,
+              desc: a.excerpt || "Tin tức & bài viết ROG",
+              href,
+              img: a.img,
+            };
+          });
           setLiveArticles(mapped);
         }
       })
@@ -306,10 +314,22 @@ export default function SearchPage() {
     return Array.from(map.values());
   }, [liveArticles]);
 
+  const indexedProducts = useMemo<SearchEntry[]>(() => {
+    return (productIndex as { title: string; subName: string; specs: string; link: string; img: string; price: string }[]).map((p) => ({
+      type: "product" as const,
+      typeLabel: "SẢN PHẨM",
+      title: p.title,
+      desc: p.specs ? `${p.subName} — ${p.specs}` : p.subName || "Sản phẩm chính hãng ASUS ROG",
+      href: p.link,
+      badge: p.price || "ROG",
+      img: p.img,
+    }));
+  }, []);
+
   const allEntries = useMemo(() => {
-    const productsToUse = beProducts.length > 0 ? beProducts : BASE_PRODUCTS;
+    const productsToUse = beProducts.length > 0 ? beProducts : [...indexedProducts, ...BASE_PRODUCTS];
     return [...productsToUse, ...articleEntries];
-  }, [beProducts, articleEntries]);
+  }, [beProducts, indexedProducts, articleEntries]);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -452,9 +472,9 @@ export default function SearchPage() {
 
           {/* Result Cards */}
           <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            {results.map((item) => (
+            {results.map((item, idx) => (
               <Link
-                key={item.href}
+                key={`${item.type}-${item.href}-${idx}`}
                 href={item.href}
                 style={{
                   display: "flex",

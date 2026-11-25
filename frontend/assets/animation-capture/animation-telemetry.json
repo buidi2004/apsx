@@ -1,0 +1,1150 @@
+{
+  "targetUrl": "http://localhost:3000/vn",
+  "extractedAt": "2026-11-23T03:10:00.673Z",
+  "canvasSequenceFrames": [],
+  "webAnimations": [
+    {
+      "index": 0,
+      "id": "anim_0",
+      "selector": "span.rog-hero-fill rog-hero-fill-active",
+      "playState": "running",
+      "timing": {
+        "delay": 0,
+        "direction": "normal",
+        "duration": 5000,
+        "easing": "linear",
+        "endDelay": 0,
+        "fill": "forwards",
+        "iterationStart": 0,
+        "iterations": 1
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "scaleX(0)",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "scaleX(1)",
+          "computedOffset": 1
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "id": "anim_1",
+      "selector": "a.rog-ai-btn",
+      "playState": "running",
+      "timing": {
+        "delay": 0,
+        "direction": "normal",
+        "duration": 6000,
+        "easing": "linear",
+        "endDelay": 0,
+        "fill": "none",
+        "iterationStart": 0,
+        "iterations": null
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "linear",
+          "composite": "auto",
+          "backgroundPositionX": "0%",
+          "backgroundPositionY": "50%",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "linear",
+          "composite": "auto",
+          "backgroundPositionX": "200%",
+          "backgroundPositionY": "50%",
+          "computedOffset": 1
+        }
+      ]
+    }
+  ],
+  "scrollSampling": {
+    "stepPercent": 10,
+    "totalHeight": 2508,
+    "samples": [
+      {
+        "scrollProgress": 0,
+        "scrollY": 0,
+        "elementMetrics": [
+          {
+            "targetIndex": 0,
+            "tagName": "section",
+            "className": "rog-hero",
+            "transform": "",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": 90,
+            "height": 555
+          },
+          {
+            "targetIndex": 1,
+            "tagName": "a",
+            "className": "rog-hero-slide rog-hero-slide-active",
+            "transform": "",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": 90,
+            "height": 555
+          },
+          {
+            "targetIndex": 2,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": 90,
+            "height": 555
+          },
+          {
+            "targetIndex": 3,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": 90,
+            "height": 555
+          },
+          {
+            "targetIndex": 4,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": 90,
+            "height": 555
+          },
+          {
+            "targetIndex": 5,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": 90,
+            "height": 555
+          },
+          {
+            "targetIndex": 6,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": 90,
+            "height": 555
+          },
+          {
+            "targetIndex": 7,
+            "tagName": "div",
+            "className": "rog-hero-indicators",
+            "transform": "matrix(1, 0, 0, 1, -220, 0)",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": 607,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "scrollProgress": 10,
+        "scrollY": 251,
+        "elementMetrics": [
+          {
+            "targetIndex": 0,
+            "tagName": "section",
+            "className": "rog-hero",
+            "transform": "",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -161,
+            "height": 555
+          },
+          {
+            "targetIndex": 1,
+            "tagName": "a",
+            "className": "rog-hero-slide rog-hero-slide-active",
+            "transform": "",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -161,
+            "height": 555
+          },
+          {
+            "targetIndex": 2,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -161,
+            "height": 555
+          },
+          {
+            "targetIndex": 3,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -161,
+            "height": 555
+          },
+          {
+            "targetIndex": 4,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -161,
+            "height": 555
+          },
+          {
+            "targetIndex": 5,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -161,
+            "height": 555
+          },
+          {
+            "targetIndex": 6,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -161,
+            "height": 555
+          },
+          {
+            "targetIndex": 7,
+            "tagName": "div",
+            "className": "rog-hero-indicators",
+            "transform": "matrix(1, 0, 0, 1, -220, 0)",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": 356,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "scrollProgress": 20,
+        "scrollY": 502,
+        "elementMetrics": [
+          {
+            "targetIndex": 0,
+            "tagName": "section",
+            "className": "rog-hero",
+            "transform": "",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -412,
+            "height": 555
+          },
+          {
+            "targetIndex": 1,
+            "tagName": "a",
+            "className": "rog-hero-slide rog-hero-slide-active",
+            "transform": "",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -412,
+            "height": 555
+          },
+          {
+            "targetIndex": 2,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -412,
+            "height": 555
+          },
+          {
+            "targetIndex": 3,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -412,
+            "height": 555
+          },
+          {
+            "targetIndex": 4,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -412,
+            "height": 555
+          },
+          {
+            "targetIndex": 5,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -412,
+            "height": 555
+          },
+          {
+            "targetIndex": 6,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -412,
+            "height": 555
+          },
+          {
+            "targetIndex": 7,
+            "tagName": "div",
+            "className": "rog-hero-indicators",
+            "transform": "matrix(1, 0, 0, 1, -220, 0)",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": 105,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "scrollProgress": 30,
+        "scrollY": 752,
+        "elementMetrics": [
+          {
+            "targetIndex": 0,
+            "tagName": "section",
+            "className": "rog-hero",
+            "transform": "",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -662,
+            "height": 555
+          },
+          {
+            "targetIndex": 1,
+            "tagName": "a",
+            "className": "rog-hero-slide rog-hero-slide-active",
+            "transform": "",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -662,
+            "height": 555
+          },
+          {
+            "targetIndex": 2,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -662,
+            "height": 555
+          },
+          {
+            "targetIndex": 3,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -662,
+            "height": 555
+          },
+          {
+            "targetIndex": 4,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -662,
+            "height": 555
+          },
+          {
+            "targetIndex": 5,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -662,
+            "height": 555
+          },
+          {
+            "targetIndex": 6,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -662,
+            "height": 555
+          },
+          {
+            "targetIndex": 7,
+            "tagName": "div",
+            "className": "rog-hero-indicators",
+            "transform": "matrix(1, 0, 0, 1, -220, 0)",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -145,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "scrollProgress": 40,
+        "scrollY": 1003,
+        "elementMetrics": [
+          {
+            "targetIndex": 0,
+            "tagName": "section",
+            "className": "rog-hero",
+            "transform": "",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -913,
+            "height": 555
+          },
+          {
+            "targetIndex": 1,
+            "tagName": "a",
+            "className": "rog-hero-slide rog-hero-slide-active",
+            "transform": "",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -913,
+            "height": 555
+          },
+          {
+            "targetIndex": 2,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -913,
+            "height": 555
+          },
+          {
+            "targetIndex": 3,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -913,
+            "height": 555
+          },
+          {
+            "targetIndex": 4,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -913,
+            "height": 555
+          },
+          {
+            "targetIndex": 5,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -913,
+            "height": 555
+          },
+          {
+            "targetIndex": 6,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -913,
+            "height": 555
+          },
+          {
+            "targetIndex": 7,
+            "tagName": "div",
+            "className": "rog-hero-indicators",
+            "transform": "matrix(1, 0, 0, 1, -220, 0)",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -396,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "scrollProgress": 50,
+        "scrollY": 1254,
+        "elementMetrics": [
+          {
+            "targetIndex": 0,
+            "tagName": "section",
+            "className": "rog-hero",
+            "transform": "",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -1164,
+            "height": 555
+          },
+          {
+            "targetIndex": 1,
+            "tagName": "a",
+            "className": "rog-hero-slide rog-hero-slide-active",
+            "transform": "",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -1164,
+            "height": 555
+          },
+          {
+            "targetIndex": 2,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -1164,
+            "height": 555
+          },
+          {
+            "targetIndex": 3,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -1164,
+            "height": 555
+          },
+          {
+            "targetIndex": 4,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -1164,
+            "height": 555
+          },
+          {
+            "targetIndex": 5,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -1164,
+            "height": 555
+          },
+          {
+            "targetIndex": 6,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -1164,
+            "height": 555
+          },
+          {
+            "targetIndex": 7,
+            "tagName": "div",
+            "className": "rog-hero-indicators",
+            "transform": "matrix(1, 0, 0, 1, -220, 0)",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -647,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "scrollProgress": 60,
+        "scrollY": 1505,
+        "elementMetrics": [
+          {
+            "targetIndex": 0,
+            "tagName": "section",
+            "className": "rog-hero",
+            "transform": "",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -1415,
+            "height": 555
+          },
+          {
+            "targetIndex": 1,
+            "tagName": "a",
+            "className": "rog-hero-slide rog-hero-slide-active",
+            "transform": "",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -1415,
+            "height": 555
+          },
+          {
+            "targetIndex": 2,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -1415,
+            "height": 555
+          },
+          {
+            "targetIndex": 3,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -1415,
+            "height": 555
+          },
+          {
+            "targetIndex": 4,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -1415,
+            "height": 555
+          },
+          {
+            "targetIndex": 5,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -1415,
+            "height": 555
+          },
+          {
+            "targetIndex": 6,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -1415,
+            "height": 555
+          },
+          {
+            "targetIndex": 7,
+            "tagName": "div",
+            "className": "rog-hero-indicators",
+            "transform": "matrix(1, 0, 0, 1, -220, 0)",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -898,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "scrollProgress": 70,
+        "scrollY": 1756,
+        "elementMetrics": [
+          {
+            "targetIndex": 0,
+            "tagName": "section",
+            "className": "rog-hero",
+            "transform": "",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -1666,
+            "height": 555
+          },
+          {
+            "targetIndex": 1,
+            "tagName": "a",
+            "className": "rog-hero-slide rog-hero-slide-active",
+            "transform": "",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -1666,
+            "height": 555
+          },
+          {
+            "targetIndex": 2,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -1666,
+            "height": 555
+          },
+          {
+            "targetIndex": 3,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -1666,
+            "height": 555
+          },
+          {
+            "targetIndex": 4,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -1666,
+            "height": 555
+          },
+          {
+            "targetIndex": 5,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -1666,
+            "height": 555
+          },
+          {
+            "targetIndex": 6,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -1666,
+            "height": 555
+          },
+          {
+            "targetIndex": 7,
+            "tagName": "div",
+            "className": "rog-hero-indicators",
+            "transform": "matrix(1, 0, 0, 1, -220, 0)",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -1149,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "scrollProgress": 80,
+        "scrollY": 2006,
+        "elementMetrics": [
+          {
+            "targetIndex": 0,
+            "tagName": "section",
+            "className": "rog-hero",
+            "transform": "",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -1916,
+            "height": 555
+          },
+          {
+            "targetIndex": 1,
+            "tagName": "a",
+            "className": "rog-hero-slide rog-hero-slide-active",
+            "transform": "",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -1916,
+            "height": 555
+          },
+          {
+            "targetIndex": 2,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -1916,
+            "height": 555
+          },
+          {
+            "targetIndex": 3,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -1916,
+            "height": 555
+          },
+          {
+            "targetIndex": 4,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -1916,
+            "height": 555
+          },
+          {
+            "targetIndex": 5,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -1916,
+            "height": 555
+          },
+          {
+            "targetIndex": 6,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -1916,
+            "height": 555
+          },
+          {
+            "targetIndex": 7,
+            "tagName": "div",
+            "className": "rog-hero-indicators",
+            "transform": "matrix(1, 0, 0, 1, -220, 0)",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -1399,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "scrollProgress": 90,
+        "scrollY": 2257,
+        "elementMetrics": [
+          {
+            "targetIndex": 0,
+            "tagName": "section",
+            "className": "rog-hero",
+            "transform": "",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -2167,
+            "height": 555
+          },
+          {
+            "targetIndex": 1,
+            "tagName": "a",
+            "className": "rog-hero-slide rog-hero-slide-active",
+            "transform": "",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -2167,
+            "height": 555
+          },
+          {
+            "targetIndex": 2,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -2167,
+            "height": 555
+          },
+          {
+            "targetIndex": 3,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -2167,
+            "height": 555
+          },
+          {
+            "targetIndex": 4,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -2167,
+            "height": 555
+          },
+          {
+            "targetIndex": 5,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -2167,
+            "height": 555
+          },
+          {
+            "targetIndex": 6,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -2167,
+            "height": 555
+          },
+          {
+            "targetIndex": 7,
+            "tagName": "div",
+            "className": "rog-hero-indicators",
+            "transform": "matrix(1, 0, 0, 1, -220, 0)",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -1650,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "scrollProgress": 100,
+        "scrollY": 2508,
+        "elementMetrics": [
+          {
+            "targetIndex": 0,
+            "tagName": "section",
+            "className": "rog-hero",
+            "transform": "",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -2418,
+            "height": 555
+          },
+          {
+            "targetIndex": 1,
+            "tagName": "a",
+            "className": "rog-hero-slide rog-hero-slide-active",
+            "transform": "",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -2418,
+            "height": 555
+          },
+          {
+            "targetIndex": 2,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -2418,
+            "height": 555
+          },
+          {
+            "targetIndex": 3,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -2418,
+            "height": 555
+          },
+          {
+            "targetIndex": 4,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -2418,
+            "height": 555
+          },
+          {
+            "targetIndex": 5,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -2418,
+            "height": 555
+          },
+          {
+            "targetIndex": 6,
+            "tagName": "a",
+            "className": "rog-hero-slide",
+            "transform": "",
+            "opacity": "0",
+            "clipPath": "",
+            "filter": "",
+            "y": -2418,
+            "height": 555
+          },
+          {
+            "targetIndex": 7,
+            "tagName": "div",
+            "className": "rog-hero-indicators",
+            "transform": "matrix(1, 0, 0, 1, -220, 0)",
+            "opacity": "1",
+            "clipPath": "",
+            "filter": "",
+            "y": -1901,
+            "height": 16
+          }
+        ]
+      }
+    ]
+  },
+  "mediaAssets": [],
+  "retinaAssets": [
+    {
+      "url": "/sites/rog-asus/img/hero/control-resonant.webp",
+      "type": "srcset-asset",
+      "descriptor": "1x"
+    },
+    {
+      "url": "/sites/rog-asus/img/hero/gamescom.webp",
+      "type": "srcset-asset",
+      "descriptor": "1x"
+    },
+    {
+      "url": "/sites/rog-asus/img/hero/google-ai.webp",
+      "type": "srcset-asset",
+      "descriptor": "1x"
+    },
+    {
+      "url": "/sites/rog-asus/img/hero/strix-scar-18.webp",
+      "type": "srcset-asset",
+      "descriptor": "1x"
+    },
+    {
+      "url": "/sites/rog-asus/img/hero/zephyrus-duo.webp",
+      "type": "srcset-asset",
+      "descriptor": "1x"
+    },
+    {
+      "url": "/sites/rog-asus/img/hero/zephyrus-g14.webp",
+      "type": "srcset-asset",
+      "descriptor": "1x"
+    }
+  ],
+  "codeSnippets": {
+    "framerMotion": "// Generated from ASUS ROG Scroll-Keyframe Sampling (0% -> 100%)\nimport { motion, useScroll, useTransform } from 'framer-motion';\nimport { useRef } from 'react';\n\nexport function RogParallaxHero() {\n  const containerRef = useRef<HTMLDivElement>(null);\n  const { scrollYProgress } = useScroll({\n    target: containerRef,\n    offset: [\"start start\", \"end end\"]\n  });\n\n  const opacity = useTransform(scrollYProgress, [0, 0.25, 0.5, 0.75, 1], [1, 0.9, 0.5, 0.2, 0]);\n  const scale = useTransform(scrollYProgress, [0, 0.25, 0.5, 0.75, 1], [1, 1.05, 1.15, 1.25, 1.4]);\n\n  return (\n    <div ref={containerRef} className=\"relative h-[250vh] bg-black\">\n      <motion.div \n        style={{ opacity, scale }}\n        className=\"sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden\"\n      >\n        <h1 className=\"text-6xl font-black text-white uppercase tracking-widest\">\n          FOR THOSE WHO DARE\n        </h1>\n      </motion.div>\n    </div>\n  );\n}",
+    "gsapScrollTrigger": "// Generated GSAP ScrollTrigger timeline matching ASUS ROG pinned sequence\nimport { gsap } from 'gsap';\nimport { ScrollTrigger } from 'gsap/ScrollTrigger';\n\ngsap.registerPlugin(ScrollTrigger);\n\nexport function initRogScrollAnimation(triggerElement: HTMLElement, targetElement: HTMLElement) {\n  const tl = gsap.timeline({\n    scrollTrigger: {\n      trigger: triggerElement,\n      start: 'top top',\n      end: '+=150%',\n      pin: true,\n      scrub: 1, // Smooth inertia scrub\n      anticipatePin: 1,\n    }\n  });\n\n  tl.to(targetElement, {\n    scale: 1.2,\n    opacity: 0,\n    ease: 'power2.out',\n    duration: 1\n  });\n\n  return tl;\n}"
+  }
+}

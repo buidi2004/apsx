@@ -257,3 +257,19 @@
   white-space: nowrap !important;
   text-decoration: none !important;
 }
+
+/* Ensure product subbar docks right beneath 50px sticky RogNavbar */
+.ProductTabBar__productTabBarContainer__O9P3C,
+.ProductTabBar__productTabBarContainer__O9P3C.ProductTabBar__isFixed__Sd\+4M,
+.ProductTabBar__productTabBarContainer__O9P3C.ProductTabBar__isMotherboards__ytvqk.ProductTabBar__isFixed__Sd\+4M {
+  position: sticky !important;
+  top: 50px !important;
+  z-index: 1000 !important;
+}
+
+@media (max-width: 1023px) {
+  .ProductTabBar__productTabBarContainer__O9P3C,
+  .ProductTabBar__productTabBarContainer__O9P3C.ProductTabBar__isFixed__Sd\+4M {
+    top: 48px !important;
+  }
+}

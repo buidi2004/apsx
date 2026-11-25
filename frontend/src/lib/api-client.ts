@@ -51,6 +51,9 @@ export interface PublicReviewDto {
   rating: number;
   isApproved: boolean;
   createdAtUtc: string;
+  adminReply?: string | null;
+  repliedAt?: string | null;
+  repliedBy?: string | null;
 }
 
 export interface ProductListItemDto {
@@ -238,6 +241,7 @@ export interface CreateOrderInput {
   phone: string;
   address: string;
   note?: string;
+  couponCode?: string;
   items: CreateOrderItemInput[];
 }
 
@@ -265,6 +269,30 @@ export interface OrderDto {
   statusText: string;
   createdAt: string;
   items: OrderItemDto[];
+  shippingCarrier?: string;
+  trackingNumber?: string;
+  couponCode?: string | null;
+  discountAmount?: number;
+}
+
+export interface PublicCouponDto {
+  code: string;
+  title: string;
+  description: string;
+  discountType: "Percentage" | "FixedAmount";
+  discountValue: number;
+  minOrderValue: number;
+  maxDiscountAmount?: number | null;
+  validTo?: string | null;
+}
+
+export interface ValidateCouponResponse {
+  valid: boolean;
+  code: string;
+  title: string;
+  message: string;
+  discountAmount: number;
+  finalTotal: number;
 }
 
 export interface CreateOrderResponse {
@@ -661,6 +689,15 @@ export const RogApi = {
     return getJsonAuth<CustomerProfileDto>("/public/auth/me", token ?? getCustomerToken());
   },
 
+  // ---------- Mã giảm giá / Coupons ----------
+  async getPublicCoupons(): Promise<PublicCouponDto[]> {
+    return safeFetch<PublicCouponDto[]>("/public/coupons");
+  },
+
+  async validateCoupon(code: string, orderSubtotal: number): Promise<ValidateCouponResponse> {
+    return postJson<ValidateCouponResponse>("/public/coupons/validate", { code, orderSubtotal });
+  },
+
   // ---------- Đơn hàng ----------
   async createOrder(input: CreateOrderInput, token?: string | null): Promise<CreateOrderResponse> {
     return postJson<CreateOrderResponse>("/public/orders", input, token ?? getCustomerToken());
@@ -675,21 +712,31 @@ export const RogApi = {
   },
 
   async subscribeNewsletter(email: string): Promise<boolean> {
-    const response = await fetch(`${API_BASE}/public/newsletter/subscribe`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
-    return response.ok;
+    try {
+      const response = await fetch(apiUrl("/public/newsletter/subscribe"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+        signal: AbortSignal.timeout(5000),
+      });
+      return response.ok;
+    } catch {
+      return false;
+    }
   },
 
-  async submitProductReview(productSlug: string, content: string, rating = 5): Promise<boolean> {
-    const response = await fetch(`${API_BASE}/public/reviews`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ productSlug, content, rating }),
-    });
-    return response.ok;
+  async submitProductReview(productSlug: string, content: string, rating = 5, authorName?: string, title?: string): Promise<boolean> {
+    try {
+      const response = await fetch(apiUrl("/public/reviews"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productSlug, content, rating, authorName, title }),
+        signal: AbortSignal.timeout(5000),
+      });
+      return response.ok;
+    } catch {
+      return false;
+    }
   },
 
   async getProductReviews(productSlug: string, options?: FetchOptions): Promise<PublicReviewDto[]> {
@@ -869,5 +916,35 @@ export const RogApi = {
    */
   async getVideos(): Promise<VideoItemDto[]> {
     return safeFetch<VideoItemDto[]>("/public/videos");
+  },
+
+  /**
+   * Fetch full article detail with contentHtml
+   */
+  async getArticleDetail(slugPath: string, options?: FetchOptions): Promise<{
+    title: string;
+    lead: string;
+    date: string;
+    image: string;
+    category: string;
+    contentHtml: string;
+    author?: string;
+  } | null> {
+    const slug = slugPath.replace(/^\/+|\/+$/g, "").split("/").map(encodeURIComponent).join("/");
+    return safeFetch(`/public/articles/${slug}`, options);
+  },
+
+  /**
+   * Fetch individual service centers
+   */
+  async getServiceCenters(options?: FetchOptions): Promise<unknown[] | null> {
+    return safeFetch("/public/service-centers", options);
+  },
+
+  /**
+   * Fetch individual warranty policies
+   */
+  async getWarrantyPolicies(options?: FetchOptions): Promise<unknown[] | null> {
+    return safeFetch("/public/warranty-policies", options);
   },
 };

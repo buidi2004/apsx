@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/lib/cart";
 import { RogApi } from "@/lib/api-client";
+import RogProductAwards from "@/components/sites/rog-asus/universal/RogProductAwards";
 import "../RogProductDetail.css";
 import "./kjp-style.css";
 import { KJP_FEATURES_HTML } from "./kjp-html";
@@ -13,6 +14,7 @@ import { KJP_FEATURES_HTML } from "./kjp-html";
 export default function RogFlowZ13KjpOverview() {
   const router = useRouter();
   const { addLine } = useCart();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [livePrice, setLivePrice] = useState("109.990.000 ₫");
   const [unitPriceNum, setUnitPriceNum] = useState(109990000);
 
@@ -109,7 +111,11 @@ export default function RogFlowZ13KjpOverview() {
       </div>
 
       {/* sticky subbar with tabs */}
-      <div className="rog-pd-subbar" style={{ position: "sticky", top: 50, zIndex: 900 }}>
+      <div
+        id="productTabBarContainer"
+        className="rog-pd-subbar productTabBarContainer ProductTabBar__productTabBarContainer__O9P3C"
+        style={{ position: "sticky", top: 50, zIndex: 999, fontSize: "16px", lineHeight: "18.4px" }}
+      >
         <div className="rog-pd-subbar-inner">
           <div className="rog-pd-subbar-left">
             <img
@@ -125,22 +131,34 @@ export default function RogFlowZ13KjpOverview() {
               href="/vn/laptops/rog-flow/rog-flow-z13-kjp"
               className="rog-pd-tab-link is-active"
             >
-              Tổng quan (Xem thêm)
+              Tính năng
             </Link>
             <Link
               href="/vn/laptops/rog-flow/rog-flow-z13-kjp/spec"
               className="rog-pd-tab-link"
             >
-              Chi tiết / Thông số kỹ thuật
+              Thông số kỹ thuật
             </Link>
-            <a href="#section-ring" className="rog-pd-tab-link">
-              3D Interactive
-            </a>
-            <a href="#section-scrollParallaxGallery" className="rog-pd-tab-link">
-              Thư viện ảnh
-            </a>
             <Link
-              href="/vn/support"
+              href="/vn/laptops/rog-flow/rog-flow-z13-kjp/award"
+              className="rog-pd-tab-link"
+            >
+              Giải thưởng
+            </Link>
+            <Link
+              href="/vn/laptops/rog-flow/rog-flow-z13-kjp/gallery"
+              className="rog-pd-tab-link"
+            >
+              Thư viện
+            </Link>
+            <Link
+              href="/vn/laptops/rog-flow/rog-flow-z13-kjp/wtb"
+              className="rog-pd-tab-link"
+            >
+              Nơi mua
+            </Link>
+            <Link
+              href="/vn/laptops/rog-flow/rog-flow-z13-kjp/helpdesk"
               className="rog-pd-tab-link"
             >
               Hỗ trợ
@@ -152,16 +170,74 @@ export default function RogFlowZ13KjpOverview() {
               <span className="rog-pd-subbar-price-label">Giá trên ASUS estore</span>
               <span className="rog-pd-subbar-price">{livePrice}</span>
             </div>
+            <Link
+              href="/vn/laptops/rog-flow/rog-flow-z13-kjp/spec"
+              className="rog-pd-buy-btn"
+              style={{ background: "#ff0036", color: "#fff", textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
+            >
+              LỰA CHỌN
+            </Link>
             <button
               type="button"
-              onClick={handleBuyNow}
-              className="rog-pd-buy-btn"
-              style={{ cursor: "pointer", border: "none" }}
+              aria-label="Toggle mobile menu"
+              className="rog-pd-subbar-burger"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              MUA NGAY
+              <span>{mobileMenuOpen ? "ĐÓNG" : "MENU"}</span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ transform: mobileMenuOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s ease" }}>
+                <path d="M1 4l5 6 5-6H1z" fill="#fff" />
+              </svg>
             </button>
           </div>
         </div>
+
+        {/* Mobile dropdown drawer */}
+        {mobileMenuOpen && (
+          <div className="rog-pd-subbar-mobile-menu">
+            <Link
+              href="/vn/laptops/rog-flow/rog-flow-z13-kjp"
+              className="rog-pd-subbar-mobile-link is-active"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Tính năng
+            </Link>
+            <Link
+              href="/vn/laptops/rog-flow/rog-flow-z13-kjp/spec"
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Thông số kỹ thuật
+            </Link>
+            <Link
+              href="/vn/laptops/rog-flow/rog-flow-z13-kjp/award"
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Giải thưởng
+            </Link>
+            <Link
+              href="/vn/laptops/rog-flow/rog-flow-z13-kjp/gallery"
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Thư viện
+            </Link>
+            <Link
+              href="/vn/laptops/rog-flow/rog-flow-z13-kjp/wtb"
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Nơi mua
+            </Link>
+            <Link
+              href="/vn/laptops/rog-flow/rog-flow-z13-kjp/helpdesk"
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Hỗ trợ
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* 1:1 Bespoke KJP Experience Container */}
@@ -170,6 +246,9 @@ export default function RogFlowZ13KjpOverview() {
         dangerouslySetInnerHTML={{ __html: KJP_FEATURES_HTML }}
         suppressHydrationWarning
       />
+
+      {/* Official Awards & Media Reviews */}
+      <RogProductAwards productName="ROG Flow Z13-KJP (2026)" />
 
       {/* Footer disclaimers */}
       <footer className="rog-pd-foot-note" style={{ padding: "40px 24px", background: "#0b0b0b", borderTop: "1px solid #222" }}>

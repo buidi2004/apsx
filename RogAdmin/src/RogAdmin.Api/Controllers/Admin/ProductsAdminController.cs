@@ -33,7 +33,8 @@ public record CreateProductRequest(
     decimal Price = 0,
     decimal? OldPrice = null,
     string DiscountLabel = "",
-    StockStatus StockStatus = StockStatus.InStock
+    StockStatus StockStatus = StockStatus.InStock,
+    int StockQuantity = 15
 );
 
 public record ProductSpecItemDto(
@@ -64,16 +65,17 @@ public class ProductsAdminController(
     IOutputCacheStore cacheStore,
     IAuditLogService auditLog) : ControllerBase
 {
-    /// <summary>Danh sách sản phẩm quản trị (phân trang, lọc danh mục, tìm kiếm).</summary>
+    /// <summary>Danh sách sản phẩm quản trị (phân trang, lọc danh mục, tìm kiếm, lọc kho).</summary>
     [HttpGet]
     public async Task<ActionResult<PagedResult<ProductListItemDto>>> GetPaged(
         [FromQuery] string? category,
         [FromQuery] string? search,
+        [FromQuery] StockStatus? stockStatus,
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 20,
         CancellationToken ct = default)
     {
-        var result = await catalogService.GetProductsAsync(category, search, page, pageSize, includeInactive: true, ct);
+        var result = await catalogService.GetProductsAsync(category, search, page, pageSize, includeInactive: true, stockStatus: stockStatus, ct: ct);
         return Ok(result);
     }
 
@@ -104,6 +106,7 @@ public class ProductsAdminController(
             req.OldPrice,
             req.DiscountLabel,
             req.StockStatus,
+            req.StockQuantity,
             ct);
 
         if (result == null) return NotFound(new { message = $"Không tìm thấy sản phẩm #{id}" });
@@ -113,7 +116,7 @@ public class ProductsAdminController(
 
         var username = User.Identity?.Name ?? "Admin";
         var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
-        await auditLog.LogAsync(username, "UPDATE_PRICE", "Product", id.ToString(), $"Cập nhật giá sản phẩm #{id}: {req.Price:N0} VNĐ, kho: {req.StockStatus}", ip, ct);
+        await auditLog.LogAsync(username, "UPDATE_PRICE", "Product", id.ToString(), $"Cập nhật giá sản phẩm #{id}: {req.Price:N0} VNĐ, kho: {req.StockStatus}, tồn kho: {req.StockQuantity ?? 15}", ip, ct);
 
         return Ok(result);
     }
@@ -131,6 +134,7 @@ public class ProductsAdminController(
             req.OldPrice,
             req.DiscountLabel,
             req.StockStatus,
+            req.StockQuantity,
             ct);
 
         if (result == null) return NotFound(new { message = $"Không tìm thấy sản phẩm slug: '{slug}'" });

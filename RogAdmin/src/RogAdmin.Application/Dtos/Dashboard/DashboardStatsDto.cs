@@ -23,4 +23,6 @@ public class DashboardStatsDto
     public int OrdersTotal { get; set; }
     public int OrdersPending { get; set; }
     public int PendingReviewsTotal { get; set; }
+    public int LowStockProductsTotal { get; set; }
+    public int CouponsTotal { get; set; }
 }

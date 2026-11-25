@@ -2,13 +2,55 @@
 
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { RogApi } from "@/lib/api-client";
+import { useCart } from "@/lib/cart";
 import "../RogProductDetail.css";
 import "./matrix-style.css";
 import { MATRIX_FEATURES_HTML } from "./matrix-html";
 import RogCardMatrix5090PostFeatures from "./RogCardMatrix5090PostFeatures";
 
 export default function RogCardMatrix5090Overview() {
+  const router = useRouter();
+  const { addLine } = useCart();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [livePrice, setLivePrice] = useState<string>("99.990.000 ₫");
+  const [priceLabel, setPriceLabel] = useState<string>("Giá trên ASUS estore");
+  const [unitPriceNum, setUnitPriceNum] = useState<number>(99990000);
+  const [stockStatus, setStockStatus] = useState<number>(0);
+
+  useEffect(() => {
+    RogApi.getBatchPricing(["graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th"])
+      .then((res) => {
+        if (res && res.length > 0) {
+          const item = res[0];
+          if (item.formattedPrice) {
+            setLivePrice(item.formattedPrice);
+            setPriceLabel("Giá trên ASUS estore");
+          }
+          if (item.price) setUnitPriceNum(item.price);
+          setStockStatus(item.stockStatus);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleBuyNow = () => {
+    if (unitPriceNum > 0) {
+      addLine({
+        slug: "graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th",
+        name: "ROG Matrix Platinum GeForce RTX™ 5090 - ASUS 30th Anniversary Edition",
+        image: "/sites/rog-asus/img/vga/hot-matrix-5090.webp",
+        price: unitPriceNum,
+        href: "/vn/graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th",
+        selectedSpecs: "32GB GDDR7 · 800W Dual BTF/12V-2x6 · Quad Fan Liquid Metal",
+      });
+      router.push("/vn/checkout");
+    } else {
+      router.push("/vn/where-to-buy");
+    }
+  };
   useEffect(() => {
     // 0. Inject vendor CSS into <head>
     const cssUrls = ["/sites/rog-asus/matrix-5090/css/hd-style.css"];
@@ -99,7 +141,11 @@ export default function RogCardMatrix5090Overview() {
       </div>
 
       {/* 2. Sticky Subbar */}
-      <div className="rog-pd-subbar" style={{ position: "sticky", top: 50, zIndex: 900 }}>
+      <div
+        id="productTabBarContainer"
+        className="rog-pd-subbar productTabBarContainer ProductTabBar__productTabBarContainer__O9P3C"
+        style={{ position: "sticky", top: 50, zIndex: 999, fontSize: "16px", lineHeight: "18.4px" }}
+      >
         <div className="rog-pd-subbar-inner">
           <div className="rog-pd-subbar-left">
             <img
@@ -115,43 +161,110 @@ export default function RogCardMatrix5090Overview() {
               href="/vn/graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th"
               className="rog-pd-tab-link is-active"
             >
-              Tính năng (Xem thêm)
+              Tính năng
             </Link>
             <Link
               href="/vn/graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th/spec"
               className="rog-pd-tab-link"
             >
-              Chi tiết / Thông số kỹ thuật
+              Thông số kỹ thuật
             </Link>
-            <a href="#awards" className="rog-pd-tab-link">
+            <Link href="/vn/graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th/award" className="rog-pd-tab-link">
               Giải thưởng
-            </a>
+            </Link>
+            <Link href="/vn/graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th/gallery" className="rog-pd-tab-link">
+              Thư viện
+            </Link>
             <a href="#pageContent-sec-cooling" className="rog-pd-tab-link">
               Tản nhiệt
             </a>
             <a href="#pageContent-sec-psu" className="rog-pd-tab-link">
               Nguồn cấp
             </a>
-            <Link href="/vn/where-to-buy" className="rog-pd-tab-link">
+            <Link href="/vn/graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th/wtb" className="rog-pd-tab-link">
               Nơi mua
             </Link>
-            <Link href="/vn/support" className="rog-pd-tab-link">
+            <Link href="/vn/graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th/helpdesk" className="rog-pd-tab-link">
               Hỗ trợ
             </Link>
           </nav>
 
           <div className="rog-pd-subbar-actions">
             <div className="rog-pd-subbar-price-wrap">
-              <span className="rog-pd-subbar-price-label">Phiên bản giới hạn</span>
+              <span className="rog-pd-subbar-price-label">{priceLabel}</span>
               <span className="rog-pd-subbar-price" style={{ color: "#ff0036", fontWeight: 700 }}>
-                Kỷ Niệm 30 Năm
+                {livePrice}
               </span>
             </div>
-            <Link href="/vn/where-to-buy" className="rog-pd-buy-btn">
-              Lựa Chọn
-            </Link>
+            <button
+              type="button"
+              onClick={handleBuyNow}
+              className="rog-pd-buy-btn"
+              style={{ cursor: "pointer", border: "none" }}
+            >
+              {stockStatus === 1 ? "TẠM HẾT HÀNG" : "LỰA CHỌN"}
+            </button>
+            <button
+              type="button"
+              aria-label="Toggle mobile menu"
+              className="rog-pd-subbar-burger"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              <span>{mobileMenuOpen ? "ĐÓNG" : "MENU"}</span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ transform: mobileMenuOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s ease" }}>
+                <path d="M1 4l5 6 5-6H1z" fill="#fff" />
+              </svg>
+            </button>
           </div>
         </div>
+
+        {/* Mobile dropdown drawer */}
+        {mobileMenuOpen && (
+          <div className="rog-pd-subbar-mobile-menu">
+            <Link
+              href="/vn/graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th"
+              className="rog-pd-subbar-mobile-link is-active"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Tính năng
+            </Link>
+            <Link
+              href="/vn/graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th/spec"
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Thông số kỹ thuật
+            </Link>
+            <Link
+              href="/vn/graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th/award"
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Giải thưởng
+            </Link>
+            <Link
+              href="/vn/graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th/gallery"
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Thư viện
+            </Link>
+            <Link
+              href="/vn/graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th/wtb"
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Nơi mua
+            </Link>
+            <Link
+              href="/vn/graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th/helpdesk"
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Hỗ trợ
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* 3. Bespoke 1:1 ROG Matrix GeForce RTX 5090 Interactive Core (18 Official Sections) */}

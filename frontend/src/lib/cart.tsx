@@ -68,8 +68,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    setLines(readStorage());
-    setReady(true);
+    queueMicrotask(() => {
+      setLines(readStorage());
+      setReady(true);
+    });
   }, []);
 
   useEffect(() => {

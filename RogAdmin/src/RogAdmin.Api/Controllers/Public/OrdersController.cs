@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using RogAdmin.Application.Dtos.Commerce;
 using RogAdmin.Application.Interfaces;
 
@@ -8,6 +9,7 @@ namespace RogAdmin.Api.Controllers.Public;
 
 [ApiController]
 [Route("api/public/orders")]
+[OutputCache(NoStore = true)]
 public class OrdersController(IOrderService orderService) : ControllerBase
 {
     /// <summary>Tạo đơn hàng từ storefront. Khách vãng lai không cần đăng nhập;

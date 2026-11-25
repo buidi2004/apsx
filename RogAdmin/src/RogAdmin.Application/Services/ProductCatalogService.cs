@@ -24,6 +24,7 @@ public class ProductCatalogService(
         int page = 1,
         int pageSize = 20,
         bool includeInactive = false,
+        StockStatus? stockStatus = null,
         CancellationToken ct = default)
     {
         page = Math.Max(1, page);
@@ -37,6 +38,11 @@ public class ProductCatalogService(
         if (!includeInactive)
         {
             q = q.Where(p => p.IsActive);
+        }
+
+        if (stockStatus.HasValue)
+        {
+            q = q.Where(p => p.Price != null && p.Price.StockStatus == stockStatus.Value);
         }
 
         if (!string.IsNullOrWhiteSpace(category))
@@ -74,7 +80,8 @@ public class ProductCatalogService(
                                p.Price != null ? p.Price.StockStatus : StockStatus.InStock,
                                p.IsHot,
                                p.IsFeatured,
-                               p.IsActive
+                               p.IsActive,
+                               p.Price != null ? p.Price.StockQuantity : 15
                            ))
                            .ToListAsync(ct);
 
@@ -124,7 +131,8 @@ public class ProductCatalogService(
             product.Price?.StockStatus ?? StockStatus.InStock,
             product.Price?.StoreUrl ?? "/vn/where-to-buy",
             product.Specs.Select(s => new ProductSpecDto(s.SpecGroup, s.SpecKey, s.SpecValue)).ToList(),
-            product.GalleryImages.Select(i => i.ImageUrl).ToList()
+            product.GalleryImages.Select(i => i.ImageUrl).ToList(),
+            product.Price?.StockQuantity ?? 15
         );
     }
 
@@ -181,7 +189,8 @@ public class ProductCatalogService(
                 p.Price?.DiscountLabel ?? "",
                 p.Price?.StockStatus ?? StockStatus.InStock,
                 formattedPrice,
-                formattedOld
+                formattedOld,
+                p.Price?.StockQuantity ?? 15
             );
         }).ToList();
     }
@@ -308,6 +317,7 @@ public class ProductCatalogService(
         decimal? oldPrice,
         string? discountLabel,
         StockStatus? stockStatus,
+        int? stockQuantity = null,
         CancellationToken ct = default)
     {
         if (price < 0 || oldPrice is < 0)
@@ -329,7 +339,8 @@ public class ProductCatalogService(
                 Price = price,
                 OldPrice = oldPrice,
                 DiscountLabel = discountLabel ?? "",
-                StockStatus = stockStatus ?? StockStatus.InStock,
+                StockStatus = stockStatus ?? (stockQuantity.HasValue && stockQuantity.Value <= 0 ? StockStatus.OutOfStock : StockStatus.InStock),
+                StockQuantity = stockQuantity ?? 15,
                 Currency = "VND",
                 LastCheckedAt = DateTime.UtcNow
             };
@@ -341,6 +352,18 @@ public class ProductCatalogService(
             product.Price.Price = price;
             if (oldPrice.HasValue) product.Price.OldPrice = oldPrice.Value;
             if (discountLabel != null) product.Price.DiscountLabel = discountLabel;
+            if (stockQuantity.HasValue)
+            {
+                product.Price.StockQuantity = Math.Max(0, stockQuantity.Value);
+                if (product.Price.StockQuantity == 0)
+                {
+                    product.Price.StockStatus = StockStatus.OutOfStock;
+                }
+                else if (stockStatus == null && product.Price.StockStatus == StockStatus.OutOfStock)
+                {
+                    product.Price.StockStatus = StockStatus.InStock;
+                }
+            }
             if (stockStatus.HasValue) product.Price.StockStatus = stockStatus.Value;
             product.Price.LastCheckedAt = DateTime.UtcNow;
             priceRepo.Update(product.Price);
@@ -359,7 +382,8 @@ public class ProductCatalogService(
             product.Price.DiscountLabel,
             product.Price.StockStatus,
             formattedPrice,
-            formattedOld
+            formattedOld,
+            product.Price.StockQuantity
         );
     }
 
@@ -369,6 +393,7 @@ public class ProductCatalogService(
         decimal? oldPrice,
         string? discountLabel,
         StockStatus? stockStatus,
+        int? stockQuantity = null,
         CancellationToken ct = default)
     {
         var normalizedSlug = slug.Trim().ToLower().TrimStart('/').Replace("vn/", "");
@@ -380,7 +405,7 @@ public class ProductCatalogService(
 
         if (product == null) return null;
 
-        return await UpdateProductPriceAsync(product.Id, price, oldPrice, discountLabel, stockStatus, ct);
+        return await UpdateProductPriceAsync(product.Id, price, oldPrice, discountLabel, stockStatus, stockQuantity, ct);
     }
 
     public async Task<ProductDetailDto?> GetProductByIdAsync(int id, CancellationToken ct = default)
@@ -420,7 +445,9 @@ public class ProductCatalogService(
             discountLabel,
             stockStatus,
             storeUrl,
-            specs
+            specs,
+            null,
+            product.Price?.StockQuantity ?? 15
         );
     }
 
@@ -455,6 +482,7 @@ public class ProductCatalogService(
             OldPrice = request.OldPrice,
             DiscountLabel = request.DiscountLabel ?? "",
             StockStatus = request.StockStatus,
+            StockQuantity = request.StockQuantity,
             Currency = "VND",
             LastCheckedAt = DateTime.UtcNow
         };
@@ -477,7 +505,8 @@ public class ProductCatalogService(
             price.StockStatus,
             product.IsHot,
             product.IsFeatured,
-            product.IsActive
+            product.IsActive,
+            price.StockQuantity
         );
     }
 
@@ -518,7 +547,8 @@ public class ProductCatalogService(
             product.Price?.StockStatus ?? StockStatus.InStock,
             product.IsHot,
             product.IsFeatured,
-            product.IsActive
+            product.IsActive,
+            product.Price?.StockQuantity ?? 15
         );
     }
 

@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/lib/cart";
 import { RogApi, type PublicReviewDto } from "@/lib/api-client";
+import RogProductAwards from "@/components/sites/rog-asus/universal/RogProductAwards";
 import "./RogProductDetail.css";
 import {
   type DetailStory,
@@ -17,6 +18,57 @@ import {
 
 export type { DetailStory, DetailQuote, DetailFaq, DetailProduct };
 export { generateDynamicDetailProduct };
+
+function categorizeSpecs(specs: [string, string][]): { group: string; items: [string, string][] }[] {
+  const categories: { name: string; match: RegExp; items: [string, string][] }[] = [
+    { name: "Hệ điều hành", match: /hệ điều hành|operating system|^os$/i, items: [] },
+    { name: "Bộ vi xử lý & NPU", match: /bộ vi xử lý|processor|^cpu|socket|chipset|npu|bộ xử lý ai/i, items: [] },
+    { name: "Đồ họa", match: /đồ họa|graphics|^gpu|card đồ họa/i, items: [] },
+    { name: "Màn hình hiển thị", match: /màn hình|display|panel|resolution|refresh rate|aspect ratio|độ sáng|hdr/i, items: [] },
+    { name: "Bộ nhớ (RAM)", match: /bộ nhớ|^ram|memory/i, items: [] },
+    { name: "Lưu trữ", match: /lưu trữ|storage|^ssd|^hdd|ổ lưu trữ|khe cắm/i, items: [] },
+    { name: "Cổng kết nối I/O", match: /cổng kết nối|cổng i\/o|ports|displayport|hdmi|usb|thunderbolt|jack/i, items: [] },
+    { name: "Bàn phím & Điều khiển", match: /bàn phím|touchpad|chuột|switch|nút bấm|layout|cần gạt/i, items: [] },
+    { name: "Âm thanh & Camera", match: /âm thanh|audio|loa|sound|camera|webcam/i, items: [] },
+    { name: "Mạng và kết nối", match: /mạng|wi-fi|wifi|bluetooth|lan|ethernet|kết nối không dây/i, items: [] },
+    { name: "Pin & Nguồn điện", match: /pin|battery|bộ nguồn|power supply|adapter|công suất/i, items: [] },
+    { name: "Kích thước & Trọng lượng", match: /kích thước|trọng lượng|dimensions|weight/i, items: [] },
+    { name: "Bảo mật & Phụ kiện bổ sung", match: /bảo mật|security|phụ kiện|giải thưởng|gói tặng kèm/i, items: [] },
+  ];
+
+  const others: [string, string][] = [];
+
+  for (const item of specs) {
+    const key = item[0] || "";
+    let matched = false;
+    for (const cat of categories) {
+      if (cat.match.test(key)) {
+        cat.items.push(item);
+        matched = true;
+        break;
+      }
+    }
+    if (!matched) {
+      others.push(item);
+    }
+  }
+
+  const result: { group: string; items: [string, string][] }[] = [];
+  for (const cat of categories) {
+    if (cat.items.length > 0) {
+      result.push({ group: cat.name, items: cat.items });
+    }
+  }
+  if (others.length > 0) {
+    result.push({ group: "Thông số kỹ thuật khác", items: others });
+  }
+
+  if (result.length === 0 && specs.length > 0) {
+    result.push({ group: "Tất cả thông số kỹ thuật", items: specs });
+  }
+
+  return result;
+}
 
 const PG34WCDN: DetailProduct = {
   name: "ROG Swift OLED PG34WCDN",
@@ -1354,15 +1406,21 @@ export default function RogProductDetail({
   mode?: "overview" | "spec";
   customProduct?: DetailProduct;
 }) {
-  const p = customProduct ?? DETAIL_PRODUCTS[product] ?? FLOW_Z13_KJP;
+  const initialProduct = customProduct ?? DETAIL_PRODUCTS[product] ?? FLOW_Z13_KJP;
+  const [p, setP] = useState<DetailProduct>(initialProduct);
   const router = useRouter();
   const { addLine } = useCart();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const cleanSlug = p.basePath.replace(/^\/vn\//, "").replace(/\/spec$/, "");
   const [livePrice, setLivePrice] = useState<string>(p.price || "");
   const [unitPriceNum, setUnitPriceNum] = useState<number>(0);
   const [cartNotice, setCartNotice] = useState(false);
+
+  useEffect(() => {
+    setP(customProduct ?? DETAIL_PRODUCTS[product] ?? FLOW_Z13_KJP);
+  }, [product, customProduct]);
 
   // Reviews state
   const [reviews, setReviews] = useState<PublicReviewDto[]>([]);
@@ -1374,6 +1432,31 @@ export default function RogProductDetail({
   const [reviewContent, setReviewContent] = useState("");
   const [submittingReview, setSubmittingReview] = useState(false);
   const [reviewSuccessMsg, setReviewSuccessMsg] = useState("");
+
+  useEffect(() => {
+    if (!cleanSlug) return;
+    RogApi.getProductItem(cleanSlug)
+      .then((detail) => {
+        if (!detail) return;
+        setP((prev) => {
+          const updated = { ...prev };
+          if (detail.name) updated.name = detail.name;
+          if (detail.modelCode) updated.modelCode = detail.modelCode;
+          if (detail.tagline) updated.tagline = detail.tagline;
+          if (detail.price) {
+            updated.price = `${detail.price.toLocaleString("vi-VN")} ₫`;
+            setLivePrice(updated.price);
+            setUnitPriceNum(detail.price);
+          }
+          if (detail.specs && detail.specs.length > 0) {
+            const liveSpecs: [string, string][] = detail.specs.map((s) => [s.key || s.group, s.value]);
+            updated.specs = liveSpecs;
+          }
+          return updated;
+        });
+      })
+      .catch(() => {});
+  }, [cleanSlug]);
 
   useEffect(() => {
     if (!cleanSlug) return;
@@ -1482,45 +1565,39 @@ export default function RogProductDetail({
               href={p.basePath}
               className={`rog-pd-tab-link${mode === "overview" ? " is-active" : ""}`}
             >
-              {p.modelCode?.startsWith("GU605") ? "Tính năng (Xem thêm)" : "Tổng quan (Xem thêm)"}
+              Tính năng
             </Link>
             <Link
               href={`${p.basePath}/spec`}
               className={`rog-pd-tab-link${mode === "spec" ? " is-active" : ""}`}
             >
-              Chi tiết / Thông số kỹ thuật
+              Thông số kỹ thuật
             </Link>
-            {p.modelCode?.startsWith("GU605") ? (
-              <>
-                <Link
-                  href={`${p.basePath}#awards`}
-                  className="rog-pd-tab-link"
-                >
-                  Giải thưởng
-                </Link>
-                <Link
-                  href={`${p.basePath}/gallery`}
-                  className="rog-pd-tab-link"
-                >
-                  Thư viện
-                </Link>
-                <Link
-                  href="/vn/where-to-buy"
-                  className="rog-pd-tab-link"
-                >
-                  Nơi mua
-                </Link>
-              </>
-            ) : (
-              <>
-                <a href="#awards" className="rog-pd-tab-link">
-                  Giải thưởng
-                </a>
-                <a href="#gallery" className="rog-pd-tab-link">
-                  Thư viện ảnh
-                </a>
-              </>
-            )}
+            <a
+              href="#awards"
+              className="rog-pd-tab-link"
+              onClick={(e) => {
+                const el = document.getElementById("awards");
+                if (el) {
+                  e.preventDefault();
+                  el.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+            >
+              Giải thưởng
+            </a>
+            <Link
+              href={`${p.basePath}/gallery`}
+              className="rog-pd-tab-link"
+            >
+              Thư viện
+            </Link>
+            <Link
+              href="/vn/where-to-buy"
+              className="rog-pd-tab-link"
+            >
+              Nơi mua
+            </Link>
             <Link
               href="/vn/support"
               className="rog-pd-tab-link"
@@ -1552,8 +1629,71 @@ export default function RogProductDetail({
             >
               MUA NGAY
             </button>
+            <button
+              type="button"
+              aria-label="Toggle mobile menu"
+              className="rog-pd-subbar-burger"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              <span>{mobileMenuOpen ? "ĐÓNG" : "MENU"}</span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ transform: mobileMenuOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s ease" }}>
+                <path d="M1 4l5 6 5-6H1z" fill="#fff" />
+              </svg>
+            </button>
           </div>
         </div>
+
+        {/* Mobile dropdown drawer */}
+        {mobileMenuOpen && (
+          <div className="rog-pd-subbar-mobile-menu">
+            <Link
+              href={p.basePath}
+              className={`rog-pd-subbar-mobile-link${mode === "overview" ? " is-active" : ""}`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Tính năng
+            </Link>
+            <Link
+              href={`${p.basePath}/spec`}
+              className={`rog-pd-subbar-mobile-link${mode === "spec" ? " is-active" : ""}`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Thông số kỹ thuật
+            </Link>
+            <a
+              href="#awards"
+              className="rog-pd-subbar-mobile-link"
+              onClick={(e) => {
+                e.preventDefault();
+                setMobileMenuOpen(false);
+                document.getElementById("awards")?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
+              Giải thưởng
+            </a>
+            <Link
+              href={`${p.basePath}/gallery`}
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Thư viện
+            </Link>
+            <Link
+              href="/vn/where-to-buy"
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Nơi mua
+            </Link>
+            <Link
+              href="/vn/support"
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Hỗ trợ
+            </Link>
+          </div>
+        )}
         {cartNotice && (
           <div style={{ background: "rgba(34, 197, 94, 0.9)", color: "#fff", textAlign: "center", padding: "8px", fontSize: "13px", fontWeight: 700 }}>
             ✓ Đã thêm {p.name} vào giỏ hàng!
@@ -1610,19 +1750,67 @@ export default function RogProductDetail({
             )}
           </section>
 
-          {/* Full specs table */}
+          {/* Quick-Jump Anchors & Print Toolbar */}
+          <div className="rog-spec-toolbar">
+            <div className="rog-spec-pills-wrap">
+              <span className="rog-spec-pills-label">CHUYỂN NHANH ĐẾN:</span>
+              <div className="rog-spec-pills">
+                {categorizeSpecs(p.specs).map((grp) => {
+                  const anchorId = `spec-grp-${grp.group.toLowerCase().replace(/[^a-z0-9]/g, "-")}`;
+                  return (
+                    <a
+                      key={grp.group}
+                      href={`#${anchorId}`}
+                      className="rog-spec-pill"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        document.getElementById(anchorId)?.scrollIntoView({ behavior: "smooth" });
+                      }}
+                    >
+                      {grp.group}
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="rog-spec-tools">
+              <button
+                type="button"
+                onClick={() => typeof window !== "undefined" && window.print()}
+                className="rog-spec-tool-btn"
+                title="In hoặc lưu PDF thông số kỹ thuật"
+              >
+                🖨️ In thông số
+              </button>
+              <Link href="/vn/compare" className="rog-spec-tool-btn">
+                ⚖️ So sánh
+              </Link>
+            </div>
+          </div>
+
+          {/* Full specs grouped by categories */}
           <section className="rog-pd-specs">
-            <h2 className="rog-pd-specs-title">Tất cả thông số kỹ thuật</h2>
-            <table className="rog-pd-spec-table">
-              <tbody>
-                {p.specs.map(([k, v], i) => (
-                  <tr key={`${k}-${i}`}>
-                    <th scope="row">{k}</th>
-                    <td>{v}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <h2 className="rog-pd-specs-title">Thông số kỹ thuật chi tiết</h2>
+            <div className="rog-pd-spec-groups">
+              {categorizeSpecs(p.specs).map((grp) => {
+                const anchorId = `spec-grp-${grp.group.toLowerCase().replace(/[^a-z0-9]/g, "-")}`;
+                return (
+                  <div key={grp.group} id={anchorId} className="rog-pd-spec-group">
+                    <h3 className="rog-pd-spec-group-title">{grp.group}</h3>
+                    <table className="rog-pd-spec-table">
+                      <tbody>
+                        {grp.items.map(([k, v], i) => (
+                          <tr key={`${k}-${i}`}>
+                            <th scope="row">{k}</th>
+                            <td>{v}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                );
+              })}
+            </div>
             <p className="rog-pd-spec-note">
               *Thông số kỹ thuật có thể thay đổi tùy cấu hình và khu vực phân phối. Vui lòng kiểm tra lại
               với đại lý phân phối chính thức của ASUS ROG Việt Nam để có thông tin chính xác nhất.
@@ -1683,20 +1871,37 @@ export default function RogProductDetail({
           </section>
 
           {/* feature stories */}
-          <section className="rog-pd-stories" id="gallery">
-            {p.stories.map((f) => (
-              <article className={`rog-pd-story${f.img ? " has-media" : ""}`} key={f.title}>
-                {f.img && (
-                  <div className="rog-pd-story-media">
-                    <img src={f.img} alt={f.title} loading="lazy" />
+          <section className="rog-pd-stories" id="features">
+            <div className="rog-pd-stories-header">
+              <span className="rog-pd-story-eyebrow">TÍNH NĂNG ĐỘT PHÁ</span>
+              <h2 className="rog-pd-stories-main-title">ĐỈNH CAO CÔNG NGHỆ ROG</h2>
+            </div>
+            {p.stories.map((f, idx) => {
+              const tag = f.title.includes("—")
+                ? f.title.split("—")[0].trim()
+                : f.title.includes(":")
+                ? f.title.split(":")[0].trim()
+                : `CÔNG NGHỆ 0${idx + 1}`;
+              const cleanTitle = f.title.includes("—")
+                ? f.title.split("—")[1].trim()
+                : f.title.includes(":")
+                ? f.title.split(":")[1].trim()
+                : f.title;
+              return (
+                <article className={`rog-pd-story${f.img ? " has-media" : ""}`} key={f.title}>
+                  {f.img && (
+                    <div className="rog-pd-story-media">
+                      <img src={f.img} alt={f.title} loading="lazy" />
+                    </div>
+                  )}
+                  <div className="rog-pd-story-body">
+                    <span className="rog-pd-story-tag">{tag}</span>
+                    <h2>{cleanTitle}</h2>
+                    <p>{f.text}</p>
                   </div>
-                )}
-                <div className="rog-pd-story-body">
-                  <h2>{f.title}</h2>
-                  <p>{f.text}</p>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </section>
 
           {/* FAQ */}
@@ -1746,37 +1951,8 @@ export default function RogProductDetail({
         </>
       )}
 
-      {/* awards */}
-      {p.awards && p.awards.length > 0 && (
-        <section className="rog-pd-awards">
-          <h2 className="rog-pd-sec-title">GIẢI THƯỞNG</h2>
-          <div className="rog-pd-awards-row">
-            {p.awards.map((a) => (
-              <div className="rog-pd-award" key={a}>
-                <img src={a} alt="Giải thưởng ROG" loading="lazy" />
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* media reviews */}
-      {p.mediaReviews && p.mediaReviews.length > 0 && (
-        <section className="rog-pd-media">
-          <h2 className="rog-pd-sec-title">MEDIA REVIEW</h2>
-          <div className="rog-pd-media-grid">
-            {p.mediaReviews.map((m) => (
-              <a className="rog-pd-media-card" key={m.href} href={m.href} target="_blank" rel="noreferrer">
-                <div className="rog-pd-media-logo">
-                  <img src={m.img} alt={m.score} loading="lazy" />
-                </div>
-                <span className="rog-pd-media-score">{m.score}</span>
-                <p className="rog-pd-media-quote">“{m.quote}”</p>
-              </a>
-            ))}
-          </div>
-        </section>
-      )}
+      {/* Official Awards & Media Reviews */}
+      <RogProductAwards productName={p.name} />
 
       {/* video reviews */}
       {p.videoReviews && p.videoReviews.length > 0 && (
@@ -1913,6 +2089,14 @@ export default function RogProductDetail({
                 {rev.title && <div style={{ fontWeight: 700, color: "#ff0036", fontSize: "13px", marginBottom: "6px" }}>{rev.title}</div>}
                 <p style={{ color: "#ccc", fontSize: "13px", lineHeight: 1.6, margin: "0 0 8px" }}>{rev.content}</p>
                 <div style={{ color: "#666", fontSize: "11px" }}>{new Date(rev.createdAtUtc).toLocaleDateString("vi-VN")}</div>
+                {rev.adminReply && (
+                  <div style={{ marginTop: "12px", padding: "10px 14px", background: "rgba(255, 0, 54, 0.08)", borderLeft: "3px solid #ff0036", borderRadius: "2px", fontSize: "12px" }}>
+                    <div style={{ color: "#ff0036", fontWeight: 700, marginBottom: "4px" }}>
+                      🛡️ Phản hồi từ ASUS ROG Store {rev.repliedBy ? `(${rev.repliedBy})` : ""}:
+                    </div>
+                    <div style={{ color: "#eee", lineHeight: 1.5 }}>{rev.adminReply}</div>
+                  </div>
+                )}
               </div>
             ))}
           </div>

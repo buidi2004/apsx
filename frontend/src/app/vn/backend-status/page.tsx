@@ -158,17 +158,19 @@ async function loadStatusData(): Promise<{ items: StatusItem[]; allOk: boolean }
     },
     {
       name: "Danh mục sản phẩm (/api/public/products)",
-      status: products.totalCount > 0 ? "ĐỒNG BỘ" : "OFFLINE",
-      ok: products.totalCount > 0,
+      status: products && products.totalCount > 0 ? "ĐỒNG BỘ" : "OFFLINE",
+      ok: Boolean(products && products.totalCount > 0),
       latency: `${productsLatency}ms`,
-      detail: `${products.totalCount} sản phẩm, trang hiện tại ${products.items.length}`,
+      detail: products
+        ? `${products.totalCount} sản phẩm, trang hiện tại ${products.items.length}`
+        : "Không nhận được dữ liệu",
     },
     {
       name: "Đại lý và cửa hàng (/api/public/dealers)",
-      status: dealers.length > 0 ? "ĐỒNG BỘ" : "OFFLINE",
-      ok: dealers.length > 0,
+      status: dealers && dealers.length > 0 ? "ĐỒNG BỘ" : "OFFLINE",
+      ok: Boolean(dealers && dealers.length > 0),
       latency: `${dealersLatency}ms`,
-      detail: `${dealers.length} đại lý đang đồng bộ`,
+      detail: dealers ? `${dealers.length} đại lý đang đồng bộ` : "Không có dữ liệu đại lý",
     },
     {
       name: "Tra cứu bảo hành (/api/public/warranty/check)",
@@ -179,10 +181,10 @@ async function loadStatusData(): Promise<{ items: StatusItem[]; allOk: boolean }
     },
     {
       name: "Bảng giá hàng loạt (/api/public/pricing/batch)",
-      status: pricing.length > 0 ? "ĐỒNG BỘ" : "OFFLINE",
-      ok: pricing.length > 0,
+      status: pricing && pricing.length > 0 ? "ĐỒNG BỘ" : "OFFLINE",
+      ok: Boolean(pricing && pricing.length > 0),
       latency: `${pricingLatency}ms`,
-      detail: `${pricing.length} mức giá đang đồng bộ`,
+      detail: pricing ? `${pricing.length} mức giá đang đồng bộ` : "Không có dữ liệu giá",
     },
     {
       name: "So sánh sản phẩm (/api/public/products/compare)",
@@ -193,17 +195,17 @@ async function loadStatusData(): Promise<{ items: StatusItem[]; allOk: boolean }
     },
     {
       name: "Sáng tạo & Công nghệ (/api/public/innovations)",
-      status: innovations.length > 0 ? "ĐỒNG BỘ" : "OFFLINE",
-      ok: innovations.length > 0,
+      status: innovations && innovations.length > 0 ? "ĐỒNG BỘ" : "OFFLINE",
+      ok: Boolean(innovations && innovations.length > 0),
       latency: `${innovationsLatency}ms`,
-      detail: `${innovations.length} công nghệ đột phá đang đồng bộ`,
+      detail: innovations ? `${innovations.length} công nghệ đột phá đang đồng bộ` : "Không nhận được dữ liệu",
     },
     {
       name: "Hình nền 4K (/api/public/wallpapers)",
-      status: wallpapers.length > 0 ? "ĐỒNG BỘ" : "OFFLINE",
-      ok: wallpapers.length > 0,
+      status: wallpapers && wallpapers.length > 0 ? "ĐỒNG BỘ" : "OFFLINE",
+      ok: Boolean(wallpapers && wallpapers.length > 0),
       latency: `${wallpapersLatency}ms`,
-      detail: `${wallpapers.length} hình nền 4K đang đồng bộ`,
+      detail: wallpapers ? `${wallpapers.length} hình nền 4K đang đồng bộ` : "Không nhận được dữ liệu",
     },
     {
       name: "Giới thiệu ROG (/api/public/about-rog)",
@@ -228,17 +230,17 @@ async function loadStatusData(): Promise<{ items: StatusItem[]; allOk: boolean }
     },
     {
       name: "Kho Phần mềm (/api/public/downloads)",
-      status: downloads.length > 0 ? "ĐỒNG BỘ" : "OFFLINE",
-      ok: downloads.length > 0,
+      status: downloads && downloads.length > 0 ? "ĐỒNG BỘ" : "OFFLINE",
+      ok: Boolean(downloads && downloads.length > 0),
       latency: `${downloadsLatency}ms`,
-      detail: `${downloads.length} tiện ích & driver đang đồng bộ`,
+      detail: downloads ? `${downloads.length} tiện ích & driver đang đồng bộ` : "Không nhận được dữ liệu",
     },
     {
       name: "Sự kiện & Khuyến mãi (/api/public/campaigns)",
-      status: campaigns.length > 0 ? "ĐỒNG BỘ" : "OFFLINE",
-      ok: campaigns.length > 0,
+      status: campaigns && campaigns.length > 0 ? "ĐỒNG BỘ" : "OFFLINE",
+      ok: Boolean(campaigns && campaigns.length > 0),
       latency: `${campaignsLatency}ms`,
-      detail: `${campaigns.length} chiến dịch ưu đãi đang đồng bộ`,
+      detail: campaigns ? `${campaigns.length} chiến dịch ưu đãi đang đồng bộ` : "Không nhận được dữ liệu",
     },
     {
       name: "Video & Media (/api/public/videos)",

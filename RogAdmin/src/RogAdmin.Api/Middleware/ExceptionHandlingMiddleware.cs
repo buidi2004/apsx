@@ -8,7 +8,7 @@ namespace RogAdmin.Api.Middleware;
 /// Bắt lỗi toàn cục: AppException (lỗi nghiệp vụ) → mã HTTP tương ứng,
 /// lỗi khác → 500 kèm log. Response thống nhất dạng { message }.
 /// </summary>
-public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
+public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger, IHostEnvironment env)
 {
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 
@@ -33,7 +33,10 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
         catch (Exception ex)
         {
             logger.LogError(ex, "Lỗi không mong muốn khi xử lý {Method} {Path}", context.Request.Method, context.Request.Path);
-            await WriteErrorAsync(context, 500, "Có lỗi xảy ra phía máy chủ. Vui lòng thử lại sau.");
+            var msg = env.IsDevelopment()
+                ? $"{ex.GetType().Name}: {ex.Message}\n{ex.StackTrace}"
+                : "Có lỗi xảy ra phía máy chủ. Vui lòng thử lại sau.";
+            await WriteErrorAsync(context, 500, msg);
         }
     }
 

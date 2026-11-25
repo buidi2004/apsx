@@ -275,7 +275,7 @@ export default function RogCustomProductView({ product }: Props) {
         {Object.keys(specsByGroup).length > 0 && (
           <section style={{ borderTop: "1px solid #232334", paddingTop: "48px" }}>
             <h2 style={{ fontSize: "24px", fontWeight: 900, marginBottom: "32px", display: "flex", alignItems: "center", gap: "12px" }}>
-              <span style={{ color: "#ff0036" }}>//</span> THÔNG SỐ KỸ THUẬT CHI TIẾT
+              <span style={{ color: "#ff0036" }}>{"//"}</span> THÔNG SỐ KỸ THUẬT CHI TIẾT
             </h2>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "24px" }}>
@@ -305,7 +305,7 @@ export default function RogCustomProductView({ product }: Props) {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px", flexWrap: "wrap", gap: "16px" }}>
             <div>
               <h2 style={{ fontSize: "24px", fontWeight: 900, margin: "0 0 6px", display: "flex", alignItems: "center", gap: "12px" }}>
-                <span style={{ color: "#ff0036" }}>//</span> ĐÁNH GIÁ TỪ CỘNG ĐỒNG ROG
+                <span style={{ color: "#ff0036" }}>{"//"}</span> ĐÁNH GIÁ TỪ CỘNG ĐỒNG ROG
               </h2>
               <p style={{ color: "#888", fontSize: "14px", margin: 0 }}>
                 {reviews.length > 0 ? `${reviews.length} nhận xét đã được kiểm duyệt chính thức` : "Chưa có đánh giá nào cho sản phẩm này"}
@@ -338,6 +338,14 @@ export default function RogCustomProductView({ product }: Props) {
                       <div style={{ color: "#666", fontSize: "11px" }}>
                         {new Date(rev.createdAtUtc).toLocaleDateString("vi-VN")}
                       </div>
+                      {rev.adminReply && (
+                        <div style={{ marginTop: "12px", padding: "10px 14px", background: "rgba(255, 0, 54, 0.08)", borderLeft: "3px solid #ff0036", borderRadius: "2px", fontSize: "12px" }}>
+                          <div style={{ color: "#ff0036", fontWeight: 700, marginBottom: "4px" }}>
+                            🛡️ Phản hồi từ ASUS ROG Store {rev.repliedBy ? `(${rev.repliedBy})` : ""}:
+                          </div>
+                          <div style={{ color: "#eee", lineHeight: 1.5 }}>{rev.adminReply}</div>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>

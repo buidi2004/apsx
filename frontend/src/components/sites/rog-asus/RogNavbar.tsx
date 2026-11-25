@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import "./RogNavbar.css";
+import RogSearchOverlay from "./universal/RogSearchOverlay";
 import { RogApi, saveCustomerAuth, getCustomerUser, clearCustomerAuth, type CustomerProfileDto } from "@/lib/api-client";
 import { useCart } from "@/lib/cart";
 
@@ -214,6 +215,7 @@ function UserIcon() {
 
 export default function RogNavbar() {
   const { count: cartCount, ready: cartReady } = useCart();
+  const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
   const [userModalOpen, setUserModalOpen] = useState(false);
@@ -227,9 +229,10 @@ export default function RogNavbar() {
   useEffect(() => {
     RogApi.getSiteConfig()
       .then((cfg) => {
-        if (cfg && (cfg as any).megaMenuJson) {
+        const configRecord = cfg as Record<string, unknown> | undefined;
+        if (configRecord && typeof configRecord.megaMenuJson === "string") {
           try {
-            const parsed = JSON.parse((cfg as any).megaMenuJson);
+            const parsed = JSON.parse(configRecord.megaMenuJson);
             if (Array.isArray(parsed) && parsed.length > 0) {
               setMegaColumns(parsed);
             }
@@ -390,9 +393,19 @@ export default function RogNavbar() {
             <AsusWordmark />
           </a>
           <span className="rog-nav-divider" aria-hidden="true" />
-          <Link href="/vn/search" className="rog-nav-icon" aria-label="Tìm kiếm">
+          <button
+            id="searchButton"
+            type="button"
+            tabIndex={0}
+            className="rog-nav-icon searchButton Header__searchButton__NyfWa"
+            aria-label="Search, type and press enter to search"
+            aria-haspopup="dialog"
+            aria-controls="searchHeaderPanel"
+            onClick={() => setSearchOpen(true)}
+            style={{ background: "transparent", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+          >
             <SearchIcon />
-          </Link>
+          </button>
           <button
             type="button"
             className="rog-nav-icon rog-nav-bell"
@@ -741,6 +754,9 @@ export default function RogNavbar() {
           </div>
         </div>
       )}
+
+      {/* Authentic ASUS ROG Full-screen Search Overlay */}
+      <RogSearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
   );
 }

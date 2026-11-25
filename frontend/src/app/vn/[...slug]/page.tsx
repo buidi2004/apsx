@@ -1,22 +1,17 @@
+import fs from "fs";
+import path from "path";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import RogNavbar from "@/components/sites/rog-asus/RogNavbar";
 import RogPromoBar from "@/components/sites/rog-asus/RogPromoBar";
 import RogProductHome from "@/components/sites/rog-asus/RogProductHome";
-import RogProductDetail from "@/components/sites/rog-asus/RogProductDetail";
-import RogFlowZ13KjpOverview from "@/components/sites/rog-asus/flow-z13-kjp/RogFlowZ13KjpOverview";
-import RogZephyrusG16Gu605Overview from "@/components/sites/rog-asus/zephyrus-g16/RogZephyrusG16Gu605Overview";
-import RogZephyrusDuo2026Overview from "@/components/sites/rog-asus/zephyrus-duo-2026/RogZephyrusDuo2026Overview";
-import RogZephyrusG16Gu605Gallery from "@/components/sites/rog-asus/zephyrus-g16/RogZephyrusG16Gu605Gallery";
-import RogScar18Overview from "@/components/sites/rog-asus/scar-18-2026/RogScar18Overview";
-import RogCardMatrix5090Overview from "@/components/sites/rog-asus/matrix-5090/RogCardMatrix5090Overview";
-import RogPhone7Overview from "@/components/sites/rog-asus/rog-phone-7/RogPhone7Overview";
-import RogXg259qnsrAceOverview from "@/components/sites/rog-asus/xg259qnsr-ace/RogXg259qnsrAceOverview";
-import RogAlly2023Overview from "@/components/sites/rog-asus/rog-ally-2023/RogAlly2023Overview";
-import RogSeriesPage, { SeriesType } from "@/components/sites/rog-asus/RogSeriesPage";
+import RogCustomFlagshipDispatcher from "@/components/sites/rog-asus/universal/RogCustomFlagshipDispatcher";
+import type { SeriesType } from "@/components/sites/rog-asus/RogSeriesPage";
 import RogFooter from "@/components/sites/rog-asus/RogFooter";
 import RogChatWidget from "@/components/sites/rog-asus/RogChatWidget";
 import RogUniversalProductOverview from "@/components/sites/rog-asus/universal/RogUniversalProductOverview";
+import RogProductGallery from "@/components/sites/rog-asus/universal/RogProductGallery";
+import { PRODUCT_GALLERIES } from "@/components/sites/rog-asus/universal/gallery-presets";
 import { RogApi } from "@/lib/api-client";
 
 /* Product detail pages cloned locally (pathname → metadata) */
@@ -304,6 +299,66 @@ const GALLERY_PAGES: Record<
     description:
       "Bộ sưu tập hình ảnh chi tiết mọi góc cạnh của laptop gaming ROG Zephyrus G16 (2025) GU605.",
   },
+  "laptops/rog-strix/rog-strix-scar-18-2026/gallery": {
+    title: "ROG Strix SCAR 18 (2026) G835 - Thư viện ảnh | Laptop Gaming ROG VN",
+    product: "scar18",
+    description: "Bộ sưu tập hình ảnh chi tiết laptop gaming flagship ROG Strix SCAR 18 2026.",
+  },
+  "laptops/rog-zephyrus/rog-zephyrus-duo-2026/gallery": {
+    title: "ROG Zephyrus Duo (2026) GX651 - Thư viện ảnh | Laptop Gaming ROG VN",
+    product: "duo_2026",
+    description: "Bộ sưu tập hình ảnh chi tiết laptop hai màn hình ROG Zephyrus Duo 2026 GX651.",
+  },
+  "gaming-handhelds/rog-ally/rog-ally-2023/gallery": {
+    title: "ROG Ally (2023) RC71L - Thư viện ảnh | Máy Chơi Game Cầm Tay ROG VN",
+    product: "ally_2023",
+    description: "Bộ sưu tập hình ảnh máy chơi game cầm tay ROG Ally 2023 RC71L.",
+  },
+  "laptops/rog-flow/rog-flow-z13-kjp/gallery": {
+    title: "ROG Flow Z13-KJP - Thư viện ảnh | Laptop Gaming 2-in-1 ROG VN",
+    product: "z13_kjp",
+    description: "Bộ sưu tập hình ảnh phiên bản đặc biệt ROG Flow Z13-KJP Kojima Productions.",
+  },
+  "monitors/32-to-34-inches/rog-swift-oled-pg34wcdn/gallery": {
+    title: "ROG Swift OLED PG34WCDN - Thư viện ảnh | Màn Hình Gaming ROG VN",
+    product: "pg34wcdn",
+    description: "Bộ sưu tập hình ảnh màn hình gaming cong ROG Swift OLED PG34WCDN 34-inch 360Hz.",
+  },
+  "gaming-handhelds/rog-ally/rog-ally-x-2024/gallery": {
+    title: "ROG Ally X (2024) RC72LA - Thư viện ảnh | Máy Chơi Game Cầm Tay ROG VN",
+    product: "ally_x",
+    description: "Bộ sưu tập hình ảnh máy chơi game cầm tay pin 80Wh ROG Ally X 2024 RC72LA.",
+  },
+  "laptops/rog-zephyrus/rog-zephyrus-g14-2025-ga403/gallery": {
+    title: "ROG Zephyrus G14 (2025) GA403 - Thư viện ảnh | Laptop Gaming ROG VN",
+    product: "ga403",
+    description: "Bộ sưu tập hình ảnh laptop gaming mỏng nhẹ 1.5kg OLED 3K ROG Zephyrus G14 2025 GA403.",
+  },
+  "phones/rog-phone-7/gallery": {
+    title: "ROG Phone 7 - Thư viện ảnh | Điện Thoại Gaming ROG VN",
+    product: "rog_phone_7",
+    description: "Bộ sưu tập hình ảnh điện thoại gaming ROG Phone 7 Snapdragon 8 Gen 2 165Hz.",
+  },
+  "monitors/23-to-24-5-inches/rog-strix-xg259qnsr-ace/gallery": {
+    title: "ROG Strix XG259QNSR Ace - Thư viện ảnh | Gaming Màn Hình ROG VN",
+    product: "xg259qnsr_ace",
+    description: "Bộ sưu tập hình ảnh màn hình gaming Esports 420Hz ROG Strix XG259QNSR Ace.",
+  },
+  "graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th/gallery": {
+    title: "ROG Matrix Platinum GeForce RTX™ 5090 30th - Thư viện ảnh | ROG VN",
+    product: "matrix5090",
+    description: "Bộ sưu tập hình ảnh card đồ họa phiên bản kỷ niệm 30 năm ROG Matrix Platinum RTX 5090.",
+  },
+  "laptops/rog-strix/rog-strix-g16-2025/gallery": {
+    title: "ROG Strix G16 (2025) G614 - Thư viện ảnh | Laptop Gaming ROG VN",
+    product: "strix_g16",
+    description: "Bộ sưu tập hình ảnh chi tiết laptop gaming eSports ROG Strix G16 (2025) G614.",
+  },
+  "laptops/rog-strix/rog-strix-g18-2025/gallery": {
+    title: "ROG Strix G18 (2025) G815 - Thư viện ảnh | Laptop Gaming ROG VN",
+    product: "scar18",
+    description: "Bộ sưu tập hình ảnh chi tiết laptop gaming 18-inch ROG Strix G18 (2025) G815.",
+  },
 };
 
 /* Laptop series shop-listing pages cloned locally */
@@ -363,6 +418,8 @@ const LEGACY_ALIASES: string[] = [
   "gaming-handhelds",
   "gaming-handhelds/rog-ally-series",
   "gaming-handhelds/accessories-series",
+  "graphics-cards-group/allmodels",
+  "graphics-cards/allmodels",
   "keyboards-group/allmodels",
   "mice-mouse-pads-group/allmodels",
   "cooling-group/allmodels",
@@ -378,6 +435,9 @@ const LEGACY_ALIASES: string[] = [
   "controllers-group/allmodels",
   "streaming-kits-group/allmodels",
   "external-graphics-docks-group/allmodels",
+  "monitors/rog-swift-series",
+  "monitors/rog-strix-series",
+  "phones/rog-phone-series",
   "storage/rog-strix-arion-model",
   "terms-of-notice/privacy_policy",
   "terms-of-notice/official_site",
@@ -411,6 +471,28 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const key = slug.join("/");
+
+  // 1. Check local catalog cache for 100% exact title & description from ASUS ROG VN
+  try {
+    const cacheDir = path.join(process.cwd(), ".cache", "rog-catalog");
+    const cleanKey = key.replace(/^\/+|\/+$/g, "");
+    const candidates = [
+      path.join(cacheDir, `${cleanKey.replace(/[^a-zA-Z0-9-_]/g, "_")}.json`),
+      path.join(cacheDir, `${slug.slice(0, -1).join("/").replace(/[^a-zA-Z0-9-_]/g, "_")}_${slug[slug.length - 1]}.json`),
+    ];
+    for (const c of candidates) {
+      if (fs.existsSync(/*turbopackIgnore: true*/ c)) {
+        const cached = JSON.parse(fs.readFileSync(/*turbopackIgnore: true*/ c, "utf8"));
+        if (cached && cached.title) {
+          return {
+            title: cached.title,
+            description: cached.title,
+          };
+        }
+      }
+    }
+  } catch {}
+
   const gallery = GALLERY_PAGES[key];
   if (gallery) {
     return {
@@ -504,14 +586,18 @@ export default async function CategoryPage({
   const { slug } = await params;
   const key = slug.join("/");
 
-  if (
-    key === "gaming-handhelds" ||
-    key === "gaming-handhelds/rog-ally-series"
-  ) {
+  if (key === "gaming-handhelds") {
     redirect("/vn/gaming-handhelds-group");
   }
 
+  if (key === "storage-group" || key === "storage-group/allmodels") {
+    redirect("/vn/storage/rog-strix-arion-model");
+  }
+
   // Canonical redirects for "Xem thêm" catalog hubs that use *-series on ASUS ROG VN
+  if (key === "graphics-cards-group/allmodels" || key === "graphics-cards/allmodels") {
+    redirect("/vn/graphics-cards/graphics-cards-series");
+  }
   if (key === "keyboards-group/allmodels") {
     redirect("/vn/keyboards/keyboards-series");
   }
@@ -540,6 +626,14 @@ export default async function CategoryPage({
     redirect("/vn/rog-saga/toys/rog-omni-figure-og");
   }
 
+  if (key === "monitors/rog-swift-series" || key === "monitors/rog-strix-series") {
+    redirect("/vn/monitors-group/allmodels");
+  }
+
+  if (key === "phones/rog-phone-series") {
+    redirect("/vn/phones-group/allmodels");
+  }
+
   if (key === "phones" || key === "smartphones") {
     redirect("/vn/phones-group");
   }
@@ -556,77 +650,40 @@ export default async function CategoryPage({
     redirect("/vn/terms-of-notice/official-site");
   }
 
-  const isGallery = Boolean(GALLERY_PAGES[key]);
-  const isSpec = Boolean(SPEC_PAGES[key]);
-  const isDetail = Boolean(PRODUCT_DETAILS[key]);
-  const isSeries = Boolean(SERIES_PAGES[key]);
   const group = groupKey(slug);
   const isCategory = Boolean(CATEGORY_LABELS[group]) && slug.length === 1;
 
-  if (!isGallery && !isSpec && !isDetail && !isSeries && !isCategory) {
-    return <RogUniversalProductOverview slug={slug} />;
+  if (isCategory) {
+    return (
+      <div className="rog-page">
+        <RogNavbar />
+        <RogPromoBar />
+        <main>
+          <RogProductHome group={group} />
+        </main>
+        <RogFooter />
+        <RogChatWidget variant="search" />
+      </div>
+    );
   }
 
-  return (
-    <div className="rog-page">
-      <RogNavbar />
-      {/* Nguồn không hiển thị promo bar trên trang chi tiết/spec/gallery sản phẩm */}
-      {!isDetail && !isSpec && !isGallery && <RogPromoBar />}
-      <main>
-        {isGallery ? (
-          key === "laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605/gallery" ? (
-            <RogZephyrusG16Gu605Gallery />
-          ) : (
-            notFound()
-          )
-        ) : isSpec ? (
-          <RogProductDetail product={SPEC_PAGES[key].product} mode="spec" />
-        ) : isDetail ? (
-          key === "laptops/rog-zephyrus/rog-zephyrus-duo-2026" ? (
-            <RogZephyrusDuo2026Overview />
-          ) : key === "laptops/rog-flow/rog-flow-z13-kjp" ? (
-            <RogFlowZ13KjpOverview />
-          ) : key === "laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605" ? (
-            <RogZephyrusG16Gu605Overview />
-          ) : key === "laptops/rog-strix/rog-strix-scar-18-2026" ? (
-            <RogScar18Overview
-              productName="ROG Strix SCAR 18 (2026) G835"
-              price="139.990.000 ₫"
-              basePath="/vn/laptops/rog-strix/rog-strix-scar-18-2026"
-            />
-          ) : key === "laptops/rog-strix/rog-strix-g18-2025" ? (
-            <RogScar18Overview
-              productName="ROG Strix G18 (2025) G815"
-              price="65.990.000 ₫"
-              basePath="/vn/laptops/rog-strix/rog-strix-g18-2025"
-            />
-          ) : key === "graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th" ? (
-            <RogCardMatrix5090Overview />
-          ) : key === "phones/rog-phone-7" ? (
-            <RogPhone7Overview
-              productName="ROG Phone 7"
-              price="24.990.000 ₫"
-              basePath="/vn/phones/rog-phone-7"
-            />
-          ) : key === "monitors/23-to-24-5-inches/rog-strix-xg259qnsr-ace" ? (
-            <RogXg259qnsrAceOverview
-              productName="ROG Strix XG259QNSR Ace"
-              price="14.990.000 ₫"
-              basePath="/vn/monitors/23-to-24-5-inches/rog-strix-xg259qnsr-ace"
-            />
-          ) : key === "gaming-handhelds/rog-ally/rog-ally-2023" ? (
-            <RogAlly2023Overview />
-          ) : (
-            <RogProductDetail product={PRODUCT_DETAILS[key].product} mode="overview" />
-          )
-        ) : isSeries ? (
-          <RogSeriesPage series={SERIES_PAGES[key].series} />
-        ) : (
-          <RogProductHome group={group} />
-        )}
-      </main>
-      <RogFooter />
-      <RogChatWidget variant={isSeries || isDetail || isSpec || isGallery ? "greeting" : "search"} />
-    </div>
-  );
+  // All other flagship products route directly through RogUniversalProductOverview for 100% live ROG parity;
+  // only keep custom React showcase where upstream /vn/ returns 404.
+  const isCustomFlagship = key === "graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th";
+
+  if (isCustomFlagship) {
+    return (
+      <div className="rog-page">
+        <RogNavbar />
+        <main>
+          <RogCustomFlagshipDispatcher routeKey={key} />
+        </main>
+        <RogFooter />
+        <RogChatWidget variant="greeting" />
+      </div>
+    );
+  }
+
+  // All other pages: All Series ("Xem thêm"), All Catalog hubs ("allmodels"), All product details (PG34WCDN, GA403, Ally X, Phone 8/9 Pro, etc.), and all subpages (/spec, /gallery, /award, /wtb, /helpdesk)
+  return <RogUniversalProductOverview slug={slug} />;
 }

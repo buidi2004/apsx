@@ -24,7 +24,7 @@ public class ProductsController(IProductCatalogService catalogService) : Control
         [FromQuery] int pageSize = 20,
         CancellationToken ct = default)
     {
-        var result = await catalogService.GetProductsAsync(category, search, page, pageSize, includeInactive: false, ct);
+        var result = await catalogService.GetProductsAsync(category, search, page, pageSize, includeInactive: false, ct: ct);
         return Ok(result);
     }
 

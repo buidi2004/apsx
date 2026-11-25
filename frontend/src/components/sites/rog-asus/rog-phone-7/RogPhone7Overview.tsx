@@ -21,6 +21,7 @@ export default function RogPhone7Overview({
 }) {
   const router = useRouter();
   const { addLine } = useCart();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const [buyModalOpen, setBuyModalOpen] = useState(false);
   const [currentPrice, setCurrentPrice] = useState(price);
@@ -38,6 +39,11 @@ export default function RogPhone7Overview({
     initPhone7Runtime().then((c) => {
       cleanup = c;
     });
+
+    const awardsEl = document.getElementById("awardClone") || document.querySelector(".awardClone");
+    if (awardsEl && !document.getElementById("awards")) {
+      awardsEl.id = "awards";
+    }
 
     // Intercept .btn__youtube or play button in section 2 to open responsive high-def modal
     const videoBtns = document.querySelectorAll<HTMLElement>(
@@ -71,7 +77,11 @@ export default function RogPhone7Overview({
       </div>
 
       {/* 1:1 Sticky Subbar */}
-      <div className="rog-phone7-subbar">
+      <div
+        id="productTabBarContainer"
+        className="rog-phone7-subbar productTabBarContainer ProductTabBar__productTabBarContainer__O9P3C"
+        style={{ position: "sticky", top: 50, zIndex: 999, fontSize: "16px", lineHeight: "18.4px" }}
+      >
         <div className="rog-phone7-subbar-inner">
           <div className="rog-phone7-subbar-left">
             <img
@@ -84,35 +94,24 @@ export default function RogPhone7Overview({
 
           <nav className="rog-phone7-subbar-tabs" aria-label="Tabs sản phẩm">
             <Link href={basePath} className="rog-phone7-tab-link is-active">
-              Tính năng (Xem thêm)
+              Tính năng
             </Link>
             <Link href={`${basePath}/spec`} className="rog-phone7-tab-link">
-              Chi tiết / Thông số kỹ thuật
+              Thông số kỹ thuật
             </Link>
-            <a
-              href="#awardClone"
-              className="rog-phone7-tab-link"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById("awardClone")?.scrollIntoView({ behavior: "smooth" });
-              }}
-            >
+            <Link href={`${basePath}/award`} className="rog-phone7-tab-link">
               Giải thưởng
-            </a>
-            <a
-              href="#section__2"
+            </Link>
+            <Link
+              href={`${basePath}/gallery`}
               className="rog-phone7-tab-link"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById("section__2")?.scrollIntoView({ behavior: "smooth" });
-              }}
             >
               Thư viện
-            </a>
-            <Link href="/vn/where-to-buy" className="rog-phone7-tab-link">
+            </Link>
+            <Link href={`${basePath}/wtb`} className="rog-phone7-tab-link">
               Nơi mua
             </Link>
-            <Link href="/vn/support" className="rog-phone7-tab-link">
+            <Link href={`${basePath}/helpdesk`} className="rog-phone7-tab-link">
               Hỗ trợ
             </Link>
           </nav>
@@ -127,10 +126,69 @@ export default function RogPhone7Overview({
               onClick={() => setBuyModalOpen(true)}
               className="rog-phone7-buy-btn"
             >
-              MUA NGAY
+              LỰA CHỌN
+            </button>
+            <button
+              type="button"
+              aria-label="Toggle mobile menu"
+              className="rog-pd-subbar-burger"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              <span>{mobileMenuOpen ? "ĐÓNG" : "MENU"}</span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ transform: mobileMenuOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s ease" }}>
+                <path d="M1 4l5 6 5-6H1z" fill="#fff" />
+              </svg>
             </button>
           </div>
         </div>
+
+        {/* Mobile dropdown drawer */}
+        {mobileMenuOpen && (
+          <div className="rog-pd-subbar-mobile-menu">
+            <Link
+              href={basePath}
+              className="rog-pd-subbar-mobile-link is-active"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Tính năng
+            </Link>
+            <Link
+              href={`${basePath}/spec`}
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Thông số kỹ thuật
+            </Link>
+            <Link
+              href={`${basePath}/award`}
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Giải thưởng
+            </Link>
+            <Link
+              href={`${basePath}/gallery`}
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Thư viện
+            </Link>
+            <Link
+              href={`${basePath}/wtb`}
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Nơi mua
+            </Link>
+            <Link
+              href={`${basePath}/helpdesk`}
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Hỗ trợ
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* Complete 28 Sections Sourced from live ASUS ROG */}

@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+const backendUrl = process.env.ROG_BACKEND_INTERNAL_URL || "http://localhost:5161";
+
 const nextConfig: NextConfig = {
   /* config options here */
   output: "standalone",
@@ -7,10 +9,11 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/be/:path*",
-        destination: "http://localhost:5161/api/:path*",
+        destination: `${backendUrl}/api/:path*`,
       },
     ];
   },
 };
 
 export default nextConfig;
+

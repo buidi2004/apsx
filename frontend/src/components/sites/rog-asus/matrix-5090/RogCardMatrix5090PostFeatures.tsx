@@ -2,7 +2,8 @@
 
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { RogApi, type PublicReviewDto } from "@/lib/api-client";
 
 type Award = {
   id: string;
@@ -120,6 +121,54 @@ const DISCLAIMERS: string[] = [
 
 export default function RogCardMatrix5090PostFeatures() {
   const [activeVideoModal, setActiveVideoModal] = useState<string | null>(null);
+
+  // Live reviews state
+  const [reviews, setReviews] = useState<PublicReviewDto[]>([]);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [reviewerName, setReviewerName] = useState("");
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewContent, setReviewContent] = useState("");
+  const [submittingReview, setSubmittingReview] = useState(false);
+  const [reviewSuccessMsg, setReviewSuccessMsg] = useState("");
+
+  // Newsletter state
+  const [email, setEmail] = useState("");
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  useEffect(() => {
+    RogApi.getProductReviews("graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th")
+      .then((data) => {
+        if (data) setReviews(data);
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleSubmitReview = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!reviewContent.trim()) return;
+    try {
+      setSubmittingReview(true);
+      await RogApi.submitProductReview(
+        "graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th",
+        reviewContent.trim(),
+        reviewRating,
+        reviewerName.trim() || undefined
+      );
+      setReviewSuccessMsg("Cảm ơn bạn! Đánh giá đã được gửi và sẽ hiển thị sau khi quản trị viên phê duyệt.");
+      setReviewContent("");
+      setTimeout(() => setShowReviewForm(false), 2000);
+    } catch {
+      alert("Gửi đánh giá không thành công, vui lòng thử lại sau.");
+    } finally {
+      setSubmittingReview(false);
+    }
+  };
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    if (await RogApi.subscribeNewsletter(email.trim())) setIsSubscribed(true);
+  };
 
   return (
     <div id="awards" className="matrix-post-features-wrap" style={{ backgroundColor: "#0b0b0b", color: "#fff" }}>
@@ -382,6 +431,188 @@ export default function RogCardMatrix5090PostFeatures() {
               </div>
             </Link>
           ))}
+        </div>
+      </section>
+
+      {/* 4B. Customer Reviews */}
+      <section style={{ maxWidth: "1280px", margin: "0 auto 60px", padding: "0 24px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", borderBottom: "1px solid #222", paddingBottom: "12px" }}>
+          <div>
+            <span style={{ fontSize: "12px", textTransform: "uppercase", letterSpacing: "2px", color: "#ff0036", fontWeight: 700 }}>CỘNG ĐỒNG GAMER</span>
+            <h2 style={{ fontSize: "24px", fontWeight: 800, margin: "4px 0 0" }}>Đánh giá từ người dùng ({reviews.length})</h2>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowReviewForm((v) => !v)}
+            style={{
+              background: "#ff0036",
+              color: "#fff",
+              border: "none",
+              borderRadius: "4px",
+              padding: "8px 18px",
+              fontSize: "12px",
+              fontWeight: 700,
+              cursor: "pointer",
+              textTransform: "uppercase",
+            }}
+          >
+            {showReviewForm ? "Đóng form" : "Viết đánh giá"}
+          </button>
+        </div>
+
+        {showReviewForm && (
+          <div style={{ background: "#121218", border: "1px solid #282835", borderRadius: "8px", padding: "24px", marginBottom: "30px" }}>
+            <h3 style={{ fontSize: "16px", fontWeight: 700, marginBottom: "16px", color: "#fff" }}>Gửi nhận xét về ROG Matrix GeForce RTX 5090</h3>
+            {reviewSuccessMsg ? (
+              <div style={{ color: "#00e676", fontWeight: 600, padding: "12px", background: "rgba(0,230,118,0.1)", borderRadius: "4px" }}>{reviewSuccessMsg}</div>
+            ) : (
+              <form onSubmit={handleSubmitReview} style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+                <div>
+                  <label style={{ display: "block", fontSize: "12px", color: "#888", marginBottom: "4px" }}>Họ tên hoặc Nickname</label>
+                  <input
+                    type="text"
+                    value={reviewerName}
+                    onChange={(e) => setReviewerName(e.target.value)}
+                    placeholder="VD: Nguyễn Tuấn - Overclocker"
+                    style={{ width: "100%", background: "#0a0a0c", border: "1px solid #333", color: "#fff", padding: "8px 12px", borderRadius: "4px", fontSize: "13px" }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: "block", fontSize: "12px", color: "#888", marginBottom: "4px" }}>Đánh giá số sao</label>
+                  <select
+                    value={reviewRating}
+                    onChange={(e) => setReviewRating(Number(e.target.value))}
+                    style={{ width: "100%", background: "#0a0a0c", border: "1px solid #333", color: "#eab308", padding: "8px 12px", borderRadius: "4px", fontSize: "13px" }}
+                  >
+                    <option value={5}>★★★★★ (5 sao - Tuyệt vời)</option>
+                    <option value={4}>★★★★☆ (4 sao - Rất tốt)</option>
+                    <option value={3}>★★★☆☆ (3 sao - Tạm ổn)</option>
+                    <option value={2}>★★☆☆☆ (2 sao - Cần cải thiện)</option>
+                    <option value={1}>★☆☆☆☆ (1 sao - Kém)</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={{ display: "block", fontSize: "12px", color: "#888", marginBottom: "4px" }}>Nội dung nhận xét</label>
+                  <textarea
+                    value={reviewContent}
+                    onChange={(e) => setReviewContent(e.target.value)}
+                    required
+                    rows={3}
+                    placeholder="Chia sẻ cảm nhận về buồng hơi đồng, keo kim loại lỏng, thiết kế BTF..."
+                    style={{ width: "100%", background: "#0a0a0c", border: "1px solid #333", color: "#fff", padding: "8px 12px", borderRadius: "4px", fontSize: "13px", resize: "vertical" }}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={submittingReview}
+                  style={{
+                    alignSelf: "flex-start",
+                    background: "#ff0036",
+                    color: "#fff",
+                    border: "none",
+                    padding: "10px 24px",
+                    fontWeight: 700,
+                    borderRadius: "4px",
+                    cursor: submittingReview ? "not-allowed" : "pointer",
+                    fontSize: "12px",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {submittingReview ? "Đang gửi…" : "Gửi đánh giá"}
+                </button>
+              </form>
+            )}
+          </div>
+        )}
+
+        {reviews.length > 0 ? (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px" }}>
+            {reviews.map((rev) => (
+              <div key={rev.id} style={{ background: "#141418", border: "1px solid #222", borderRadius: "6px", padding: "16px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                  <span style={{ fontWeight: 800, color: "#fff", fontSize: "13px" }}>{rev.authorName || "Game thủ ROG"}</span>
+                  <span style={{ color: "#eab308", fontSize: "12px" }}>
+                    {"★".repeat(Math.max(1, Math.min(5, rev.rating)))}
+                    {"☆".repeat(Math.max(0, 5 - Math.max(1, Math.min(5, rev.rating))))}
+                  </span>
+                </div>
+                <p style={{ color: "#ccc", fontSize: "13px", lineHeight: 1.6, margin: "0 0 6px" }}>{rev.content}</p>
+                <div style={{ color: "#666", fontSize: "11px" }}>{new Date(rev.createdAtUtc).toLocaleDateString("vi-VN")}</div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div style={{ color: "#888", fontSize: "13px", fontStyle: "italic" }}>Chưa có đánh giá nào. Hãy là người đầu tiên để lại nhận xét!</div>
+        )}
+      </section>
+
+      {/* 4C. Official ROG Newsletter Subscription */}
+      <section style={{ maxWidth: "1280px", margin: "0 auto 60px", padding: "0 24px" }}>
+        <div
+          style={{
+            background: "linear-gradient(135deg, #181818 0%, #111111 100%)",
+            border: "1px solid #2a2a2a",
+            borderRadius: "16px",
+            padding: "48px 36px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          <span style={{ fontSize: "12px", textTransform: "uppercase", letterSpacing: "3px", color: "#ff0036", fontWeight: 700, marginBottom: "8px" }}>
+            REPUBLIC OF GAMERS
+          </span>
+          <h2 style={{ fontSize: "28px", fontWeight: 800, margin: "0 0 12px", color: "#fff" }}>
+            ĐĂNG KÝ NHẬN TIN VỀ ROG MATRIX RTX 5090
+          </h2>
+          <p style={{ fontSize: "14px", color: "#aaa", maxWidth: "600px", lineHeight: "1.6", margin: "0 0 28px" }}>
+            Nhận thông báo sớm nhất về phiên bản giới hạn kỷ niệm 30 năm ROG Matrix GeForce RTX 5090, sự kiện mở bán và cập nhật driver mới nhất.
+          </p>
+
+          {isSubscribed ? (
+            <div style={{ padding: "16px 24px", backgroundColor: "rgba(0, 200, 83, 0.15)", border: "1px solid #00c853", borderRadius: "8px", color: "#00e676", fontWeight: 600 }}>
+              ✓ Cảm ơn bạn! Chúng tôi sẽ gửi thông tin mở bán sớm nhất qua email của bạn.
+            </div>
+          ) : (
+            <form onSubmit={handleSubscribe} style={{ display: "flex", width: "100%", maxWidth: "520px", gap: "10px" }}>
+              <input
+                type="email"
+                required
+                placeholder="Nhập địa chỉ email của bạn..."
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={{
+                  flex: 1,
+                  backgroundColor: "#0d0d0d",
+                  border: "1px solid #333",
+                  borderRadius: "8px",
+                  padding: "14px 18px",
+                  fontSize: "14px",
+                  color: "#fff",
+                  outline: "none",
+                }}
+              />
+              <button
+                type="submit"
+                style={{
+                  backgroundColor: "#ff0036",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "8px",
+                  padding: "14px 28px",
+                  fontSize: "14px",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  transition: "background-color 0.2s ease",
+                }}
+              >
+                Đăng Ký
+              </button>
+            </form>
+          )}
         </div>
       </section>
 

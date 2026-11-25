@@ -14,6 +14,7 @@ import RogZephyrusDuo2026PostFeatures from "./RogZephyrusDuo2026PostFeatures";
 export default function RogZephyrusDuo2026Overview() {
   const router = useRouter();
   const { addLine } = useCart();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [livePrice, setLivePrice] = useState("189.990.000 ₫");
   const [unitPriceNum, setUnitPriceNum] = useState(189990000);
 
@@ -169,7 +170,11 @@ export default function RogZephyrusDuo2026Overview() {
       </div>
 
       {/* 2. Sticky Product Subbar with official 6 tabs */}
-      <div className="rog-pd-subbar" style={{ position: "sticky", top: 50, zIndex: 900 }}>
+      <div
+        id="productTabBarContainer"
+        className="rog-pd-subbar productTabBarContainer ProductTabBar__productTabBarContainer__O9P3C"
+        style={{ position: "sticky", top: 50, zIndex: 999, fontSize: "16px", lineHeight: "18.4px" }}
+      >
         <div className="rog-pd-subbar-inner">
           <div className="rog-pd-subbar-left">
             <img
@@ -185,28 +190,34 @@ export default function RogZephyrusDuo2026Overview() {
               href="/vn/laptops/rog-zephyrus/rog-zephyrus-duo-2026"
               className="rog-pd-tab-link is-active"
             >
-              Tính năng (Xem thêm)
+              Tính năng
             </Link>
             <Link
               href="/vn/laptops/rog-zephyrus/rog-zephyrus-duo-2026/spec"
               className="rog-pd-tab-link"
             >
-              Chi tiết / Thông số kỹ thuật
+              Thông số kỹ thuật
             </Link>
-            <a
-              href="#awards"
+            <Link
+              href="/vn/laptops/rog-zephyrus/rog-zephyrus-duo-2026/award"
               className="rog-pd-tab-link"
             >
               Giải thưởng
-            </a>
+            </Link>
             <Link
-              href="/vn/where-to-buy"
+              href="/vn/laptops/rog-zephyrus/rog-zephyrus-duo-2026/gallery"
+              className="rog-pd-tab-link"
+            >
+              Thư viện
+            </Link>
+            <Link
+              href="/vn/laptops/rog-zephyrus/rog-zephyrus-duo-2026/wtb"
               className="rog-pd-tab-link"
             >
               Nơi mua
             </Link>
             <Link
-              href="/vn/support"
+              href="/vn/laptops/rog-zephyrus/rog-zephyrus-duo-2026/helpdesk"
               className="rog-pd-tab-link"
             >
               Hỗ trợ
@@ -220,16 +231,74 @@ export default function RogZephyrusDuo2026Overview() {
                 <span className="rog-pd-subbar-price" style={{ color: "#ff0036", fontWeight: 700 }}>{livePrice}</span>
               </div>
             </div>
+            <Link
+              href="/vn/laptops/rog-zephyrus/rog-zephyrus-duo-2026/spec"
+              className="rog-pd-buy-btn"
+              style={{ background: "#ff0036", color: "#fff", textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
+            >
+              LỰA CHỌN
+            </Link>
             <button
               type="button"
-              onClick={handleBuyNow}
-              className="rog-pd-buy-btn"
-              style={{ cursor: "pointer", border: "none" }}
+              aria-label="Toggle mobile menu"
+              className="rog-pd-subbar-burger"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              MUA NGAY
+              <span>{mobileMenuOpen ? "ĐÓNG" : "MENU"}</span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ transform: mobileMenuOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s ease" }}>
+                <path d="M1 4l5 6 5-6H1z" fill="#fff" />
+              </svg>
             </button>
           </div>
         </div>
+
+        {/* Mobile dropdown drawer */}
+        {mobileMenuOpen && (
+          <div className="rog-pd-subbar-mobile-menu">
+            <Link
+              href="/vn/laptops/rog-zephyrus/rog-zephyrus-duo-2026"
+              className="rog-pd-subbar-mobile-link is-active"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Tính năng
+            </Link>
+            <Link
+              href="/vn/laptops/rog-zephyrus/rog-zephyrus-duo-2026/spec"
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Thông số kỹ thuật
+            </Link>
+            <Link
+              href="/vn/laptops/rog-zephyrus/rog-zephyrus-duo-2026/award"
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Giải thưởng
+            </Link>
+            <Link
+              href="/vn/laptops/rog-zephyrus/rog-zephyrus-duo-2026/gallery"
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Thư viện
+            </Link>
+            <Link
+              href="/vn/laptops/rog-zephyrus/rog-zephyrus-duo-2026/wtb"
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Nơi mua
+            </Link>
+            <Link
+              href="/vn/laptops/rog-zephyrus/rog-zephyrus-duo-2026/helpdesk"
+              className="rog-pd-subbar-mobile-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Hỗ trợ
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* 3. 1:1 Bespoke Zephyrus Duo 2026 Experience (14 Sections) */}

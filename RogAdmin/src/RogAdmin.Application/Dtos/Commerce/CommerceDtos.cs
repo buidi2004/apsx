@@ -41,6 +41,9 @@ public sealed class CreateOrderRequest
     [MaxLength(1000)]
     public string? Note { get; set; }
 
+    [MaxLength(50)]
+    public string? CouponCode { get; set; }
+
     [MinLength(1, ErrorMessage = "Giỏ hàng đang trống.")]
     public List<CreateOrderItemRequest> Items { get; set; } = new();
 }
@@ -67,7 +70,11 @@ public sealed record OrderDto(
     string Status,
     string StatusText,
     DateTime CreatedAt,
-    IReadOnlyList<OrderItemDto> Items);
+    IReadOnlyList<OrderItemDto> Items,
+    string ShippingCarrier = "",
+    string TrackingNumber = "",
+    string? CouponCode = null,
+    long DiscountAmount = 0);
 
 public sealed record CreateOrderResponse(
     string OrderCode,
@@ -130,7 +137,9 @@ public sealed record AdminOrderSummaryDto(
     string Status,
     string StatusText,
     int ItemsCount,
-    DateTime CreatedAt);
+    DateTime CreatedAt,
+    string ShippingCarrier = "",
+    string TrackingNumber = "");
 
 public sealed record AdminOrderDetailDto(
     int Id,
@@ -147,10 +156,49 @@ public sealed record AdminOrderDetailDto(
     string Status,
     string StatusText,
     DateTime CreatedAt,
-    IReadOnlyList<OrderItemDto> Items);
+    IReadOnlyList<OrderItemDto> Items,
+    string ShippingCarrier = "",
+    string TrackingNumber = "",
+    string? InternalNotes = null,
+    string? CouponCode = null,
+    long DiscountAmount = 0);
 
 public sealed class UpdateOrderStatusRequest
 {
     [Required]
     public string Status { get; set; } = string.Empty;
+    public string? ShippingCarrier { get; set; }
+    public string? TrackingNumber { get; set; }
+    public string? InternalNotes { get; set; }
 }
+
+public sealed record UpdateOrderShippingRequest(
+    string? ShippingCarrier,
+    string? TrackingNumber,
+    string? InternalNotes
+);
+
+public sealed record CustomerOrderSummaryDto(
+    int Id,
+    string OrderCode,
+    DateTime CreatedAt,
+    long Total,
+    string Status,
+    string StatusText,
+    int ItemsCount,
+    string ShippingCarrier,
+    string TrackingNumber
+);
+
+public sealed record CustomerDetailWithOrdersDto(
+    int Id,
+    string Email,
+    string FullName,
+    string PhoneNumber,
+    string Tier,
+    int Points,
+    bool IsActive,
+    long TotalSpent,
+    int OrderCount,
+    IReadOnlyList<CustomerOrderSummaryDto> Orders
+);

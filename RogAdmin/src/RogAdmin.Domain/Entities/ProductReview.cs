@@ -9,5 +9,8 @@ public class ProductReview
     public string Content { get; set; } = string.Empty;
     public int Rating { get; set; }
     public bool IsApproved { get; set; }
+    public string? AdminReply { get; set; }
+    public DateTime? RepliedAt { get; set; }
+    public string? RepliedBy { get; set; }
     public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
 }

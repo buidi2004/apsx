@@ -24,20 +24,20 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const key = slug.join("/");
-  const article = ARTICLES_DATABASE[key];
-
-  if (article) {
-    return {
-      title: `${article.title} | ROG - Republic of Gamers Việt Nam`,
-      description: article.lead,
-    };
-  }
 
   const online = await fetchRogArticle(key);
   if (online) {
     return {
       title: `${online.title} | ROG - Republic of Gamers Việt Nam`,
       description: online.lead,
+    };
+  }
+
+  const article = ARTICLES_DATABASE[key];
+  if (article) {
+    return {
+      title: `${article.title} | ROG - Republic of Gamers Việt Nam`,
+      description: article.lead,
     };
   }
 
@@ -53,15 +53,18 @@ export default async function ArticlePage({
 }) {
   const { slug } = await params;
   const key = slug.join("/");
-  const article = ARTICLES_DATABASE[key];
+  const online = await fetchRogArticle(key);
+  const fallbackArticle = ARTICLES_DATABASE[key];
 
   return (
     <div className="rog-page">
       <RogNavbar />
       <RogPromoBar />
       <main>
-        {article ? (
-          <RogArticleDetail article={article} />
+        {online ? (
+          <RogUniversalArticle slug={slug} initialArticle={online} />
+        ) : fallbackArticle ? (
+          <RogArticleDetail article={fallbackArticle} />
         ) : (
           <RogUniversalArticle slug={slug} />
         )}

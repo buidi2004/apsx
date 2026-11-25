@@ -38,6 +38,7 @@ public static class DbSeeder
         await SeedProductImagesAsync(db, ct);
         await SeedCustomersAsync(db, hasher, ct);
         await SeedOrdersAsync(db, ct);
+        await SeedCouponsAsync(db, ct);
     }
 
     private static async Task SeedUsersAsync(RogAdminDbContext db, IPasswordHasher hasher, CancellationToken ct)
@@ -75,27 +76,36 @@ public static class DbSeeder
 
     private static async Task SeedHeroSlidesAsync(RogAdminDbContext db, CancellationToken ct)
     {
+        /* RogHeroCarousel.tsx — const SLIDES */
+        (string Src, string Alt, string Href)[] slides =
+        [
+            ("/sites/rog-asus/img/hero/control-resonant.webp", "SỞ HỮU ROG & TUF GAMING RTX 50 SERIES – NHẬN NGAY TỰA GAME CONTROL RESONANT", "/vn/events"),
+            ("/sites/rog-asus/img/hero/gamescom.webp", "ROG GAMESCOM", "https://rog.asus.com/microsite/gamescom/"),
+            ("/sites/rog-asus/img/hero/google-ai.webp", "Mua laptop ROG nhận Google AI", "https://www.asus.com/vn/content/asus-googleai"),
+            ("/sites/rog-asus/img/hero/strix-scar-18.webp", "ROG Strix Scar 18 2026", "/vn/laptops/rog-strix/rog-strix-scar-18-2026"),
+            ("/sites/rog-asus/img/hero/zephyrus-duo.webp", "ROG Zephyrus DUO 2026", "/vn/laptops/rog-zephyrus/rog-zephyrus-duo-2026"),
+            ("/sites/rog-asus/img/hero/zephyrus-g14.webp", "ROG Zephyrus G14 2026 GU405", "/vn/laptops/rog-zephyrus-series"),
+        ];
+
         if (await db.HeroSlides.AnyAsync(ct))
         {
+            var existingSlides = await db.HeroSlides.OrderBy(s => s.SortOrder).ToListAsync(ct);
+            for (int i = 0; i < existingSlides.Count && i < slides.Length; i++)
+            {
+                if (string.IsNullOrWhiteSpace(existingSlides[i].Href) || existingSlides[i].Href == "#")
+                {
+                    existingSlides[i].Href = slides[i].Href;
+                }
+            }
+            await db.SaveChangesAsync(ct);
             return;
         }
-
-        /* RogHeroCarousel.tsx — const SLIDES (href FE đang là "#") */
-        (string Src, string Alt)[] slides =
-        [
-            ("/sites/rog-asus/img/hero/control-resonant.webp", "SỞ HỮU ROG & TUF GAMING RTX 50 SERIES – NHẬN NGAY TỰA GAME CONTROL RESONANT"),
-            ("/sites/rog-asus/img/hero/gamescom.webp", "ROG GAMESCOM"),
-            ("/sites/rog-asus/img/hero/google-ai.webp", "Mua laptop ROG nhận Google AI"),
-            ("/sites/rog-asus/img/hero/strix-scar-18.webp", "ROG Strix Scar 18 2026"),
-            ("/sites/rog-asus/img/hero/zephyrus-duo.webp", "ROG Zephyrus DUO 2026"),
-            ("/sites/rog-asus/img/hero/zephyrus-g14.webp", "ROG Zephyrus G14 2026 GU405"),
-        ];
 
         db.HeroSlides.AddRange(slides.Select((s, i) => new HeroSlide
         {
             ImageUrl = s.Src,
             AltText = s.Alt,
-            Href = null,
+            Href = s.Href,
             SortOrder = i,
             IsActive = true,
         }));
@@ -105,37 +115,46 @@ public static class DbSeeder
 
     private static async Task SeedProductCategoriesAsync(RogAdminDbContext db, CancellationToken ct)
     {
-        if (await db.ProductCategories.AnyAsync(ct))
-        {
-            return;
-        }
-
         /* RogProductCategories.tsx — const PRODUCTS (22 mục) */
         (string Image, string Label, string Href)[] products =
         [
-            ("/sites/rog-asus/img/products/laptop-gaming.webp", "Laptop Gaming ASUS ROG", "/vn/laptops-group/"),
-            ("/sites/rog-asus/img/products/bo-mach-chu.webp", "Bo mạch chủ", "https://rog.asus.com/vn/motherboards-group/"),
-            ("/sites/rog-asus/img/products/card-do-hoa.webp", "Card Đồ họa", "https://rog.asus.com/vn/graphics-cards-group/"),
-            ("/sites/rog-asus/img/products/man-hinh.webp", "Màn hình", "https://rog.asus.com/vn/monitors-group/"),
-            ("/sites/rog-asus/img/products/phones.webp", "Phones", "https://rog.asus.com/vn/phones-group/allmodels/"),
-            ("/sites/rog-asus/img/products/may-bo-pc-gaming.webp", "MÁY BỘ PC GAMING", "https://rog.asus.com/vn/desktops-group/"),
-            ("/sites/rog-asus/img/products/nguon-may-tinh.webp", "Nguồn máy tính", "https://rog.asus.com/vn/power-supply-units-group/"),
-            ("/sites/rog-asus/img/products/dock-vga.webp", "Dock VGA gắn ngoài", "https://rog.asus.com/vn/external-graphics-docks-group/allmodels/"),
-            ("/sites/rog-asus/img/products/thiet-bi-mang.webp", "Thiết bị mạng", "https://rog.asus.com/vn/networking-group/allmodels/"),
-            ("/sites/rog-asus/img/products/ban-phim.webp", "Bàn phím", "https://rog.asus.com/vn/keyboards-group/"),
-            ("/sites/rog-asus/img/products/chuot-lot-chuot.webp", "Chuột & Lót chuột", "https://rog.asus.com/vn/mice-mouse-pads-group/"),
-            ("/sites/rog-asus/img/products/tai-nghe-audio.webp", "Tai nghe & audio", "https://rog.asus.com/vn/headsets-audio-group/"),
-            ("/sites/rog-asus/img/products/cases.webp", "Cases", "https://rog.asus.com/vn/cases-group/allmodels/"),
-            ("/sites/rog-asus/img/products/apparel-bags-gear.webp", "Apparel, Bags, & Gear", "https://rog.asus.com/vn/apparel-bags-gear-group/"),
-            ("/sites/rog-asus/img/products/streaming-kits.webp", "Streaming Kits", "https://rog.asus.com/vn/streaming-kits-group/allmodels/"),
-            ("/sites/rog-asus/img/products/tay-cam.webp", "Tay cầm", "https://rog.asus.com/vn/controllers-group/allmodels/"),
-            ("/sites/rog-asus/img/products/o-luu-tru.webp", "Ổ lưu trữ", "https://rog.asus.com/vn/storage/rog-strix-arion-model/"),
-            ("/sites/rog-asus/img/products/protection-gadgets.webp", "Protection and Gadgets", "https://rog.asus.com/vn/protection-and-gadgets-group/"),
-            ("/sites/rog-asus/img/products/lam-mat.webp", "Làm mát", "https://rog.asus.com/vn/cooling-group/"),
-            ("/sites/rog-asus/img/products/gaming-handhelds.webp", "Gaming Handhelds", "https://rog.asus.com/vn/gaming-handhelds-group/"),
-            ("/sites/rog-asus/img/products/rog-saga.webp", "ROG SAGA", "https://rog.asus.com/vn/rog-saga-group/"),
-            ("/sites/rog-asus/img/products/docks-chargers-cables.webp", "Docks, Chargers and Cables", "https://rog.asus.com/vn/docks-chargers-and-cables-group/"),
+            ("/sites/rog-asus/img/products/laptop-gaming.webp", "Laptop Gaming ASUS ROG", "/vn/laptops-group"),
+            ("/sites/rog-asus/img/products/bo-mach-chu.webp", "Bo mạch chủ", "/vn/motherboards-group"),
+            ("/sites/rog-asus/img/products/card-do-hoa.webp", "Card Đồ họa", "/vn/graphics-cards-group"),
+            ("/sites/rog-asus/img/products/man-hinh.webp", "Màn hình", "/vn/monitors-group"),
+            ("/sites/rog-asus/img/products/phones.webp", "Phones", "/vn/phones-group/allmodels"),
+            ("/sites/rog-asus/img/products/may-bo-pc-gaming.webp", "MÁY BỘ PC GAMING", "/vn/desktops-group"),
+            ("/sites/rog-asus/img/products/nguon-may-tinh.webp", "Nguồn máy tính", "/vn/power-supply-units-group"),
+            ("/sites/rog-asus/img/products/dock-vga.webp", "Dock VGA gắn ngoài", "/vn/external-graphics-docks-group/allmodels"),
+            ("/sites/rog-asus/img/products/thiet-bi-mang.webp", "Thiết bị mạng", "/vn/networking-group/allmodels"),
+            ("/sites/rog-asus/img/products/ban-phim.webp", "Bàn phím", "/vn/keyboards-group"),
+            ("/sites/rog-asus/img/products/chuot-lot-chuot.webp", "Chuột & Lót chuột", "/vn/mice-mouse-pads-group"),
+            ("/sites/rog-asus/img/products/tai-nghe-audio.webp", "Tai nghe & audio", "/vn/headsets-audio-group"),
+            ("/sites/rog-asus/img/products/cases.webp", "Cases", "/vn/cases-group/allmodels"),
+            ("/sites/rog-asus/img/products/apparel-bags-gear.webp", "Apparel, Bags, & Gear", "/vn/apparel-bags-gear-group"),
+            ("/sites/rog-asus/img/products/streaming-kits.webp", "Streaming Kits", "/vn/streaming-kits-group/allmodels"),
+            ("/sites/rog-asus/img/products/tay-cam.webp", "Tay cầm", "/vn/controllers-group/allmodels"),
+            ("/sites/rog-asus/img/products/o-luu-tru.webp", "Ổ lưu trữ", "/vn/storage/rog-strix-arion-model"),
+            ("/sites/rog-asus/img/products/protection-gadgets.webp", "Protection and Gadgets", "/vn/protection-and-gadgets-group"),
+            ("/sites/rog-asus/img/products/lam-mat.webp", "Làm mát", "/vn/cooling-group"),
+            ("/sites/rog-asus/img/products/gaming-handhelds.webp", "Gaming Handhelds", "/vn/gaming-handhelds-group"),
+            ("/sites/rog-asus/img/products/rog-saga.webp", "ROG SAGA", "/vn/rog-saga-group"),
+            ("/sites/rog-asus/img/products/docks-chargers-cables.webp", "Docks, Chargers and Cables", "/vn/docks-chargers-and-cables-group"),
         ];
+
+        if (await db.ProductCategories.AnyAsync(ct))
+        {
+            var existingCats = await db.ProductCategories.ToListAsync(ct);
+            foreach (var cat in existingCats)
+            {
+                if (cat.Href.StartsWith("https://rog.asus.com/vn/"))
+                {
+                    cat.Href = cat.Href.Replace("https://rog.asus.com", "").TrimEnd('/');
+                }
+            }
+            await db.SaveChangesAsync(ct);
+            return;
+        }
 
         db.ProductCategories.AddRange(products.Select((p, i) => new ProductCategory
         {
@@ -471,10 +490,10 @@ public static class DbSeeder
 
     private static async Task SeedProductsAsync(RogAdminDbContext db, CancellationToken ct)
     {
-        if (await db.Products.AnyAsync(ct)) return;
-
-        var products = new List<Product>
+        if (!await db.Products.AnyAsync(ct))
         {
+            var products = new List<Product>
+            {
             new()
             {
                 Slug = "laptops/rog-strix/rog-strix-scar-18-2026",
@@ -717,6 +736,103 @@ public static class DbSeeder
         db.Products.AddRange(products);
         await db.SaveChangesAsync(ct);
     }
+
+    var essentialProducts = new List<Product>
+    {
+        new()
+        {
+            Slug = "graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th",
+            Name = "ROG Matrix Platinum GeForce RTX™ 5090 - ASUS 30th Anniversary Edition",
+            CategorySlug = "graphics-cards-group",
+            ModelCode = "ROG-MATRIX-RTX5090-P32G-30TH",
+            Tagline = "Phiên bản kỷ niệm 30 năm · 800W Dual BTF/12V-2x6 · Quad-Fan Liquid Metal",
+            ThumbnailUrl = "/sites/rog-asus/img/vga/hot-matrix-5090.webp",
+            KeyVisualUrl = "/sites/rog-asus/img/vga/hot-matrix-5090.webp",
+            BasePath = "/vn/graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th",
+            SubBarType = "standard",
+            IsHot = true,
+            IsFeatured = true,
+            Price = new ProductPrice
+            {
+                Price = 109990000m,
+                OldPrice = 119990000m,
+                DiscountLabel = "PHIÊN BẢN KỶ NIỆM 30 NĂM",
+                StockStatus = StockStatus.InStock,
+                StoreUrl = "/vn/where-to-buy"
+            },
+            Specs = new List<ProductSpec>
+            {
+                new() { SpecGroup = "GPU", SpecKey = "Đồ họa", SpecValue = "NVIDIA® GeForce RTX™ 5090 32GB GDDR7", OrderIndex = 1 },
+                new() { SpecGroup = "Power", SpecKey = "Nguồn cấp", SpecValue = "Song song BTF + 12V-2x6 lên tới 800W", OrderIndex = 2 },
+                new() { SpecGroup = "Cooling", SpecKey = "Tản nhiệt", SpecValue = "4 quạt buồng hơi đồng + Keo kim loại lỏng Liquid Metal", OrderIndex = 3 }
+            }
+        },
+        new()
+        {
+            Slug = "laptops/rog-flow/rog-flow-z13-kjp",
+            Name = "ROG Flow Z13-KJP (2026)",
+            CategorySlug = "laptops-group",
+            ModelCode = "GZ302EAC-RU184WS",
+            Tagline = "AMD Ryzen™ AI Max+ 395 · Radeon 8060S · 128GB LPDDR5X · 13.4\" 2.5K 180Hz",
+            ThumbnailUrl = "/sites/rog-asus/img/detail/z13-kjp-front.webp",
+            KeyVisualUrl = "/sites/rog-asus/img/flow/hero-kjp.webp",
+            BasePath = "/vn/laptops/rog-flow/rog-flow-z13-kjp",
+            SubBarType = "standard",
+            IsHot = true,
+            IsFeatured = true,
+            Price = new ProductPrice
+            {
+                Price = 109990000m,
+                OldPrice = 114990000m,
+                DiscountLabel = "HỢP TÁC KOJIMA PRODUCTIONS",
+                StockStatus = StockStatus.InStock,
+                StoreUrl = "/vn/where-to-buy"
+            },
+            Specs = new List<ProductSpec>
+            {
+                new() { SpecGroup = "Processor", SpecKey = "Vi xử lý", SpecValue = "AMD Ryzen™ AI Max+ 395 (NPU 50 TOPS)", OrderIndex = 1 },
+                new() { SpecGroup = "Graphics", SpecKey = "Đồ họa", SpecValue = "Radeon™ 8060S 40 CUs", OrderIndex = 2 },
+                new() { SpecGroup = "Display", SpecKey = "Màn hình", SpecValue = "13.4\" 2.5K 180Hz ROG Nebula Display Touchscreen", OrderIndex = 3 }
+            }
+        },
+        new()
+        {
+            Slug = "monitors/23-to-24-5-inches/rog-strix-xg259qnsr-ace",
+            Name = "ROG Strix XG259QNSR Ace",
+            CategorySlug = "monitors-group",
+            ModelCode = "XG259QNSR-ACE",
+            Tagline = "24.5 inch FHD Fast IPS · 420Hz (OC) · 0.3ms GTG · DisplayWidget Center",
+            ThumbnailUrl = "/sites/rog-asus/img/products/man-hinh.webp",
+            KeyVisualUrl = "/sites/rog-asus/img/products/man-hinh.webp",
+            BasePath = "/vn/monitors/23-to-24-5-inches/rog-strix-xg259qnsr-ace",
+            SubBarType = "standard",
+            IsHot = false,
+            IsFeatured = true,
+            Price = new ProductPrice
+            {
+                Price = 15990000m,
+                OldPrice = 17990000m,
+                DiscountLabel = "TIẾT KIỆM 2.000.000 ₫",
+                StockStatus = StockStatus.InStock,
+                StoreUrl = "/vn/where-to-buy"
+            },
+            Specs = new List<ProductSpec>
+            {
+                new() { SpecGroup = "Display", SpecKey = "Kích thước & Độ phân giải", SpecValue = "24.5-inch FHD (1920x1080) Fast IPS", OrderIndex = 1 },
+                new() { SpecGroup = "Speed", SpecKey = "Tần số quét & Phản hồi", SpecValue = "420Hz (OC), 0.3ms GTG", OrderIndex = 2 }
+            }
+        }
+    };
+
+    foreach (var p in essentialProducts)
+    {
+        if (!await db.Products.AnyAsync(x => x.Slug == p.Slug, ct))
+        {
+            db.Products.Add(p);
+        }
+    }
+    await db.SaveChangesAsync(ct);
+}
 
     private static async Task SeedCampaignsAsync(RogAdminDbContext db, CancellationToken ct)
     {
@@ -1410,6 +1526,137 @@ public static class DbSeeder
         };
 
         db.Orders.AddRange(sampleOrders);
+        await db.SaveChangesAsync(ct);
+
+        if (!await db.ProductReviews.AnyAsync(ct))
+        {
+            var sampleReviews = new List<ProductReview>
+            {
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    ProductSlug = "graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th",
+                    AuthorName = "Hoàng Long - Overclocker",
+                    Title = "Quái vật đồ họa kỷ niệm 30 năm đỉnh cao nhất từng sở hữu",
+                    Content = "Nhiệt độ cực kỳ ấn tượng nhờ buồng hơi đồng và keo tản nhiệt kim loại lỏng. Khả năng ép xung vọt xà 3GHz mượt mà, thiết kế chuẩn BTF giấu dây hoàn hảo.",
+                    Rating = 5,
+                    IsApproved = true,
+                    CreatedAtUtc = DateTime.UtcNow.AddDays(-5)
+                },
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    ProductSlug = "graphics-cards/rog-matrix/rog-matrix-rtx5090-p32g-30th",
+                    AuthorName = "Minh Triết - Tech Enthusiast",
+                    Title = "Xứng đáng là kiệt tác sưu tầm",
+                    Content = "Build case ROG BTF với em này thì không một sợi dây nguồn nào lộ ra ngoài. Hiệu năng ray tracing 4K max setting không đối thủ.",
+                    Rating = 5,
+                    IsApproved = true,
+                    CreatedAtUtc = DateTime.UtcNow.AddDays(-2)
+                },
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    ProductSlug = "laptops/rog-zephyrus/rog-zephyrus-duo-2026",
+                    AuthorName = "Tuấn Hưng - Streamer & Coder",
+                    Title = "Hai màn hình OLED kép thay đổi hoàn toàn cách làm việc và chơi game",
+                    Content = "Màn hình ScreenPad Plus cảm ứng cực nhạy, theo dõi chat stream hoặc timeline Premiere Pro song song màn hình chính 3K 240Hz siêu tiện lợi.",
+                    Rating = 5,
+                    IsApproved = true,
+                    CreatedAtUtc = DateTime.UtcNow.AddDays(-6)
+                },
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    ProductSlug = "laptops/rog-strix/rog-strix-scar-18-2026",
+                    AuthorName = "Đức Mạnh - Pro Gamer",
+                    Title = "Màn hình Nebula HDR Mini LED 240Hz sáng đẹp kinh ngạc",
+                    Content = "Chơi Cyberpunk 2077 và Black Myth: Wukong ở 2.5K ray tracing max setting vẫn duy trì trên 120 FPS ổn định, tản nhiệt buồng hơi êm ái.",
+                    Rating = 5,
+                    IsApproved = true,
+                    CreatedAtUtc = DateTime.UtcNow.AddDays(-7)
+                },
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    ProductSlug = "laptops/rog-zephyrus/rog-zephyrus-g16-2025-gu605",
+                    AuthorName = "Khánh Toàn",
+                    Title = "Siêu phẩm mỏng nhẹ nhưng hiệu năng quá mạnh",
+                    Content = "Vỏ nhôm CNC nguyên khối cực kỳ sang trọng, nhẹ chỉ 1.85kg mang đi làm hàng ngày quá tiện. Màn hình OLED 240Hz màu sắc chuẩn xác.",
+                    Rating = 5,
+                    IsApproved = true,
+                    CreatedAtUtc = DateTime.UtcNow.AddDays(-4)
+                },
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    ProductSlug = "gaming-handhelds/rog-ally/rog-ally-2023",
+                    AuthorName = "Phan Duy",
+                    Title = "Chiếc máy chơi game cầm tay tốt nhất hiện nay",
+                    Content = "Màn hình 120Hz mượt mà, chơi game Steam, Game Pass mọi lúc mọi nơi. Nâng cấp SSD cực dễ.",
+                    Rating = 5,
+                    IsApproved = true,
+                    CreatedAtUtc = DateTime.UtcNow.AddDays(-10)
+                }
+            };
+
+            db.ProductReviews.AddRange(sampleReviews);
+            await db.SaveChangesAsync(ct);
+        }
+    }
+
+    private static async Task SeedCouponsAsync(RogAdminDbContext db, CancellationToken ct)
+    {
+        if (await db.Coupons.AnyAsync(ct)) return;
+
+        var coupons = new List<Coupon>
+        {
+            new()
+            {
+                Code = "ROG2026",
+                Title = "Ưu đãi chào năm 2026",
+                Description = "Giảm trực tiếp 500.000 VNĐ cho đơn hàng từ 10.000.000 VNĐ.",
+                DiscountType = DiscountType.FixedAmount,
+                DiscountValue = 500000,
+                MinOrderValue = 10000000,
+                UsageLimit = 200,
+                UsedCount = 12,
+                ValidFrom = DateTime.UtcNow.AddDays(-30),
+                ValidTo = DateTime.UtcNow.AddDays(180),
+                IsActive = true
+            },
+            new()
+            {
+                Code = "ROGELITE10",
+                Title = "Đặc quyền thành viên ROG Elite",
+                Description = "Giảm 10% tối đa 2.000.000 VNĐ cho toàn bộ sản phẩm ROG.",
+                DiscountType = DiscountType.Percentage,
+                DiscountValue = 10,
+                MinOrderValue = 5000000,
+                MaxDiscountAmount = 2000000,
+                UsageLimit = 100,
+                UsedCount = 8,
+                ValidFrom = DateTime.UtcNow.AddDays(-10),
+                ValidTo = DateTime.UtcNow.AddDays(90),
+                IsActive = true
+            },
+            new()
+            {
+                Code = "CHAMPION1M",
+                Title = "Voucher siêu cấp VIP",
+                Description = "Giảm trực tiếp 1.000.000 VNĐ cho hóa đơn từ 50.000.000 VNĐ.",
+                DiscountType = DiscountType.FixedAmount,
+                DiscountValue = 1000000,
+                MinOrderValue = 50000000,
+                UsageLimit = 50,
+                UsedCount = 3,
+                ValidFrom = DateTime.UtcNow.AddDays(-5),
+                ValidTo = DateTime.UtcNow.AddDays(60),
+                IsActive = true
+            }
+        };
+
+        db.Coupons.AddRange(coupons);
         await db.SaveChangesAsync(ct);
     }
 }
